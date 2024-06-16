@@ -12,8 +12,8 @@ serviceAccountKey.json
 node_modules
 dist
 dist-ssr
-# Client-App
-# BackEnd-App
+Client-App
+BackEnd-App
 *.local
 
 # Editor directories and files
