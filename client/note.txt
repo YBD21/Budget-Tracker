@@ -1,0 +1,3 @@
+ .js  for server component 
+
+ .jsx for client component 

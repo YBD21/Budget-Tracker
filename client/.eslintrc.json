@@ -1,0 +1,33 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "next/babel",
+    "plugin:jsx-a11y/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "plugin:prettier/recommended",
+    "next/core-web-vitals",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/no-rest-destructuring": "warn",
+    "@tanstack/query/stable-query-client": "error",
+    "react-hooks/rules-of-hooks": "error", // Enforce React Hooks rules as errors
+    "react-hooks/exhaustive-deps": "warn", // Warn about potentially stale dependencies in Hooks
+    "react/jsx-no-undef": "error", // Warn about undefined JSX components
+    "react/prop-types": "off" // Disable prop-types check (optional)
+  },
+  "plugins": ["react", "react-hooks", "prettier", "@tanstack/query"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

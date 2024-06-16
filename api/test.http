@@ -1,0 +1,15 @@
+### getUSer
+GET http://localhost:5000/auth-system/user-data
+
+###
+GET http://localhost:5000/
+ 
+ 
+### Login User
+POST http://localhost:5000/auth-system/login
+Content-Type: application/json
+
+{
+    "email": "bugettestone@yopmail.com",
+    "password": "123456"
+}
