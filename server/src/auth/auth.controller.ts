@@ -119,8 +119,8 @@ export class AuthController {
     }
   }
 
-  @Post('verify-email')
-  async handleVerifyEmail(
+  @Post('send-otp-email')
+  async handleEmailVerification(
     @Req() req: Request,
     @Res() res: Response,
     @Body() verifyEmailData: FindAccountDTO,
