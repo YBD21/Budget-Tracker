@@ -10,6 +10,7 @@ import ToggleTheme from '../ToggleTheme'
 import ErrorMessage from '../ErrorMessage'
 import { pagesOptions } from '.'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
+import VerifyOTPErrorBox from '../ErrorMessageBox/VerifyOTPErrorBox'
 
 const VerifyOtp = ({ email, togglePage }) => {
   const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()
@@ -69,10 +70,13 @@ const VerifyOtp = ({ email, togglePage }) => {
 
   const reSendEmail = (e) => {
     e.preventDefault() // prevent page refresh
+    setError(null) // clear previous error
     sendEmail()
   }
 
   const handleVerifySubmit = async (data) => {
+    setError(null) // clear previous error
+
     const userData = {
       otp: data.otp, // string
       hash: encOtp,
@@ -150,9 +154,7 @@ const VerifyOtp = ({ email, togglePage }) => {
           </div>
 
           {/* Display Error Message Box  */}
-          {/* {error && (
-            <ErrorMessageBoxVerify Error_message={error} status={true} />
-          )} */}
+          {error && <VerifyOTPErrorBox message={error} />}
 
           {/* Verify */}
           <div className="min-w-max mt-4">

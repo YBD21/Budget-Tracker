@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 // refactor this later
-const FindAccountErrorBox = ({ message }) => {
+const VerifyOTPErrorBox = ({ message }) => {
   const [isClicked, setIsClicked] = useState(true)
   const [text, setText] = useState({})
 
@@ -72,4 +72,4 @@ const FindAccountErrorBox = ({ message }) => {
   } else return null
 }
 
-export default FindAccountErrorBox
+export default VerifyOTPErrorBox
