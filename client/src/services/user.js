@@ -21,3 +21,8 @@ export const sendOtpEmail = async (data) => {
   const response = await client().post(`${baseUrl}/send-otp-email`, data)
   return response.data
 }
+
+export const verifyOtp = async (data) => {
+  const response = await client().post(`${baseUrl}/verify-otp`, data)
+  return response.data
+}

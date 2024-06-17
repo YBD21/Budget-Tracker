@@ -4,6 +4,7 @@ import {
   loginUser,
   sendOtpEmail,
   verifyCaptcha,
+  verifyOtp,
 } from '@/services/user'
 import {
   decodeUser,
@@ -46,11 +47,16 @@ export const useAuthUser = () => {
     mutationFn: sendOtpEmail,
   })
 
+  const verifyOtpMutation = useMutation({
+    mutationFn: verifyOtp,
+  })
+
   return {
     verifyCaptchaMutation,
     logoutUserMutation,
     loginUserMutation,
     findAccountMutation,
     sendOtpEmailMutation,
+    verifyOtpMutation,
   }
 }

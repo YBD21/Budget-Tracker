@@ -12,7 +12,7 @@ import { pagesOptions } from '.'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
 
 const VerifyOtp = ({ email, togglePage }) => {
-  const { sendOtpEmailMutation } = useAuthUser()
+  const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()
 
   const [error, setError] = useState(null) // capture error with this state
   const [encOtp, setEncOtp] = useState(null)
@@ -50,6 +50,10 @@ const VerifyOtp = ({ email, togglePage }) => {
     togglePage(pagesOptions[0])
   }
 
+  const switchToResetPassword = () => {
+    togglePage(pagesOptions[2])
+  }
+
   const sendEmail = useCallback(async () => {
     const userData = {
       email: email,
@@ -69,10 +73,21 @@ const VerifyOtp = ({ email, togglePage }) => {
   }
 
   const handleVerifySubmit = async (data) => {
-    console.log(typeof data.otp)
-    console.log(data.otp)
     const userData = {
-      otp: data.otp,
+      otp: data.otp, // string
+      hash: encOtp,
+    }
+
+    try {
+      const response = await verifyOtpMutation.mutateAsync(userData)
+      if (response.status === true) {
+        switchToResetPassword()
+      } else {
+        setError('Incorrect Data')
+      }
+    } catch (err) {
+      const errorMessage = err?.response?.data?.error_message || err?.message
+      setError(errorMessage)
     }
   }
 
@@ -145,7 +160,7 @@ const VerifyOtp = ({ email, togglePage }) => {
               title={'Verify'}
               type="primary"
               isDisable={sendOtpEmailMutation.isPending}
-              // isPending={}
+              isPending={verifyOtpMutation.isPending}
               handleClick={handleSubmit(handleVerifySubmit)}
             />
           </div>
