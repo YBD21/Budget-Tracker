@@ -16,3 +16,8 @@ export const findAccount = async (data) => {
   const response = await client().post(`${baseUrl}/find-account`, data)
   return response.data
 }
+
+export const sendOtpEmail = async (data) => {
+  const response = await client().post(`${baseUrl}/send-otp-email`, data)
+  return response.data
+}

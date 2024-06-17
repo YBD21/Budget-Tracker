@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -9,15 +9,19 @@ import Button from '../Button'
 import ToggleTheme from '../ToggleTheme'
 import ErrorMessage from '../ErrorMessage'
 import { pagesOptions } from '.'
+import { useAuthUser } from '@/hooks/user/useAuthUser'
 
 const VerifyOtp = ({ email, togglePage }) => {
-  const [isDisable, setIsDisable] = useState(true) // default true
+  const { sendOtpEmailMutation } = useAuthUser()
+
+  const [error, setError] = useState(null) // capture error with this state
+  const [encOtp, setEncOtp] = useState(null)
 
   const MAX = 6
 
   const formSchema = Yup.object({
     otp: Yup.string()
-      .required('Verification code is required!')
+      .required('Verification code is required !')
       .test(
         'otp',
         `Verification code must be ${MAX} characters!`,
@@ -32,7 +36,6 @@ const VerifyOtp = ({ email, togglePage }) => {
   const {
     register,
     handleSubmit,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm(validationOpt)
@@ -42,13 +45,40 @@ const VerifyOtp = ({ email, togglePage }) => {
     clearErrors()
   }
 
-  const cancelVerify = () => {
+  const cancelVerify = (e) => {
+    e.preventDefault() // prevent page refresh
     togglePage(pagesOptions[0])
   }
 
-  const handleVerifySubmit = async (data) => {
-    console.log(data.otp)
+  const sendEmail = useCallback(async () => {
+    const userData = {
+      email: email,
+    }
+    try {
+      const data = await sendOtpEmailMutation.mutateAsync(userData)
+      setEncOtp(data)
+    } catch (err) {
+      const errorMessage = err?.response?.data?.error_message || err?.message
+      setError(errorMessage)
+    }
+  }, [])
+
+  const reSendEmail = (e) => {
+    e.preventDefault() // prevent page refresh
+    sendEmail()
   }
+
+  const handleVerifySubmit = async (data) => {
+    console.log(typeof data.otp)
+    console.log(data.otp)
+    const userData = {
+      otp: data.otp,
+    }
+  }
+
+  useEffect(() => {
+    sendEmail()
+  }, [email, sendEmail])
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -82,14 +112,20 @@ const VerifyOtp = ({ email, togglePage }) => {
             <ErrorMessage errorName={errors?.otp} />
           </div>
 
-          <div className="flex flex-row justify-between px-2.5 pt-2 pb-2">
+          <div
+            className={`flex flex-row  px-2.5 pt-2 pb-2  ${sendOtpEmailMutation.isPending ? 'justify-end' : 'justify-between'}`}
+          >
             {/* Resend will only apper when verify code is generated in backend */}
-            <button
-              className="text-sm text-blue-600 font-semibold cursor-pointer hover:underline decoration-2 decoration-blue-600"
-              // onClick={reSendEmail}
-            >
-              Resend Code
-            </button>
+
+            {!sendOtpEmailMutation.isPending && (
+              <button
+                className={`text-sm text-blue-600 font-semibold cursor-pointer hover:underline decoration-2 decoration-blue-600`}
+                onClick={reSendEmail}
+              >
+                Resend Code
+              </button>
+            )}
+
             <button
               className="text-sm font-medium cursor-pointer hover:underline decoration-2  text-black dark:text-gray-300"
               onClick={cancelVerify}
@@ -108,7 +144,8 @@ const VerifyOtp = ({ email, togglePage }) => {
             <Button
               title={'Verify'}
               type="primary"
-              isDisable={isDisable}
+              isDisable={sendOtpEmailMutation.isPending}
+              // isPending={}
               handleClick={handleSubmit(handleVerifySubmit)}
             />
           </div>

@@ -1,5 +1,10 @@
 import { CURRENT_USER } from '@/constants/queryKey'
-import { findAccount, loginUser, verifyCaptcha } from '@/services/user'
+import {
+  findAccount,
+  loginUser,
+  sendOtpEmail,
+  verifyCaptcha,
+} from '@/services/user'
 import {
   decodeUser,
   setHttpOnlyFindAccess,
@@ -37,10 +42,15 @@ export const useAuthUser = () => {
 
   const logoutUserMutation = () => queryClient.clear()
 
+  const sendOtpEmailMutation = useMutation({
+    mutationFn: sendOtpEmail,
+  })
+
   return {
     verifyCaptchaMutation,
     logoutUserMutation,
     loginUserMutation,
     findAccountMutation,
+    sendOtpEmailMutation,
   }
 }
