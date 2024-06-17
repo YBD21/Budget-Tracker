@@ -97,7 +97,7 @@ const ResetPassword = ({ email }) => {
               disabled
               className={`
               border-gray-500 focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400
-              block w-full px-4 py-1.5 mt-2.5 text-gray-400  border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm  cursor-not-allowed dark:bg-neutral-700 `}
+              block w-full px-4 py-1.5 mt-2.5 text-gray-400 border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm  cursor-not-allowed dark:bg-neutral-700 `}
             />
             <ErrorMessage errorName={errors?.email} />
           </div>
@@ -117,7 +117,7 @@ const ResetPassword = ({ email }) => {
                 autoComplete="new-password"
                 className={`
                 ${errors?.createPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-                block w-full px-4 py-1.5 mt-2.5 text-white border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm placeholder:text-gray-300 dark:bg-neutral-700`}
+                block w-full px-4 py-1.5 mt-2.5  border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm placeholder:text-gray-300 dark:bg-neutral-700`}
               />
 
               {/* hide/unhide password */}
@@ -150,7 +150,7 @@ const ResetPassword = ({ email }) => {
                 onChange={handleConfirmPasswordChange}
                 className={`
                 ${errors?.confirmPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-                block w-full px-4 py-1.5 mt-2.5 text-white border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm placeholder:text-gray-300 dark:bg-neutral-700`}
+                block w-full px-4 py-1.5 mt-2.5  border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm placeholder:text-gray-300 dark:bg-neutral-700`}
               />
               {/* hide/unhide password */}
               <div
