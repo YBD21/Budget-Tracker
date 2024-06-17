@@ -86,8 +86,6 @@ const VerifyOtp = ({ email, togglePage }) => {
       const response = await verifyOtpMutation.mutateAsync(userData)
       if (response.status === true) {
         switchToResetPassword()
-      } else {
-        setError('Incorrect Data')
       }
     } catch (err) {
       const errorMessage = err?.response?.data?.error_message || err?.message
@@ -97,7 +95,7 @@ const VerifyOtp = ({ email, togglePage }) => {
 
   useEffect(() => {
     sendEmail()
-  }, [email, sendEmail])
+  }, [email])
 
   return (
     <div className="flex justify-center items-center h-screen">

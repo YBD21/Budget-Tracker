@@ -151,15 +151,22 @@ export class AuthController {
     @Body() verifyCodeData: VerifyCodeDTO,
   ): Promise<void> {
     try {
-      const status = this.authService.verifyHash(
+      const VerifyStatus = await this.authService.verifyHash(
         verifyCodeData.hash,
         verifyCodeData.otp,
       );
 
-      if (status) {
-        res.status(HttpStatus.OK).send({ status: status });
+      if (VerifyStatus) {
+        const respondData: VerifyCaptchaResponse = {
+          status: VerifyStatus,
+        };
+        res.status(HttpStatus.OK).send(respondData);
       } else {
-        res.status(HttpStatus.NOT_FOUND).send({ status: status });
+        const respondData: VerifyCaptchaResponse = {
+          status: VerifyStatus,
+          error_message: 'Incorrect Data',
+        };
+        res.status(HttpStatus.NOT_FOUND).send(respondData);
       }
     } catch (error) {
       res

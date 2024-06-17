@@ -4,6 +4,8 @@ const VerifyOTPErrorBox = ({ message }) => {
   const [isClicked, setIsClicked] = useState(true)
   const [text, setText] = useState({})
 
+  console.log(message)
+
   useEffect(() => {
     switch (message) {
       case 'Network Error':
