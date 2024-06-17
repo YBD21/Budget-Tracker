@@ -22,6 +22,16 @@ export class RecaptchaDTO {
   response: string;
 }
 
+export class VerifyCodeDTO {
+  @IsString()
+  @IsNotEmpty()
+  otp: string;
+
+  @IsString()
+  @IsNotEmpty()
+  hash: string;
+}
+
 export type LoginSuccessResponse = {
   status?: boolean;
   accessToken?: string;

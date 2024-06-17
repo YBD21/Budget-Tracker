@@ -14,6 +14,7 @@ import {
   LoginDTO,
   RecaptchaDTO,
   VerifyCaptchaResponse,
+  VerifyCodeDTO,
 } from './dto/auth.dto';
 import { Request, Response } from 'express';
 
@@ -135,6 +136,30 @@ export class AuthController {
       if (respond) {
         const hashOfOTP = this.authService.generateHashFromOTP(otp);
         res.status(HttpStatus.OK).send(hashOfOTP);
+      }
+    } catch (error) {
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('Internal Server Error');
+    }
+  }
+
+  @Post('verify-otp')
+  async handleVerifyOTP(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() verifyCodeData: VerifyCodeDTO,
+  ): Promise<void> {
+    try {
+      const status = this.authService.verifyHash(
+        verifyCodeData.hash,
+        verifyCodeData.otp,
+      );
+
+      if (status) {
+        res.status(HttpStatus.OK).send({ status: status });
+      } else {
+        res.status(HttpStatus.NOT_FOUND).send({ status: status });
       }
     } catch (error) {
       res

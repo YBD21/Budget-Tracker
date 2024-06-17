@@ -37,11 +37,8 @@ export class AuthService {
     return this.configService.get<string>('GOOGLE_SITE_VERIFY_URL');
   }
 
-  async checkPassword(
-    hashPassword: string,
-    password: string,
-  ): Promise<boolean> {
-    return bcrypt.compare(password, hashPassword);
+  async verifyHash(hash: string, pass: string): Promise<boolean> {
+    return bcrypt.compare(pass, hash);
   }
 
   async verifyToken(token: string): Promise<boolean> {
@@ -125,7 +122,7 @@ export class AuthService {
         };
       }
 
-      const passwordStatus = await this.checkPassword(
+      const passwordStatus = await this.verifyHash(
         snapshot.val().Password,
         loginDTO.password,
       );
