@@ -95,7 +95,7 @@ const VerifyOtp = ({ email, togglePage }) => {
 
   useEffect(() => {
     sendEmail()
-  }, [email])
+  }, [])
 
   return (
     <div className="flex justify-center items-center h-screen">
