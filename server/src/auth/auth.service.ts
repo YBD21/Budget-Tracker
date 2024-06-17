@@ -7,6 +7,7 @@ import {
   LoginDTO,
   LoginSuccessResponse,
   RecaptchaDTO,
+  ResetPasswordSuccessResponse,
   VerifyCaptchaResponse,
 } from './dto/auth.dto';
 import { UsersService } from 'src/users/users.service';
@@ -179,6 +180,50 @@ export class AuthService {
     }
   }
 
+  async resetPassword(
+    resetData: LoginDTO,
+  ): Promise<ResetPasswordSuccessResponse> {
+    try {
+      const mailDomain = resetData.email.split('@')[1].split('.')[0];
+      const userId = this.userService.getUniqueIdFromEmail(resetData.email);
+      const encPassword = this.encryptPassword(resetData.password);
+
+      const resetReferencePath = `SignWithEmail/${mailDomain}/${userId}`;
+
+      const databaseReference = this.firebaseService
+        .getDatabase()
+        .ref(resetReferencePath);
+
+      const snapshot = await databaseReference.once('value');
+
+      if (!snapshot.exists()) {
+        // account not found for email
+        this.logger.warn(
+          `Reset Password attempt with incorrect email: ${resetData.email}`,
+        );
+        return {
+          status: false,
+          error_message: 'Incorrect Data',
+        };
+      }
+
+      await databaseReference.update({
+        Password: encPassword,
+      });
+
+      this.logger.log(`Password is Reset for with email: ${resetData.email}`);
+
+      return {
+        status: true,
+      };
+    } catch (error) {
+      this.logger.error(`Reset Password process failed: ${error.message}`);
+      throw new Error(
+        'An error occurred during the reset password process. Please try again later.',
+      );
+    }
+  }
+
   // Generate a random OTP
   generateOTP() {
     const digits = '0123456789';
@@ -194,6 +239,14 @@ export class AuthService {
     const salt = bcrypt.genSaltSync(7);
     const hashOfOTP = bcrypt.hashSync(otp, salt);
     return hashOfOTP;
+  };
+
+  // Generate a hash for password
+
+  encryptPassword = (pass: string) => {
+    const salt = bcrypt.genSaltSync(10);
+    const encPass = bcrypt.hashSync(pass, salt);
+    return encPass;
   };
 
   async generateCaptchaVerifyToken(data: any): Promise<string> {

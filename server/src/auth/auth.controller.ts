@@ -4,6 +4,7 @@ import {
   Get,
   // HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   Res,
@@ -168,6 +169,26 @@ export class AuthController {
         };
         res.status(HttpStatus.NOT_FOUND).send(respondData);
       }
+    } catch (error) {
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('Internal Server Error');
+    }
+  }
+
+  @Patch('reset-password')
+  async handleResetPassword(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() ResetPasswordData: LoginDTO,
+  ): Promise<void> {
+    try {
+      const respondData =
+        await this.authService.resetPassword(ResetPasswordData);
+      if (respondData.status) {
+        res.status(HttpStatus.OK).send(respondData);
+      }
+      res.status(HttpStatus.NOT_FOUND).send(respondData);
     } catch (error) {
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)

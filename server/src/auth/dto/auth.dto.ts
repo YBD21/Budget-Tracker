@@ -39,6 +39,11 @@ export type LoginSuccessResponse = {
   error_message: false | string;
 };
 
+export type ResetPasswordSuccessResponse = {
+  status: boolean;
+  error_message?: string;
+};
+
 export type VerifyCaptchaResponse = {
   status: boolean;
   token?: string;
