@@ -10,7 +10,7 @@ import ToggleTheme from '../ToggleTheme'
 import ErrorMessage from '../ErrorMessage'
 import { pagesOptions } from '.'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
-import VerifyOTPErrorBox from '../ErrorMessageBox/VerifyOTPErrorBox'
+import VerifyOTPErrorBox from '../MessageBox/VerifyOTPErrorBox'
 
 const VerifyOtp = ({ email, togglePage }) => {
   const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()

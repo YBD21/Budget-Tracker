@@ -13,7 +13,7 @@ import Button from '../Button'
 import ErrorMessage from '../ErrorMessage'
 import Recaptcha from '../Recaptcha'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
-import FindAccountErrorBox from '../ErrorMessageBox/FindAccountErrorBox'
+import FindAccountErrorBox from '../MessageBox/FindAccountErrorBox'
 import { pagesOptions } from '.'
 
 const FindAccount = ({ togglePage, setEmailToParent }) => {
