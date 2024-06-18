@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ErrorMessageBox = ({ text, checkClick }) => {
+const MessageBox = ({ text, checkClick }) => {
   return (
     <div
       className="flex flex-col justify-center bg-red-100 border border-red-900 text-red-800 px-2.5 py-3 rounded-md relative mt-4"
@@ -28,4 +28,4 @@ const ErrorMessageBox = ({ text, checkClick }) => {
   )
 }
 
-export default ErrorMessageBox
+export default MessageBox

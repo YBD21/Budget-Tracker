@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import ErrorMessageBox from '.'
+import MessageBox from '.'
 // refactor this later
 const VerifyOTPErrorBox = ({ message }) => {
   const [isClicked, setIsClicked] = useState(true)
@@ -47,7 +47,7 @@ const VerifyOTPErrorBox = ({ message }) => {
   }
 
   if (isClicked) {
-    return <ErrorMessageBox text={text} checkClick={checkClick} />
+    return <MessageBox text={text} checkClick={checkClick} />
   } else return null
 }
 
