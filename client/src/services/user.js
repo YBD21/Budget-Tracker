@@ -28,6 +28,6 @@ export const verifyOtp = async (data) => {
 }
 
 export const resetPassword = async (data) => {
-  const response = await client().post(`${baseUrl}/reset-password`, data)
+  const response = await client().patch(`${baseUrl}/reset-password`, data)
   return response.data
 }

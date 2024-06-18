@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -12,10 +13,15 @@ import { LOGIN } from '@/constants/Routes'
 import ToggleTheme from '../ToggleTheme'
 import ErrorMessage from '../ErrorMessage'
 import Button from '../Button'
+import { useAuthUser } from '@/hooks/user/useAuthUser'
 
 const ResetPassword = ({ email }) => {
+  const router = useRouter()
+
   const [open, setOpen] = useState(false)
   const [error, setError] = useState(null) // capture error with this state
+
+  const { resetPasswordMutation } = useAuthUser()
 
   // handle toggle to show or hide password
   const toggle = () => {
@@ -72,8 +78,30 @@ const ResetPassword = ({ email }) => {
     handleClearErrors()
   }
 
+  const redirectToLogin = () => {
+    router.replace(LOGIN)
+  }
+
   const handleResetPassword = async (data) => {
+    setError(null) // initial on every click
     console.log(data.confirmPassword)
+
+    const resetData = {
+      email: data.email,
+      password: data.confirmPassword,
+    }
+
+    try {
+      const respond = await resetPasswordMutation.mutateAsync(resetData)
+
+      if (respond.status === true) {
+        // wait timer of 2 sec and redirect
+        setTimeout(redirectToLogin, 2000)
+      }
+    } catch (err) {
+      const errorMessage = err?.response?.data?.error_message || err?.message
+      setError(errorMessage)
+    }
   }
 
   return (

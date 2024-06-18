@@ -78,7 +78,7 @@ const Login = () => {
     } catch (err) {
       const errorMessage = err?.response?.data?.error_message || err?.message
       setError(errorMessage)
-      console.log(errorMessage) // Network Error
+      // console.log(errorMessage) // Network Error
     }
   }
 
