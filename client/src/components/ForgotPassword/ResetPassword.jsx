@@ -14,6 +14,7 @@ import ToggleTheme from '../ToggleTheme'
 import ErrorMessage from '../ErrorMessage'
 import Button from '../Button'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
+import ResetPasswordMessageBox from './ResetPasswordMessageBox'
 
 const ResetPassword = ({ email }) => {
   const router = useRouter()
@@ -95,6 +96,7 @@ const ResetPassword = ({ email }) => {
       const respond = await resetPasswordMutation.mutateAsync(resetData)
 
       if (respond.status === true) {
+        setMessage('ResetPassword')
         // wait timer of 2 sec and redirect
         setTimeout(redirectToLogin, 2000)
       }
@@ -196,12 +198,7 @@ const ResetPassword = ({ email }) => {
 
           {/* Message Box */}
 
-          {/* {error && (
-            <ErrorMessageBoxForgorPassword
-              Error_message={error}
-              status={true}
-            />
-          )} */}
+          {message && <ResetPasswordMessageBox message={message} />}
 
           <div className="pt-5">
             <Button title="Reset Password" type="primary" />
