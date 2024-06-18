@@ -13,7 +13,7 @@ import {
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { HttpService } from '@nestjs/axios';
-import * as easyYopmail from 'easy-yopmail';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +24,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
     private readonly userService: UsersService,
+    private readonly mailService: MailerService,
   ) {}
 
   getSecretKey() {
@@ -327,14 +328,17 @@ export class AuthService {
       <p><i>Note: This is a system-generated email. Please do not reply.</i></p>
     `;
 
-    const yopMail = this.configService.get<string>('YOP_MAIL');
-
-    const subject = 'Email Verification';
+    const mail = this.configService.get<string>('MAIL');
 
     try {
-      await easyYopmail.writeMessage(yopMail, email, subject, html);
-      this.logger.log(`Verification email sent to ${email}`);
+      await this.mailService.sendMail({
+        from: `"BudgetTracker"${mail}`,
+        to: `${email}`,
+        subject: 'Email Verification',
+        html: html,
+      });
 
+      this.logger.log(`Verification email sent to ${email}`);
       return true;
     } catch (error) {
       this.logger.error(`Failed to send verification email to ${email}`);

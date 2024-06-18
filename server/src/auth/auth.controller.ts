@@ -84,7 +84,7 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
     @Body() findAccountData: FindAccountDTO,
-  ): Promise<void> {
+  ): Promise<Response> {
     try {
       const accessData = req.accessData;
 
@@ -103,19 +103,19 @@ export class AuthController {
             token: token,
           };
 
-          res.status(HttpStatus.OK).send(respondData);
+          return res.status(HttpStatus.OK).send(respondData);
         }
 
         const respondData: VerifyCaptchaResponse = {
           status: accountStatus,
           error_message: 'Incorrect Data',
         };
-        res.status(HttpStatus.NOT_FOUND).send(respondData);
+        return res.status(HttpStatus.NOT_FOUND).send(respondData);
       } else {
-        res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized');
+        return res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized'); // Stop further execution
       }
     } catch (error) {
-      res
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal Server Error');
     }
