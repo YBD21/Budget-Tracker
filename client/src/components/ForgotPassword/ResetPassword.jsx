@@ -96,8 +96,7 @@ const ResetPassword = ({ email }) => {
               value={email}
               disabled
               className={`
-              border-gray-500 focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400
-              block w-full px-4 py-1.5 mt-2.5 dark:text-gray-400 text-gray-600 border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm  cursor-not-allowed dark:bg-neutral-700 `}
+              border-gray-500 focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400 block w-full px-4 py-1.5 mt-2.5 dark:text-gray-400 text-gray-600 border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm  cursor-not-allowed dark:bg-neutral-700 `}
             />
             <ErrorMessage errorName={errors?.email} />
           </div>
