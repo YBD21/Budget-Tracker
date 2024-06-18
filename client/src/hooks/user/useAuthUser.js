@@ -2,6 +2,7 @@ import { CURRENT_USER } from '@/constants/queryKey'
 import {
   findAccount,
   loginUser,
+  resetPassword,
   sendOtpEmail,
   verifyCaptcha,
   verifyOtp,
@@ -41,8 +42,6 @@ export const useAuthUser = () => {
     },
   })
 
-  const logoutUserMutation = () => queryClient.clear()
-
   const sendOtpEmailMutation = useMutation({
     mutationFn: sendOtpEmail,
   })
@@ -51,6 +50,12 @@ export const useAuthUser = () => {
     mutationFn: verifyOtp,
   })
 
+  const resetPasswordMutation = useMutation({
+    mutationFn: resetPassword,
+  })
+
+  const logoutUserMutation = () => queryClient.clear()
+
   return {
     verifyCaptchaMutation,
     logoutUserMutation,
@@ -58,5 +63,6 @@ export const useAuthUser = () => {
     findAccountMutation,
     sendOtpEmailMutation,
     verifyOtpMutation,
+    resetPasswordMutation,
   }
 }

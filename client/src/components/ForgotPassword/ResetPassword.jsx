@@ -15,6 +15,7 @@ import Button from '../Button'
 
 const ResetPassword = ({ email }) => {
   const [open, setOpen] = useState(false)
+  const [error, setError] = useState(null) // capture error with this state
 
   // handle toggle to show or hide password
   const toggle = () => {
@@ -50,7 +51,6 @@ const ResetPassword = ({ email }) => {
     register,
     handleSubmit,
     setValue,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm(validationOpt)

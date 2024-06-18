@@ -26,3 +26,8 @@ export const verifyOtp = async (data) => {
   const response = await client().post(`${baseUrl}/verify-otp`, data)
   return response.data
 }
+
+export const resetPassword = async (data) => {
+  const response = await client().post(`${baseUrl}/reset-password`, data)
+  return response.data
+}
