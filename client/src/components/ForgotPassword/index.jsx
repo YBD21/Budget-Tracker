@@ -9,8 +9,8 @@ import ResetPassword from './ResetPassword'
 export const pagesOptions = ['ForgotPassword', 'VerifyOtp', 'ResetPassword']
 
 export const ForgetPassword = () => {
-  const [pageName, setPageName] = useState(pagesOptions[2]) // default pagesOptions[0]
-  const [email, setEmail] = useState('')
+  const [pageName, setPageName] = useState(pagesOptions[0]) // default pagesOptions[0]
+  const [email, setEmail] = useState('') // default ''
 
   const switchPage = (name) => {
     setPageName(name)
