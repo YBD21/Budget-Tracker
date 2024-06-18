@@ -19,7 +19,7 @@ const ResetPassword = ({ email }) => {
   const router = useRouter()
 
   const [open, setOpen] = useState(false)
-  const [error, setError] = useState(null) // capture error with this state
+  const [message, setMessage] = useState(null) // capture error with this state
 
   const { resetPasswordMutation } = useAuthUser()
 
@@ -83,7 +83,7 @@ const ResetPassword = ({ email }) => {
   }
 
   const handleResetPassword = async (data) => {
-    setError(null) // initial on every click
+    setMessage(null) // initial on every click
     console.log(data.confirmPassword)
 
     const resetData = {
@@ -100,7 +100,7 @@ const ResetPassword = ({ email }) => {
       }
     } catch (err) {
       const errorMessage = err?.response?.data?.error_message || err?.message
-      setError(errorMessage)
+      setMessage(errorMessage)
     }
   }
 
@@ -194,7 +194,7 @@ const ResetPassword = ({ email }) => {
             <ErrorMessage errorName={errors?.confirmPassword} />
           </div>
 
-          {/* Error Message Box */}
+          {/* Message Box */}
 
           {/* {error && (
             <ErrorMessageBoxForgorPassword
@@ -202,9 +202,6 @@ const ResetPassword = ({ email }) => {
               status={true}
             />
           )} */}
-
-          {/* Success Message Box */}
-          {/* {success && <SuccessMessageBox props={success} status={true} />} */}
 
           <div className="pt-5">
             <Button title="Reset Password" type="primary" />
