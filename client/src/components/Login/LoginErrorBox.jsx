@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import MessageBox from '.'
+import MessageBox from '@/components/MessageBox'
+
 // refactor this later
 const LoginErrorBox = ({ message }) => {
   const [isClicked, setIsClicked] = useState(true)

@@ -16,7 +16,7 @@ import Button from '../Button'
 import ErrorMessage from '../ErrorMessage'
 import ToggleTheme from '../ToggleTheme'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
-import LoginErrorBox from '../MessageBox/LoginErrorBox'
+import LoginErrorBox from './LoginErrorBox'
 
 const Login = () => {
   const router = useRouter()
