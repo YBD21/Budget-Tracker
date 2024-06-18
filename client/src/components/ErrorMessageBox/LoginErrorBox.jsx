@@ -19,23 +19,17 @@ const LoginErrorBox = ({ message }) => {
           Second: 'Email Or Password !',
         })
 
-      //   case 'Incorrect Password':
-      //     return setText({
-      //       First: 'Incorrect ',
-      //       Second: 'Password !',
-      //     })
-
       case 'Disable Account':
         return setText({
           First: 'Sorry !',
           Second: 'Your account has been disable.',
         })
 
-      //   case 'Too Many Requests':
-      //     return setText({
-      //       First: 'Too many login attempts',
-      //       Second: ',please try again later !',
-      //     })
+      case 'Too Many Requests':
+        return setText({
+          First: 'Too many login attempts',
+          Second: ',please try again later !',
+        })
 
       default:
         return setText({

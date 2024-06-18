@@ -1,9 +1,9 @@
 import React from 'react'
 
-const MessageBox = ({ text, checkClick }) => {
+const MessageBox = ({ text, checkClick, isError = true }) => {
   return (
     <div
-      className="flex flex-col justify-center bg-red-100 border border-red-900 text-red-800 px-2.5 py-3 rounded-md relative mt-4"
+      className={`flex flex-col justify-center border ${isError ? 'bg-red-100 border-red-900 text-red-800' : 'bg-green-100 border-green-900 text-green-800'}  px-2.5 py-3 rounded-md relative mt-4`}
       role="alert"
     >
       {/* Display Error Message */}
@@ -14,7 +14,7 @@ const MessageBox = ({ text, checkClick }) => {
 
       <span className="absolute right-0.5">
         <svg
-          className="fill-current h-6 w-6 text-red-700"
+          className={`fill-current h-6 w-6 ${isError ? 'text-red-700' : 'text-green-700'}`}
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
