@@ -13,8 +13,8 @@ import Button from '../Button'
 import ErrorMessage from '../ErrorMessage'
 import Recaptcha from '../Recaptcha'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
-import FindAccountErrorBox from '../MessageBox/FindAccountErrorBox'
 import { pagesOptions } from '.'
+import FindAccountErrorBox from './FindAccountErrorBox'
 
 const FindAccount = ({ togglePage, setEmailToParent }) => {
   const [recapchaStatus, setRecapchaStatus] = useState(false)
