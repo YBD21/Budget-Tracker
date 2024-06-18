@@ -25,17 +25,19 @@ export class AuthController {
 
   // @HttpCode(HttpStatus.OK)
   @Get('user-data')
-  async getUserData(@Req() req: Request, @Res() res: Response): Promise<void> {
+  async getUserData(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
     try {
       const accessToken = req.cookies.userData;
       if (!accessToken || !(await this.authService.verifyToken(accessToken))) {
-        res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized');
-        return;
+        return res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized');
       }
 
-      res.json(accessToken);
+      return res.json(accessToken);
     } catch (error) {
-      res
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal Server Error');
     }
@@ -46,7 +48,7 @@ export class AuthController {
   async login(
     @Res() res: Response,
     @Body() loginData: LoginDTO,
-  ): Promise<void> {
+  ): Promise<Response> {
     try {
       const respond = await this.authService.handleLogin(loginData);
       if (respond.status === true) {
@@ -56,12 +58,12 @@ export class AuthController {
           httpOnly: true, // set to true to prevent client-side scripts from accessing the cookie
           sameSite: 'lax',
         });
-        res.json(respond);
+        return res.json(respond);
       } else if (respond.message) {
-        res.status(HttpStatus.BAD_REQUEST).json(respond);
+        return res.status(HttpStatus.BAD_REQUEST).json(respond);
       }
     } catch (error) {
-      res
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal Server Error');
     }
@@ -71,12 +73,12 @@ export class AuthController {
   async verifyCaptcha(
     @Res() res: Response,
     @Body() recaptchaData: RecaptchaDTO,
-  ) {
+  ): Promise<Response> {
     // console.log(recaptchaData.response);
 
     const respond = await this.authService.handleVerifyCaptcha(recaptchaData);
 
-    res.status(HttpStatus.CREATED).json(respond);
+    return res.status(HttpStatus.CREATED).json(respond);
   }
 
   @Post('find-account')
@@ -126,7 +128,7 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
     @Body() verifyEmailData: FindAccountDTO,
-  ): Promise<void> {
+  ): Promise<Response> {
     try {
       const userEmail = verifyEmailData.email;
       const otp = this.authService.generateOTP();
@@ -136,10 +138,10 @@ export class AuthController {
       );
       if (respond) {
         const hashOfOTP = this.authService.generateHashFromOTP(otp);
-        res.status(HttpStatus.OK).send(hashOfOTP);
+        return res.status(HttpStatus.OK).send(hashOfOTP);
       }
     } catch (error) {
-      res
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal Server Error');
     }
@@ -150,7 +152,7 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
     @Body() verifyCodeData: VerifyCodeDTO,
-  ): Promise<void> {
+  ): Promise<Response> {
     try {
       const VerifyStatus = await this.authService.verifyHash(
         verifyCodeData.hash,
@@ -161,16 +163,16 @@ export class AuthController {
         const respondData: VerifyCaptchaResponse = {
           status: VerifyStatus,
         };
-        res.status(HttpStatus.OK).send(respondData);
+        return res.status(HttpStatus.OK).send(respondData);
       } else {
         const respondData: VerifyCaptchaResponse = {
           status: VerifyStatus,
           error_message: 'Incorrect Data',
         };
-        res.status(HttpStatus.NOT_FOUND).send(respondData);
+        return res.status(HttpStatus.NOT_FOUND).send(respondData);
       }
     } catch (error) {
-      res
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal Server Error');
     }
@@ -181,16 +183,16 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
     @Body() ResetPasswordData: LoginDTO,
-  ): Promise<void> {
+  ): Promise<Response> {
     try {
       const respondData =
         await this.authService.resetPassword(ResetPasswordData);
       if (respondData.status) {
-        res.status(HttpStatus.OK).send(respondData);
+        return res.status(HttpStatus.OK).send(respondData);
       }
-      res.status(HttpStatus.NOT_FOUND).send(respondData);
+      return res.status(HttpStatus.NOT_FOUND).send(respondData);
     } catch (error) {
-      res
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send('Internal Server Error');
     }
