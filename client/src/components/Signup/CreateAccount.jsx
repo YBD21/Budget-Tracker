@@ -13,7 +13,7 @@ import { LOGIN } from '@/constants/Routes'
 import ErrorMessage from '../ErrorMessage'
 import ToggleTheme from '../ToggleTheme'
 
-const CreateAccount = () => {
+const CreateAccount = ({ togglePage }) => {
   const [open, setOpen] = useState(false)
 
   // handle toggle to show or hide password
