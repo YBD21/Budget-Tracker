@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 // import { ResetPasswordSuccessResponse } from 'src/auth/dto/auth.dto';
 import { FirebaseService } from 'src/firebase/firebase.service';
+import { BudgetSummary } from './dto/users.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,7 @@ export class UsersService {
     return uniqueId;
   }
 
-  async createBudgetSummary(email: string) {
+  async createBudgetSummary(email: string): Promise<boolean> {
     const userId = this.getUniqueIdFromEmail(email);
     const budgetRefPath = 'Users';
     const fireStoreRef = this.firebaseService
@@ -36,12 +37,46 @@ export class UsersService {
         this.logger.log(
           `Initial BudgetSummary has been created for email: ${email}`,
         );
+        return true;
       }
+      return false;
     } catch (error) {
       this.logger.error(`createBudgetSummary process failed: ${error.message}`);
       throw new Error(
         'An error occurred while creating new budget summary. Please try again later.',
       );
     }
+  }
+
+  async getBudgetSummary(email: string): Promise<BudgetSummary> {
+    const userId = this.getUniqueIdFromEmail(email);
+
+    const budgetRefPath = 'Users';
+
+    const budgetSummaryRef = this.firebaseService
+      .getFirestore()
+      .collection(budgetRefPath)
+      .doc(userId);
+
+    try {
+      const summaryDoc = await budgetSummaryRef.get();
+
+      if (summaryDoc.exists) {
+        const { totalIncome, totalExpense, totalBalance } = summaryDoc.data();
+        return { totalIncome, totalExpense, totalBalance };
+      } else {
+        const status = await this.createBudgetSummary(email);
+
+        if (status) {
+          const updateDoc = await budgetSummaryRef.get();
+
+          if (updateDoc.exists) {
+            const { totalIncome, totalExpense, totalBalance } =
+              updateDoc.data();
+            return { totalIncome, totalExpense, totalBalance };
+          }
+        }
+      }
+    } catch (error) {}
   }
 }

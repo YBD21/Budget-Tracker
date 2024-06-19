@@ -147,9 +147,9 @@ export class AuthService {
         Email: userEmail,
       } = snapshot.val();
 
-      // const { totalIncome, totalExpense, totalBalance } =
-      //   await getBudgetSummary(userId);
-      // add type here later
+      // const { totalIncome, totalExpense, totalBalance } = await this.userService.getBudgetSummary(
+      //   userId
+      // );
       const token = this.generateToken(
         firstName,
         lastName,
