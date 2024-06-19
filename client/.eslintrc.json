@@ -20,15 +20,33 @@
     }
   },
   "rules": {
+    // JavaScript Rules
+    "prefer-const": "warn",
+    "no-var": "warn",
+    "no-unused-vars": "warn",
+    "object-shorthand": "warn",
+    "quote-props": ["warn", "as-needed"],
+    // Tanstack Rules
     "@tanstack/query/exhaustive-deps": "error",
     "@tanstack/query/no-rest-destructuring": "warn",
     "@tanstack/query/stable-query-client": "error",
-    "react-hooks/rules-of-hooks": "error", // Enforce React Hooks rules as errors
-    "react-hooks/exhaustive-deps": "warn", // Warn about potentially stale dependencies in Hooks
+    // React Rules
+    "react/jsx-fragments": ["warn", "syntax"], // Shorthand syntax for React fragments
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": ["ts", "tsx"]
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
     "react/jsx-no-undef": "error", // Warn about undefined JSX components
     "react/prop-types": "off", // Disable prop-types check (optional)
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    // React Hooks Rules
+    "react-hooks/rules-of-hooks": "error", // Enforce React Hooks rules as errors
+    "react-hooks/exhaustive-deps": "warn", // Warn about potentially stale dependencies in Hooks
+    "prettier/prettier": "warn"
   },
   "plugins": ["next", "react", "react-hooks", "prettier", "@tanstack/query"],
   "settings": {
