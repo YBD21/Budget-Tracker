@@ -84,7 +84,6 @@ export class AuthController {
       const respond = await this.authService.createAccount(signUpData);
 
       if (respond.status === true) {
-        // pass user email for creating BudgetSummary
         await this.userService.createBudgetSummary(signUpData.email);
         return res.status(HttpStatus.OK).json(respond);
       }
