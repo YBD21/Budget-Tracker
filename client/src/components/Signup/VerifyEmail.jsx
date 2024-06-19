@@ -10,12 +10,12 @@ import ErrorMessage from '../ErrorMessage'
 import VerifyOTPErrorBox from '../ForgotPassword/VerifyOTPErrorBox'
 import Button from '../Button'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
+import VerifyEmailMessageBox from './VerifyEmailMessageBox'
 
 const VerifyEmail = ({ email, togglePage }) => {
-  // display messege that your account has been created
-
   const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()
 
+  const [message, setMessage] = useState(null)
   const [error, setError] = useState(null) // capture error with this state
   const [encOtp, setEncOtp] = useState(null)
 
@@ -52,9 +52,10 @@ const VerifyEmail = ({ email, togglePage }) => {
     togglePage(false)
   }
 
-  const switchToLogin = () => {
-    // redirect to login page
+  const redirectToLogin = () => {
+    router.replace(LOGIN)
   }
+  // display messege that your account has been created
 
   const sendEmail = useCallback(async () => {
     const userData = {
@@ -156,6 +157,9 @@ const VerifyEmail = ({ email, togglePage }) => {
 
           {/* Display Error Message Box  */}
           {error && <VerifyOTPErrorBox message={error} />}
+
+          {/* Message Box */}
+          {message && <VerifyEmailMessageBox message={message} />}
 
           {/* Verify */}
           <div className="min-w-max mt-4">
