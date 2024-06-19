@@ -3,16 +3,17 @@
 import { useState } from 'react'
 
 import CreateAccount from './CreateAccount'
+import VerifyEmail from './VerifyEmail'
 
 const Signup = () => {
-  const [togglePage, setTogglePage] = useState(false) // default false
+  const [togglePage, setTogglePage] = useState(true) // default false
 
   const switchPage = (status) => {
     setTogglePage(status)
   }
 
   if (togglePage === true) {
-    return <div>verify Email</div>
+    return <VerifyEmail togglePage={switchPage} email={''} />
   }
 
   return <CreateAccount togglePage={switchPage} />
