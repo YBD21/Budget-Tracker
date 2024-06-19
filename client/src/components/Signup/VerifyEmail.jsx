@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -11,8 +12,11 @@ import VerifyOTPErrorBox from '../ForgotPassword/VerifyOTPErrorBox'
 import Button from '../Button'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
 import VerifyEmailMessageBox from './VerifyEmailMessageBox'
+import { LOGIN } from '@/constants/Routes'
 
 const VerifyEmail = ({ userInfo, togglePage }) => {
+  const router = useRouter()
+
   const { sendOtpEmailMutation, verifyOtpMutation, createAccountMutation } =
     useAuthUser()
 
@@ -183,7 +187,9 @@ const VerifyEmail = ({ userInfo, togglePage }) => {
               title={'Verify'}
               type="primary"
               isDisable={sendOtpEmailMutation.isPending}
-              isPending={verifyOtpMutation.isPending}
+              isPending={
+                verifyOtpMutation.isPending || createAccountMutation.isPending
+              }
               handleClick={handleSubmit(handleVerifySubmit)}
             />
           </div>
