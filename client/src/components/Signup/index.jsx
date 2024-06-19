@@ -6,17 +6,22 @@ import CreateAccount from './CreateAccount'
 import VerifyEmail from './VerifyEmail'
 
 const Signup = () => {
-  const [togglePage, setTogglePage] = useState(true) // default false
+  const [togglePage, setTogglePage] = useState(false) // default false
+  const [userData, setUserData] = useState(null)
 
   const switchPage = (status) => {
     setTogglePage(status)
   }
 
-  if (togglePage === true) {
-    return <VerifyEmail togglePage={switchPage} email={''} />
+  const setUserInfo = (data) => {
+    setUserData(data)
   }
 
-  return <CreateAccount togglePage={switchPage} />
+  if (togglePage === true) {
+    return <VerifyEmail togglePage={switchPage} userInfo={userData} />
+  }
+
+  return <CreateAccount togglePage={switchPage} setUserInfo={setUserInfo} />
 }
 
 export default Signup

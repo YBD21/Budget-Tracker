@@ -13,7 +13,7 @@ import { LOGIN } from '@/constants/Routes'
 import ErrorMessage from '../ErrorMessage'
 import ToggleTheme from '../ToggleTheme'
 
-const CreateAccount = ({ togglePage }) => {
+const CreateAccount = ({ togglePage, setUserInfo }) => {
   const [open, setOpen] = useState(false)
 
   // handle toggle to show or hide password
@@ -96,7 +96,16 @@ const CreateAccount = ({ togglePage }) => {
   }
 
   const handleCreateAccountSubmit = async (data) => {
-    console.log(data.email)
+    const userData = {
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.confirmPassword,
+    }
+
+    setUserInfo(userData)
+
+    togglePage(true)
   }
 
   return (

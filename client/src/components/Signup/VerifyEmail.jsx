@@ -12,7 +12,7 @@ import Button from '../Button'
 import { useAuthUser } from '@/hooks/user/useAuthUser'
 import VerifyEmailMessageBox from './VerifyEmailMessageBox'
 
-const VerifyEmail = ({ email, togglePage }) => {
+const VerifyEmail = ({ userInfo, togglePage }) => {
   const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()
 
   const [message, setMessage] = useState(null)
@@ -59,7 +59,7 @@ const VerifyEmail = ({ email, togglePage }) => {
 
   const sendEmail = useCallback(async () => {
     const userData = {
-      email: email,
+      email: userInfo?.email,
     }
     try {
       const data = await sendOtpEmailMutation.mutateAsync(userData)
@@ -109,7 +109,7 @@ const VerifyEmail = ({ email, togglePage }) => {
         <p className="font-semibold text-center text-gray-700 py-5 dark:text-neutral-300">
           Verification code was sent to{' '}
           <span className="font-medium text-[#300] dark:text-white">
-            {email}
+            {userInfo?.email}
           </span>
         </p>
         {/* verify code */}
