@@ -1,5 +1,6 @@
 import { CURRENT_USER } from '@/constants/queryKey'
 import {
+  createAccount,
   findAccount,
   loginUser,
   resetPassword,
@@ -35,6 +36,10 @@ export const useAuthUser = () => {
     },
   })
 
+  const createAccountMutation = useMutation({
+    mutationFn: createAccount,
+  })
+
   const findAccountMutation = useMutation({
     mutationFn: findAccount,
     onSuccess: (data) => {
@@ -64,5 +69,6 @@ export const useAuthUser = () => {
     sendOtpEmailMutation,
     verifyOtpMutation,
     resetPasswordMutation,
+    createAccountMutation,
   }
 }

@@ -12,6 +12,11 @@ export const verifyCaptcha = async (data) => {
   return response.data
 }
 
+export const createAccount = async (data) => {
+  const response = await client().post(`${baseUrl}/create-account`, data)
+  return response.data
+}
+
 export const findAccount = async (data) => {
   const response = await client().post(`${baseUrl}/find-account`, data)
   return response.data

@@ -13,7 +13,8 @@ import { useAuthUser } from '@/hooks/user/useAuthUser'
 import VerifyEmailMessageBox from './VerifyEmailMessageBox'
 
 const VerifyEmail = ({ userInfo, togglePage }) => {
-  const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()
+  const { sendOtpEmailMutation, verifyOtpMutation, createAccountMutation } =
+    useAuthUser()
 
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(null) // capture error with this state
@@ -76,6 +77,21 @@ const VerifyEmail = ({ userInfo, togglePage }) => {
     sendEmail()
   }
 
+  const handleSignUpSubmit = async () => {
+    setMessage(null) // clear previous error
+    try {
+      const response = await createAccountMutation.mutateAsync(userInfo)
+      if (response.status === true) {
+        setMessage('Account Created')
+        // wait timer of 2 sec and redirect
+        setTimeout(redirectToLogin, 2000)
+      }
+    } catch (err) {
+      const errorMessage = err?.response?.data?.error_message || err?.message
+      setMessage(errorMessage)
+    }
+  }
+
   const handleVerifySubmit = async (data) => {
     setError(null) // clear previous error
 
@@ -87,7 +103,7 @@ const VerifyEmail = ({ userInfo, togglePage }) => {
     try {
       const response = await verifyOtpMutation.mutateAsync(userData)
       if (response.status === true) {
-        switchToResetPassword()
+        await handleSignUpSubmit()
       }
     } catch (err) {
       const errorMessage = err?.response?.data?.error_message || err?.message
