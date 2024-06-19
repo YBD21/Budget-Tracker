@@ -16,8 +16,8 @@ const VerifyEmailMessageBox = ({ message }) => {
 
       case 'Incorrect Data':
         return setText({
-          First: 'Incorrect ',
-          Second: 'Email Or Password !',
+          First: 'Sorry',
+          Second: 'Account Already Exists!',
         })
 
       case 'Disable Account':
