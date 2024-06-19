@@ -10,7 +10,9 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+
 import {
+  CreateAccountDTO,
   FindAccountDTO,
   LoginDTO,
   RecaptchaDTO,
@@ -62,6 +64,27 @@ export class AuthController {
       } else if (respond.message) {
         return res.status(HttpStatus.BAD_REQUEST).json(respond);
       }
+    } catch (error) {
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('Internal Server Error');
+    }
+  }
+
+  @Post('create-account')
+  async handlecreateAccount(
+    @Res() res: Response,
+    @Body() signUpData: CreateAccountDTO,
+  ): Promise<Response> {
+    try {
+      const respond = await this.authService.createAccount(signUpData);
+
+      if (respond.status === true) {
+        // pass user email
+        return res.status(HttpStatus.OK).json(respond);
+      }
+
+      return res.status(HttpStatus.BAD_REQUEST).json(respond);
     } catch (error) {
       return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)

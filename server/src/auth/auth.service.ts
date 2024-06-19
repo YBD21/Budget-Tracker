@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import {
+  CreateAccountDTO,
   FindAccountDTO,
   LoginDTO,
   LoginSuccessResponse,
@@ -177,6 +178,56 @@ export class AuthService {
       this.logger.error(`Login process failed: ${error.message}`);
       throw new Error(
         'An error occurred during the login process. Please try again later.',
+      );
+    }
+  }
+
+  async createAccount(
+    userData: CreateAccountDTO,
+  ): Promise<ResetPasswordSuccessResponse> {
+    try {
+      const mailDomain = userData.email.split('@')[1].split('.')[0];
+      const userId = this.userService.getUniqueIdFromEmail(userData.email);
+
+      const createAccountRefPath = `SignWithEmail/${mailDomain}/${userId}`;
+
+      const databaseReference = this.firebaseService
+        .getDatabase()
+        .ref(createAccountRefPath);
+
+      const snapshot = await databaseReference.once('value');
+
+      if (!snapshot.exists()) {
+        const createdDate = new Date().toString();
+
+        const encPass = this.encryptPassword(userData.password);
+
+        await databaseReference.update({
+          Created_At: createdDate,
+          FirstName: userData.firstName,
+          LastName: userData.lastName,
+          Email: userData.email,
+          LastSeen_At: createdDate,
+          Password: encPass,
+          AccountType: 'Client',
+          AccountID: userId,
+          IsDisable: false,
+        });
+
+        return {
+          status: true,
+        };
+      }
+
+      this.logger.warn(`Signup attempt with existing email: ${userData.email}`);
+      return {
+        status: false,
+        error_message: 'Incorrect Data',
+      };
+    } catch (error) {
+      this.logger.error(`Signup process failed: ${error.message}`);
+      throw new Error(
+        'An error occurred during the signup process. Please try again later.',
       );
     }
   }

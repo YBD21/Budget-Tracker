@@ -10,6 +10,24 @@ export class LoginDTO {
   password: string;
 }
 
+export class CreateAccountDTO {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  firstName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  lastName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
+
 export class FindAccountDTO {
   @IsEmail()
   @IsNotEmpty()
