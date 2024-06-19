@@ -9,7 +9,8 @@
     "plugin:react-hooks/recommended",
     "plugin:@tanstack/eslint-plugin-query/recommended",
     "plugin:prettier/recommended",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:@next/next/recommended"
   ],
   "parserOptions": {
     "ecmaVersion": "latest",
