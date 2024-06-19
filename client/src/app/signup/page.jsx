@@ -1,7 +1,7 @@
-import CreateAccount from '@/components/CreateAccount'
+import Signup from '@/components/Signup'
 
-function CreateAccountPage() {
-  return <CreateAccount />
+function SignupPage() {
+  return <Signup />
 }
 
-export default CreateAccountPage
+export default SignupPage
