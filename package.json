@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@next/eslint-plugin-next": "^14.2.4",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2"
+  }
+}
