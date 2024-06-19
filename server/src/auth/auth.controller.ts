@@ -20,10 +20,14 @@ import {
   VerifyCodeDTO,
 } from './dto/auth.dto';
 import { Request, Response } from 'express';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth-system')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UsersService,
+  ) {}
 
   // @HttpCode(HttpStatus.OK)
   @Get('user-data')
@@ -80,7 +84,8 @@ export class AuthController {
       const respond = await this.authService.createAccount(signUpData);
 
       if (respond.status === true) {
-        // pass user email
+        // pass user email for creating BudgetSummary
+        await this.userService.createBudgetSummary(signUpData.email);
         return res.status(HttpStatus.OK).json(respond);
       }
 
