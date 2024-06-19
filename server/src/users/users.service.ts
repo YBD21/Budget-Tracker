@@ -41,7 +41,9 @@ export class UsersService {
       }
       return false;
     } catch (error) {
-      this.logger.error(`createBudgetSummary process failed: ${error.message}`);
+      this.logger.error(
+        `UsersService:createBudgetSummary process failed: ${error.message}`,
+      );
       throw new Error(
         'An error occurred while creating new budget summary. Please try again later.',
       );
@@ -65,6 +67,8 @@ export class UsersService {
         const { totalIncome, totalExpense, totalBalance } = summaryDoc.data();
         return { totalIncome, totalExpense, totalBalance };
       } else {
+        this.logger.warn(`Budget summary document does not exist`);
+
         const status = await this.createBudgetSummary(email);
 
         if (status) {
@@ -77,6 +81,13 @@ export class UsersService {
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      this.logger.error(
+        `UsersService:getBudgetSummary process failed: ${error.message}`,
+      );
+      throw new Error(
+        'An error occurred while fetching budget summary. Please try again later.',
+      );
+    }
   }
 }
