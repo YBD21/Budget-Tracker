@@ -19,8 +19,8 @@ export default async function middleware(req: NextRequest) {
     try {
       const decodedToken = await decodeUser(token.value);
       role = (decodedToken as DecodedToken)?.role?.toLowerCase() || '';
-    } catch (error) {
-      console.error('Token decoding error:', error);
+    } catch (error: any) {
+      console.log('Token decoding error:', error);
     }
   }
 
@@ -44,8 +44,12 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (redirectPath) {
-    const absoluteURL = new URL(redirectPath, origin);
-    return NextResponse.redirect(absoluteURL.toString());
+    try {
+      const absoluteURL = new URL(redirectPath, origin);
+      return NextResponse.redirect(absoluteURL);
+    } catch (error) {
+      console.log('redirectPath error:', error);
+    }
   }
 }
 

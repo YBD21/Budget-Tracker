@@ -1,20 +1,20 @@
-"use client";
-import { ChangeEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+'use client';
+import { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
-import { FORGOTPASSWORD, HOME, SIGNUP } from "@/constants/Routes";
+import { FORGOTPASSWORD, HOME, SIGNUP } from '@/constants/Routes';
 
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Button from "../Button";
-import ErrorMessage from "../ErrorMessage";
-import ToggleTheme from "../ToggleTheme";
-import { useAuthUser } from "@/hooks/user/useAuthUser";
-import LoginErrorBox from "./LoginErrorBox";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Button from '../Button';
+import ErrorMessage from '../ErrorMessage';
+import ToggleTheme from '../ToggleTheme';
+import { useAuthUser } from '@/hooks/user/useAuthUser';
+import LoginErrorBox from './LoginErrorBox';
 
 type Inputs = {
   email: string;
@@ -35,11 +35,11 @@ const Login = () => {
   };
 
   const formSchema = Yup.object({
-    email: Yup.string().email().required("Email is required !"),
+    email: Yup.string().email().required('Email is required !'),
     password: Yup.string()
       .trim()
-      .max(16, "Password must be max 16 characters")
-      .required("Password is required !"),
+      .max(16, 'Password must be max 16 characters')
+      .required('Password is required !'),
   });
 
   const validationOpt = {
@@ -57,7 +57,7 @@ const Login = () => {
   // Function to handle password input change
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim();
-    setValue("password", trimmedValue);
+    setValue('password', trimmedValue);
     handleClearErrors();
   };
 
@@ -94,18 +94,18 @@ const Login = () => {
         </h2>
         {/* login submit */}
         <form className="mt-3" onSubmit={handleSubmit(handleLoginSubmit)}>
-          <div className={`${errors?.email ? "pb-2" : "pb-3"}`}>
+          <div className={`${errors?.email ? 'pb-2' : 'pb-3'}`}>
             <label className="block text-sm font-semibold text-gray-800 dark:text-neutral-300">
               Email
             </label>
             <input
-              {...register("email")}
+              {...register('email')}
               type="email"
               autoComplete="email"
               onChange={handleClearErrors}
               // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
               className={`
-              ${errors?.email ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+              ${errors?.email ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
               mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
             />
             <ErrorMessage errorName={errors?.email} />
@@ -121,18 +121,18 @@ const Login = () => {
 
             <div className="relative flex cursor-pointer flex-col">
               <input
-                {...register("password")}
-                type={open === false ? "password" : "text"}
+                {...register('password')}
+                type={open === false ? 'password' : 'text'}
                 autoComplete="current-password"
                 onChange={handlePasswordChange}
                 // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
                 className={`
-                ${errors?.password ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+                ${errors?.password ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
                 mt-2.5 block w-full rounded-md border-2 px-4 py-1.5 text-black  focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700 dark:text-white`}
               />
               {/* hide/unhide password */}
               <div
-                className={`absolute right-3.5 top-2.5 text-2xl ${errors.password ? "text-red-700" : "text-black dark:text-white"} `}
+                className={`absolute right-3.5 top-2.5 text-2xl ${errors.password ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
                   <VisibilityIcon onClick={toggle} fontSize="small" />
