@@ -2,7 +2,7 @@ import "./globals.css";
 import { Metadata } from "next";
 import ReactQueryProvider from "@/utils/ReactQueryProvider";
 import localFont from "next/font/local";
-import { ThemeProvider } from "../components/ToggleTheme/providers.jsx";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Budget Tracker",
@@ -29,12 +29,7 @@ export default function RootLayout({
       <body className={redditMono.className}>
         <ReactQueryProvider>
           {/* <StateProvider initialState={initialState} reducer={reducer}> */}
-          <ThemeProvider
-            suppressHydrationWarning
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
           {/* </StateProvider> */}
