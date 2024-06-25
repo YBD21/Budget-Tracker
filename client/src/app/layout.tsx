@@ -1,16 +1,16 @@
-import "./globals.css";
-import { Metadata } from "next";
-import ReactQueryProvider from "@/utils/ReactQueryProvider";
-import localFont from "next/font/local";
-import { ThemeProvider } from "next-themes";
+import './globals.css';
+import { Metadata } from 'next';
+import ReactQueryProvider from '@/utils/ReactQueryProvider';
+import localFont from 'next/font/local';
+import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
-  title: "Budget Tracker",
-  description: "It an App",
+  title: 'Budget Tracker',
+  description: 'It an App',
 };
 
 const redditMono = localFont({
-  src: "./fonts/RedditMono-VariableFont_wght.ttf",
+  src: './fonts/RedditMono-VariableFont_wght.ttf',
 });
 
 export default function RootLayout({
