@@ -32,6 +32,7 @@ export const useAuthUser = () => {
   const verifyCaptchaMutation = useMutation({
     mutationFn: verifyCaptcha,
     onSuccess: (data) => {
+      // eslint-disable-next-line no-unused-vars
       const setCookiesStatus = setHttpOnlyFindAccess(data.token)
     },
   })
@@ -43,6 +44,7 @@ export const useAuthUser = () => {
   const findAccountMutation = useMutation({
     mutationFn: findAccount,
     onSuccess: (data) => {
+      // eslint-disable-next-line no-unused-vars
       const setCookiesStatus = setHttpOnlyFindAccess(data.token)
     },
   })

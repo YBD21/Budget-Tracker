@@ -35,10 +35,10 @@ function ToggleTheme() {
       // Set theme using next-themes hook
       setTheme(newTheme)
     }
-  }, [resolvedTheme])
+  }, [resolvedTheme, setTheme])
 
   return (
-    <div className="absolute top-0 right-4 cursor-pointer">
+    <div className="absolute right-4 top-0 cursor-pointer">
       {theme === DARK_THEME ? (
         <Image
           suppressHydrationWarning

@@ -1,24 +1,34 @@
-'use client'
+/* eslint-disable tailwindcss/migration-from-tailwind-2 */
+'use client';
 
-import { useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
+import { FC, useCallback, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
-import Button from '../Button'
-import ToggleTheme from '../ToggleTheme'
-import ErrorMessage from '../ErrorMessage'
-import { pagesOptions } from '.'
-import { useAuthUser } from '@/hooks/user/useAuthUser'
-import VerifyOTPErrorBox from './VerifyOTPErrorBox'
+import Button from '../Button';
+import ToggleTheme from '../ToggleTheme';
+import ErrorMessage from '../ErrorMessage';
+import { pagesOptions } from '.';
+import { useAuthUser } from '@/hooks/user/useAuthUser';
+import VerifyOTPErrorBox from './VerifyOTPErrorBox';
 
-const VerifyOtp = ({ email, togglePage }) => {
-  const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser()
+type VerifyOtpProps = {
+  email: string;
+  togglePage: (name: string) => void;
+};
 
-  const [error, setError] = useState(null) // capture error with this state
-  const [encOtp, setEncOtp] = useState(null)
+type Inputs = {
+  otp: string;
+};
 
-  const MAX = 6
+const VerifyOtp: FC<VerifyOtpProps> = ({ email, togglePage }) => {
+  const { sendOtpEmailMutation, verifyOtpMutation } = useAuthUser();
+
+  const [error, setError] = useState(null); // capture error with this state
+  const [encOtp, setEncOtp] = useState(null);
+
+  const MAX = 6;
 
   const formSchema = Yup.object({
     otp: Yup.string()
@@ -26,87 +36,85 @@ const VerifyOtp = ({ email, togglePage }) => {
       .test(
         'otp',
         `Verification code must be ${MAX} characters!`,
-        (val) => !isNaN(val) && val.toString().length === MAX,
+        (val) => !Number.isNaN(val) && val.toString().length === MAX
       ),
-  })
+  });
 
   const validationOpt = {
     resolver: yupResolver(formSchema),
-  }
+  };
 
   const {
     register,
     handleSubmit,
     clearErrors,
     formState: { errors },
-  } = useForm(validationOpt)
+  } = useForm(validationOpt);
 
   const handleClearErrors = () => {
     // Clear errors when input value changes
-    clearErrors()
-  }
+    clearErrors();
+  };
 
-  const cancelVerify = (e) => {
-    e.preventDefault() // prevent page refresh
-    togglePage(pagesOptions[0])
-  }
+  const cancelVerify = (e: any) => {
+    e.preventDefault(); // prevent page refresh
+    togglePage(pagesOptions[0]);
+  };
 
   const switchToResetPassword = () => {
-    togglePage(pagesOptions[2])
-  }
+    togglePage(pagesOptions[2]);
+  };
 
   const sendEmail = useCallback(async () => {
     const userData = {
-      email: email,
-    }
+      email,
+    };
     try {
-      const data = await sendOtpEmailMutation.mutateAsync(userData)
-      setEncOtp(data)
-    } catch (err) {
-      const errorMessage = err?.response?.data?.error_message || err?.message
-      setError(errorMessage)
+      const data = await sendOtpEmailMutation.mutateAsync(userData);
+      setEncOtp(data);
+    } catch (err: any) {
+      const errorMessage = err?.response?.data?.error_message || err?.message;
+      setError(errorMessage);
     }
-  }, [])
+  }, [email, sendOtpEmailMutation]);
 
-  const reSendEmail = (e) => {
-    e.preventDefault() // prevent page refresh
-    setError(null) // clear previous error
-    sendEmail()
-  }
+  const reSendEmail = (e: any) => {
+    e.preventDefault(); // prevent page refresh
+    setError(null); // clear previous error
+    sendEmail();
+  };
 
-  const handleVerifySubmit = async (data) => {
-    setError(null) // clear previous error
+  const handleVerifySubmit: SubmitHandler<Inputs> = async (data) => {
+    setError(null); // clear previous error
 
     const userData = {
       otp: data.otp, // string
       hash: encOtp,
-    }
+    };
 
     try {
-      const response = await verifyOtpMutation.mutateAsync(userData)
+      const response = await verifyOtpMutation.mutateAsync(userData);
       if (response.status === true) {
-        switchToResetPassword()
+        switchToResetPassword();
       }
-    } catch (err) {
-      const errorMessage = err?.response?.data?.error_message || err?.message
-      setError(errorMessage)
+    } catch (err: any) {
+      const errorMessage = err?.response?.data?.error_message || err?.message;
+      setError(errorMessage);
     }
-  }
+  };
 
   useEffect(() => {
-    sendEmail()
-  }, [])
+    sendEmail();
+  }, [sendEmail]);
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="relative w-full mb-auto mt-14 p-6  rounded-md sm:max-w-lg">
+    <div className="flex h-screen items-center justify-center">
+      <div className="relative mb-auto mt-14 w-full rounded-md  p-6 sm:max-w-lg">
         <ToggleTheme />
 
-        <p className=" font-semibold text-lg text-center text-black py-5 dark:text-neutral-300">
+        <p className=" py-5 text-center text-lg font-semibold text-black dark:text-neutral-300">
           Verification code was sent to{' '}
-          <span className="font-medium text-[#300] dark:text-white">
-            {email}
-          </span>
+          <span className="font-medium text-[#300] dark:text-white">{email}</span>
         </p>
         {/* verify code */}
         <form className="mt-6">
@@ -115,14 +123,14 @@ const VerifyOtp = ({ email, togglePage }) => {
             <label className="block text-sm font-semibold text-gray-800 dark:text-neutral-300">
               Verification code
             </label>
-            <div className="flex flex-row cursor-pointer">
+            <div className="flex cursor-pointer flex-row">
               <input
                 {...register('otp')}
                 type="number"
                 onChange={handleClearErrors}
                 className={`
                 ${errors?.otp ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-                block w-full px-4 py-1.5 mt-2.5  border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm text-center dark:bg-neutral-700`}
+                mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  text-center placeholder:text-sm focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
             </div>
             {/* Error Message */}
@@ -130,13 +138,13 @@ const VerifyOtp = ({ email, togglePage }) => {
           </div>
 
           <div
-            className={`flex flex-row  px-2.5 pt-2 pb-2  ${sendOtpEmailMutation.isPending ? 'justify-end' : 'justify-between'}`}
+            className={`flex flex-row  px-2.5 py-2  ${sendOtpEmailMutation.isPending ? 'justify-end' : 'justify-between'}`}
           >
             {/* Resend will only apper when verify code is generated in backend */}
 
             {!sendOtpEmailMutation.isPending && (
               <button
-                className={`text-sm text-blue-600 font-semibold cursor-pointer hover:underline decoration-2 decoration-blue-600`}
+                className={`cursor-pointer text-sm font-semibold text-blue-600 decoration-blue-600 decoration-2 hover:underline`}
                 onClick={reSendEmail}
               >
                 Resend Code
@@ -144,7 +152,7 @@ const VerifyOtp = ({ email, togglePage }) => {
             )}
 
             <button
-              className="text-sm font-medium cursor-pointer hover:underline decoration-2  text-black dark:text-gray-300"
+              className="cursor-pointer text-sm font-medium text-black decoration-2  hover:underline dark:text-gray-300"
               onClick={cancelVerify}
             >
               Go Back
@@ -155,7 +163,7 @@ const VerifyOtp = ({ email, togglePage }) => {
           {error && <VerifyOTPErrorBox message={error} />}
 
           {/* Verify */}
-          <div className="min-w-max mt-4">
+          <div className="mt-4 min-w-max">
             <Button
               title={'Verify'}
               type="primary"
@@ -167,7 +175,7 @@ const VerifyOtp = ({ email, togglePage }) => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VerifyOtp
+export default VerifyOtp;

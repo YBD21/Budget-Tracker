@@ -1,9 +1,9 @@
 /* eslint-disable tailwindcss/migration-from-tailwind-2 */
 
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 
 type ButtonProps = {
-  title: string;
+  title: string | ReactNode;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
   isDisable?: boolean;
   type?: "primary";

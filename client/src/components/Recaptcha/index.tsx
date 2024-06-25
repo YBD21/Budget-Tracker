@@ -1,11 +1,11 @@
-import ReCAPTCHA from 'react-google-recaptcha'
-import { RECAPTCHA_KEY } from '@/constants/hashKey'
-import { useTheme } from 'next-themes'
+import ReCAPTCHA from "react-google-recaptcha";
+import { RECAPTCHA_KEY } from "@/constants/hashKey";
+import { useTheme } from "next-themes";
 
-const Recaptcha = ({ onChange }) => {
-  const { resolvedTheme } = useTheme()
+const Recaptcha = ({ onChange }: any) => {
+  const { resolvedTheme } = useTheme();
 
-  return resolvedTheme !== '' ? (
+  return resolvedTheme !== "" ? (
     <ReCAPTCHA
       sitekey={RECAPTCHA_KEY}
       size="normal"
@@ -13,7 +13,7 @@ const Recaptcha = ({ onChange }) => {
       // theme={resolvedTheme}
       onChange={onChange}
     />
-  ) : null
-}
+  ) : null;
+};
 
-export default Recaptcha
+export default Recaptcha;

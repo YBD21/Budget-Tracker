@@ -1,58 +1,67 @@
-'use client'
+/* eslint-disable tailwindcss/migration-from-tailwind-2 */
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
+import { ChangeEvent, FC, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { LOGIN } from '@/constants/Routes'
-import ToggleTheme from '../ToggleTheme'
-import ErrorMessage from '../ErrorMessage'
-import Button from '../Button'
-import { useAuthUser } from '@/hooks/user/useAuthUser'
-import ResetPasswordMessageBox from './ResetPasswordMessageBox'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { LOGIN } from '@/constants/Routes';
+import ToggleTheme from '../ToggleTheme';
+import ErrorMessage from '../ErrorMessage';
+import Button from '../Button';
+import { useAuthUser } from '@/hooks/user/useAuthUser';
+import ResetPasswordMessageBox from './ResetPasswordMessageBox';
 
-const ResetPassword = ({ email }) => {
-  const router = useRouter()
+type ResetPasswordProps = {
+  email: string;
+};
 
-  const [open, setOpen] = useState(false)
-  const [message, setMessage] = useState(null) // capture error with this state
+type Message = string | null;
 
-  const { resetPasswordMutation } = useAuthUser()
+type Inputs = {
+  createPassword: string;
+  confirmPassword: string;
+};
+
+const ResetPassword: FC<ResetPasswordProps> = ({ email }) => {
+  const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState<Message>(null); // capture error with this state
+
+  const { resetPasswordMutation } = useAuthUser();
 
   // handle toggle to show or hide password
   const toggle = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
-  const MAX = 16
-  const MIN_PASSWORD = 8
+  const MAX = 16;
+  const MIN_PASSWORD = 8;
 
   const formSchema = Yup.object({
     createPassword: Yup.string()
       .trim()
       .required('Create password is required !')
-      .min(
-        MIN_PASSWORD,
-        `Create password must be at least ${MIN_PASSWORD} characters !`,
-      )
+      .min(MIN_PASSWORD, `Create password must be at least ${MIN_PASSWORD} characters !`)
       .max(MAX, `Create password must be at most ${MAX} characters !`),
 
     confirmPassword: Yup.string()
       .trim()
       .required('Confirm password is required !')
       .test('passwords-match', 'Password does not match !', function (value) {
-        return this.parent.createPassword === value
+        return this.parent.createPassword === value;
       }),
-  })
+  });
 
   const validationOpt = {
     resolver: yupResolver(formSchema),
-  }
+  };
 
   const {
     register,
@@ -60,60 +69,60 @@ const ResetPassword = ({ email }) => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm(validationOpt)
+  } = useForm(validationOpt);
 
   const handleClearErrors = () => {
     // Clear errors when input value changes
-    clearErrors()
-  }
+    clearErrors();
+  };
 
-  const handleCreatePasswordChange = (e) => {
-    const trimmedValue = e.target.value.trim()
-    setValue('createPassword', trimmedValue)
-    handleClearErrors()
-  }
+  const handleCreatePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const trimmedValue = e.target.value.trim();
+    setValue('createPassword', trimmedValue);
+    handleClearErrors();
+  };
 
-  const handleConfirmPasswordChange = (e) => {
-    const trimmedValue = e.target.value.trim()
-    setValue('confirmPassword', trimmedValue)
-    handleClearErrors()
-  }
+  const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const trimmedValue = e.target.value.trim();
+    setValue('confirmPassword', trimmedValue);
+    handleClearErrors();
+  };
 
   const redirectToLogin = () => {
-    router.replace(LOGIN)
-  }
+    router.replace(LOGIN);
+  };
 
-  const handleResetPassword = async (data) => {
-    setMessage(null) // initial on every click
+  const handleResetPassword: SubmitHandler<Inputs> = async (data) => {
+    setMessage(null); // initial on every click
 
     const resetData = {
-      email: email,
+      email,
       password: data.confirmPassword,
-    }
+    };
 
     try {
-      const respond = await resetPasswordMutation.mutateAsync(resetData)
+      const respond = await resetPasswordMutation.mutateAsync(resetData);
 
       if (respond.status === true) {
-        setMessage('ResetPassword')
+        setMessage('ResetPassword');
         // wait timer of 2 sec and redirect
-        setTimeout(redirectToLogin, 2000)
+        setTimeout(redirectToLogin, 2000);
       }
-    } catch (err) {
-      const errorMessage = err?.response?.data?.error_message || err?.message
-      setMessage(errorMessage)
+    } catch (err: any) {
+      const errorMessage = err?.response?.data?.error_message || err?.message;
+      setMessage(errorMessage);
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col justify-center min-h-screen overflow-hidden">
-      <div className="relative w-full p-6 mb-auto mx-auto mt-32 rounded-md sm:max-w-lg">
+    <div className="flex min-h-screen flex-col justify-center overflow-hidden">
+      <div className="relative mx-auto mb-auto mt-32 w-full rounded-md p-6 sm:max-w-lg">
         <ToggleTheme />
-        <h2 className="text-2xl font-semibold text-center text-black dark:text-neutral-300">
+        <h2 className="text-center text-2xl font-semibold text-black dark:text-neutral-300">
           Reset Password
         </h2>
 
-        {/* Resetpassword Form*/}
+        {/* Resetpassword Form */}
         <form className="mt-8" onSubmit={handleSubmit(handleResetPassword)}>
           {/* Email */}
           <div className="mb-4">
@@ -126,9 +135,8 @@ const ResetPassword = ({ email }) => {
               disabled
               autoComplete="off"
               className={`
-              border-gray-500 focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400 block w-full px-4 py-1.5 mt-2.5 dark:text-gray-400 text-gray-600 border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm  cursor-not-allowed dark:bg-neutral-700 `}
+              mt-2.5 block w-full cursor-not-allowed rounded-md border-2 border-gray-500 px-4 py-1.5 text-gray-600 placeholder:text-sm focus:border-black focus:outline-none focus:ring focus:ring-black  focus:ring-opacity-40 dark:border-neutral-400 dark:bg-neutral-700 dark:text-gray-400  dark:focus:border-neutral-500 dark:focus:ring-neutral-400 `}
             />
-            <ErrorMessage errorName={errors?.email} />
           </div>
 
           {/* Password Input Box */}
@@ -137,7 +145,7 @@ const ResetPassword = ({ email }) => {
               Create Password
             </label>
 
-            <div className="relative flex flex-row cursor-pointer">
+            <div className="relative flex cursor-pointer flex-row">
               <input
                 {...register('createPassword')}
                 type={open === false ? 'password' : 'text'}
@@ -146,12 +154,12 @@ const ResetPassword = ({ email }) => {
                 autoComplete="new-password"
                 className={`
                 ${errors?.createPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-                block w-full px-4 py-1.5 mt-2.5  border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm placeholder:text-gray-300 dark:bg-neutral-700`}
+                mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm placeholder:text-gray-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
 
               {/* hide/unhide password */}
               <div
-                className={`absolute text-2xl top-2.5 right-3.5 ${errors.password ? 'text-red-700' : 'text-black dark:text-white'} `}
+                className={`absolute right-3.5 top-2.5 text-2xl ${errors.createPassword ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
                   <VisibilityIcon onClick={toggle} fontSize="small" />
@@ -170,7 +178,7 @@ const ResetPassword = ({ email }) => {
               Confirm Password
             </label>
 
-            <div className="relative flex flex-row cursor-pointer">
+            <div className="relative flex cursor-pointer flex-row">
               <input
                 {...register('confirmPassword')}
                 autoComplete="confirm-password"
@@ -179,11 +187,11 @@ const ResetPassword = ({ email }) => {
                 onChange={handleConfirmPasswordChange}
                 className={`
                 ${errors?.confirmPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-                block w-full px-4 py-1.5 mt-2.5  border-2 rounded-md  focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-sm placeholder:text-gray-300 dark:bg-neutral-700`}
+                mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm placeholder:text-gray-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
               {/* hide/unhide password */}
               <div
-                className={`absolute text-2xl top-2.5 right-3.5 ${errors.password ? 'text-red-700' : 'text-black dark:text-white'} `}
+                className={`absolute right-3.5 top-2.5 text-2xl ${errors.confirmPassword ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
                   <VisibilityIcon onClick={toggle} fontSize="small" />
@@ -211,7 +219,7 @@ const ResetPassword = ({ email }) => {
             <Link
               href={LOGIN}
               replace={true}
-              className="font-semibold leading-6 text-[#300] dark:text-gray-300 decoration-2 hover:underline"
+              className="font-semibold leading-6 text-[#300] decoration-2 hover:underline dark:text-gray-300"
             >
               Click Here
             </Link>
@@ -219,7 +227,7 @@ const ResetPassword = ({ email }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;

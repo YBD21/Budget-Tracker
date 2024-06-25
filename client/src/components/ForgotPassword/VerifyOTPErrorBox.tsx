@@ -1,55 +1,55 @@
-import { useEffect, useState } from 'react'
-import MessageBox from '../MessageBox'
+import { useEffect, useState } from "react";
+import MessageBox from "../MessageBox";
 
 // refactor this later
-const VerifyOTPErrorBox = ({ message }) => {
-  const [isClicked, setIsClicked] = useState(true)
-  const [text, setText] = useState({})
+const VerifyOTPErrorBox = ({ message }: any) => {
+  const [isClicked, setIsClicked] = useState(true);
+  const [text, setText] = useState({});
 
   // console.log(message)
 
   useEffect(() => {
     switch (message) {
-      case 'Network Error':
+      case "Network Error":
         return setText({
-          First: 'Network Error !',
-          Second: 'Cannot access to the internet.',
-        })
+          First: "Network Error !",
+          Second: "Cannot access to the internet.",
+        });
 
-      case 'Incorrect Data':
+      case "Incorrect Data":
         return setText({
-          First: 'Invalid !',
-          Second: 'OTP Code.',
-        })
+          First: "Invalid !",
+          Second: "OTP Code.",
+        });
 
-      case 'Disable Account':
+      case "Disable Account":
         return setText({
-          First: 'Sorry !',
-          Second: 'Your account has been disable.',
-        })
+          First: "Sorry !",
+          Second: "Your account has been disable.",
+        });
 
-      case 'Too Many Requests':
+      case "Too Many Requests":
         return setText({
-          First: 'Too many login attempts',
-          Second: ',please try again later !',
-        })
+          First: "Too many login attempts",
+          Second: ",please try again later !",
+        });
 
       default:
         return setText({
-          First: 'Holy smokes !',
-          Second: 'Something seriously bad happened.',
-        })
+          First: "Holy smokes !",
+          Second: "Something seriously bad happened.",
+        });
     }
-  }, [isClicked])
+  }, [isClicked, message]);
 
   const checkClick = () => {
-    setIsClicked(!isClicked)
+    setIsClicked(!isClicked);
     // console.log("Someting is happening ?");
-  }
+  };
 
   if (isClicked) {
-    return <MessageBox text={text} checkClick={checkClick} />
-  } else return null
-}
+    return <MessageBox text={text} checkClick={checkClick} />;
+  } else return null;
+};
 
-export default VerifyOTPErrorBox
+export default VerifyOTPErrorBox;
