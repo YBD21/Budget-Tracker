@@ -51,6 +51,7 @@ export default async function middleware(req: NextRequest) {
       console.log('redirectPath error:', error);
     }
   }
+  return NextResponse.next();
 }
 
 export const config = {
