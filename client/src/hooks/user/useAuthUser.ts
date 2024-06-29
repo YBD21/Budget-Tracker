@@ -8,7 +8,7 @@ import {
   verifyCaptcha,
   verifyOtp,
 } from '@/services/user';
-import { decodeUser, setHttpOnlyFindAccess, setHttpOnlyUserData } from '@/services/userServer';
+import { decodeUser, setHttpOnlyFindAccess } from '@/services/userServer';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useAuthUser = () => {
@@ -17,11 +17,11 @@ export const useAuthUser = () => {
   const loginUserMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: async (data) => {
-      const setCookiesStatus = setHttpOnlyUserData(data.accessToken);
-      if (setCookiesStatus) {
-        const decodeData = await decodeUser(data.accessToken);
-        queryClient.setQueryData([CURRENT_USER], decodeData);
-      }
+      // const setCookiesStatus = setHttpOnlyUserData(data.accessToken);
+      // if (setCookiesStatus) {
+      const decodeData = await decodeUser(data.accessToken);
+      queryClient.setQueryData([CURRENT_USER], decodeData);
+      // }
     },
   });
 
