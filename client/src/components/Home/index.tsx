@@ -1,7 +1,14 @@
 'use client';
 
+import NavBar from '../NavBar';
+
 const HomePage = () => {
-  return <div className="text-red-700 dark:text-blue-300"> Home </div>;
+  return (
+    <>
+      <NavBar />
+      <div className="text-red-700 dark:text-blue-300"> Home </div>
+    </>
+  );
 };
 
 export default HomePage;
