@@ -7,7 +7,7 @@ import {
   sendOtpEmail,
   verifyCaptcha,
   verifyOtp,
-} from '@/services/user';
+} from '@/services/authUser';
 import { decodeUser, setHttpOnlyFindAccess } from '@/services/userServer';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
