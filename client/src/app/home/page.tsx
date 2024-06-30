@@ -1,7 +1,7 @@
-import React from 'react';
+import HomePage from '@/components/Home';
 
 function Home() {
-  return <div className="text-red-700"> Home </div>;
+  return <HomePage />;
 }
 
 export default Home;
