@@ -58,15 +58,15 @@ export class AuthController {
     try {
       const respond = await this.authService.handleLogin(loginData);
       if (respond.status === true) {
-        const time = 1 * 60 * 60 * 1000; // 60 min
+        // const time = 1 * 60 * 60 * 1000; // 60 min
 
         // set HTTP Only Cookie
-        res.cookie('userData', respond.accessToken, {
-          secure: true, // set to true to enable sending the cookie only over HTTPS
-          httpOnly: true, // set to true to prevent client-side scripts from accessing the cookie
-          sameSite: 'lax',
-          expires: new Date(Date.now() + time),
-        });
+        // res.cookie('userData', respond.accessToken, {
+        //   secure: true, // set to true to enable sending the cookie only over HTTPS
+        //   httpOnly: true, // set to true to prevent client-side scripts from accessing the cookie
+        //   sameSite: 'strict',
+        //   expires: new Date(Date.now() + time),
+        // });
 
         return res.json(respond);
       } else if (respond.message) {
