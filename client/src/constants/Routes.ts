@@ -1,6 +1,6 @@
 // Route
-export const HOME = '/home'
-export const LOGIN = '/'
+export const HOME = '/'
+export const LOGIN = '/login'
 export const FORGOTPASSWORD = '/forget-password'
 export const SIGNUP = '/signup'
 
