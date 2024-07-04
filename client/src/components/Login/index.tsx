@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -66,11 +66,46 @@ const Login = () => {
     clearErrors();
   };
 
+  useEffect(() => {
+    // Function to handle input change
+    const handleInputChange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      if (target.name === 'email' || target.name === 'password') {
+        setValue(target.name, target.value);
+        clearErrors(target.name);
+      }
+    };
+
+    // Add event listeners
+    const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
+    const passwordInput = document.querySelector('input[name="password"]') as HTMLInputElement;
+
+    emailInput?.addEventListener('input', handleInputChange);
+    passwordInput?.addEventListener('input', handleInputChange);
+
+    // Manually trigger change events to ensure validation runs
+    if (emailInput && emailInput.value) {
+      const event = new Event('input', { bubbles: true });
+      emailInput.dispatchEvent(event);
+    }
+
+    if (passwordInput && passwordInput.value) {
+      const event = new Event('input', { bubbles: true });
+      passwordInput.dispatchEvent(event);
+    }
+
+    // Cleanup event listeners on unmount
+    return () => {
+      emailInput?.removeEventListener('input', handleInputChange);
+      passwordInput?.removeEventListener('input', handleInputChange);
+    };
+  }, [setValue, clearErrors]);
+
   const handleLoginSubmit: SubmitHandler<Inputs> = async (data) => {
     setError(null); // initial on every click
     const loginData = {
-      email: data.email,
-      password: data.password,
+      email: data?.email,
+      password: data?.password,
     };
 
     try {
@@ -81,7 +116,7 @@ const Login = () => {
     } catch (err: any) {
       const errorMessage = err?.response?.data?.error_message || err?.message;
       setError(errorMessage);
-      // console.log(errorMessage) // Network Error
+      // console.log(errorMessage); // Network Error
     }
   };
 
