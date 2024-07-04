@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
+import Tooltip from '@mui/material/Tooltip';
 
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -42,21 +43,23 @@ const ToggleTheme: FC<ToggleThemeProps> = ({ style, isLarge = false }) => {
   }, [resolvedTheme, setTheme]);
 
   return (
-    <div className={`${style ? style : 'absolute right-4 top-0'} cursor-pointer`}>
-      {theme === DARK_THEME ? (
-        <DarkModeOutlinedIcon
-          suppressHydrationWarning
-          onClick={toggleTheme}
-          fontSize={isLarge ? 'large' : 'medium'}
-        />
-      ) : (
-        <LightModeOutlinedIcon
-          suppressHydrationWarning
-          onClick={toggleTheme}
-          fontSize={isLarge ? 'large' : 'medium'}
-        />
-      )}
-    </div>
+    <Tooltip title="Mode">
+      <div className={`${style ? style : 'absolute right-4 top-0'} cursor-pointer`}>
+        {theme === DARK_THEME ? (
+          <DarkModeOutlinedIcon
+            suppressHydrationWarning
+            onClick={toggleTheme}
+            fontSize={isLarge ? 'large' : 'medium'}
+          />
+        ) : (
+          <LightModeOutlinedIcon
+            suppressHydrationWarning
+            onClick={toggleTheme}
+            fontSize={isLarge ? 'large' : 'medium'}
+          />
+        )}
+      </div>
+    </Tooltip>
   );
 };
 

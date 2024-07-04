@@ -1,9 +1,9 @@
 'use client';
 import Tooltip from '@mui/material/Tooltip';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
 import ToggleTheme from '../ToggleTheme';
 
 const NavBar = () => {
@@ -19,9 +19,7 @@ const NavBar = () => {
       {/* max-w-screen-sm */}
       <ul className="flex w-1/2 justify-end mx-4">
         <li className="flex my-auto mx-4">
-          <Tooltip title="Mode">
-            <ToggleTheme style={'flex'} />
-          </Tooltip>
+          <ToggleTheme style={'flex'} />
         </li>
 
         <li className="my-auto mx-4">
