@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { Tooltip } from '@mui/material';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -162,9 +163,13 @@ const ResetPassword: FC<ResetPasswordProps> = ({ email }) => {
                 className={`absolute right-3.5 top-2.5 text-2xl ${errors.createPassword ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
-                  <VisibilityIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Show">
+                    <VisibilityIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 ) : (
-                  <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Hide">
+                    <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 )}
               </div>
             </div>
@@ -194,9 +199,13 @@ const ResetPassword: FC<ResetPasswordProps> = ({ email }) => {
                 className={`absolute right-3.5 top-2.5 text-2xl ${errors.confirmPassword ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
-                  <VisibilityIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Show">
+                    <VisibilityIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 ) : (
-                  <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Hide">
+                    <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 )}
               </div>
             </div>

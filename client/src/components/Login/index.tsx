@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import Tooltip from '@mui/material/Tooltip';
 
 import { FORGOTPASSWORD, HOME, SIGNUP } from '@/constants/Routes';
 
@@ -170,9 +171,13 @@ const Login = () => {
                 className={`absolute right-3.5 top-2.5 text-2xl ${errors.password ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
-                  <VisibilityIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Show">
+                    <VisibilityIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 ) : (
-                  <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Hide">
+                    <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 )}
               </div>
 

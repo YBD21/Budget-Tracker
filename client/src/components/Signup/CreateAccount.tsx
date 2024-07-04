@@ -1,19 +1,20 @@
 /* eslint-disable tailwindcss/migration-from-tailwind-2 */
-"use client";
+'use client';
 
-import { ChangeEvent, FC, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import { ChangeEvent, FC, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { Tooltip } from '@mui/material';
 
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Button from "../Button";
-import Link from "next/link";
-import { LOGIN } from "@/constants/Routes";
-import ErrorMessage from "../ErrorMessage";
-import ToggleTheme from "../ToggleTheme";
-import { UserInfo } from ".";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Button from '../Button';
+import Link from 'next/link';
+import { LOGIN } from '@/constants/Routes';
+import ErrorMessage from '../ErrorMessage';
+import ToggleTheme from '../ToggleTheme';
+import { UserInfo } from '.';
 
 type CreateAccountProps = {
   togglePage: (status: boolean) => void;
@@ -43,25 +44,25 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
   const formSchema = Yup.object({
     firstName: Yup.string()
       .trim()
-      .required("First name is required !")
+      .required('First name is required !')
       .min(MIN_NAME, `First name must be at least ${MIN_NAME} characters !`)
       .max(MAX, `First name must be at most ${MAX} characters !`),
     lastName: Yup.string()
       .trim()
-      .required("Last name is required !")
+      .required('Last name is required !')
       .min(MIN_NAME, `Last name must be at least ${MIN_NAME} characters !`)
       .max(MAX, `Last name must be at most ${MAX} characters !`),
-    email: Yup.string().email().required("Email is required !"),
+    email: Yup.string().email().required('Email is required !'),
     createPassword: Yup.string()
       .trim()
-      .required("Create password is required !")
+      .required('Create password is required !')
       .min(MIN_PASSWORD, `Create password must be at least ${MIN_PASSWORD} characters !`)
       .max(MAX, `Create password must be at most ${MAX} characters !`),
 
     confirmPassword: Yup.string()
       .trim()
-      .required("Confirm password is required !")
-      .test("passwords-match", "Password does not match !", function (value) {
+      .required('Confirm password is required !')
+      .test('passwords-match', 'Password does not match !', function (value) {
         return this.parent.createPassword === value;
       }),
   });
@@ -85,25 +86,25 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
 
   const handleFirstNameOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim();
-    setValue("firstName", trimmedValue);
+    setValue('firstName', trimmedValue);
     handleClearErrors();
   };
 
   const handleLastNameOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim();
-    setValue("lastName", trimmedValue);
+    setValue('lastName', trimmedValue);
     handleClearErrors();
   };
 
   const handleCreatePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim();
-    setValue("createPassword", trimmedValue);
+    setValue('createPassword', trimmedValue);
     handleClearErrors();
   };
 
   const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim();
-    setValue("confirmPassword", trimmedValue);
+    setValue('confirmPassword', trimmedValue);
     handleClearErrors();
   };
 
@@ -124,7 +125,7 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
     <div className="flex min-h-screen flex-col justify-center overflow-hidden dark:bg-neutral-800">
       <div
         className={`relative mx-auto mb-auto w-full rounded-md p-6 sm:max-w-lg ${
-          Object.keys(errors).length > 0 ? "mt-4" : "mt-12"
+          Object.keys(errors).length > 0 ? 'mt-4' : 'mt-12'
         }`}
       >
         <ToggleTheme />
@@ -140,12 +141,12 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
             </label>
             <div className="flex cursor-pointer flex-row">
               <input
-                {...register("firstName")}
+                {...register('firstName')}
                 type="text"
-                placeholder={"What is your first name ?"}
+                placeholder={'What is your first name ?'}
                 onChange={handleFirstNameOnChange}
                 className={`
-                ${errors?.firstName ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+                ${errors?.firstName ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
                 mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
             </div>
@@ -159,12 +160,12 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
 
             <div className="flex cursor-pointer flex-row">
               <input
-                {...register("lastName")}
+                {...register('lastName')}
                 type="text"
-                placeholder={"What is your last name ?"}
+                placeholder={'What is your last name ?'}
                 onChange={handleLastNameOnChange}
                 className={`
-                ${errors?.lastName ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+                ${errors?.lastName ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
                 mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
             </div>
@@ -176,13 +177,13 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
               Email
             </label>
             <input
-              {...register("email")}
+              {...register('email')}
               type="email"
               autoComplete="e-mail"
-              placeholder={"example@email.com"}
+              placeholder={'example@email.com'}
               onChange={handleClearErrors}
               className={`
-              ${errors?.email ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+              ${errors?.email ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
               mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
             />
             <ErrorMessage errorName={errors?.email} />
@@ -195,23 +196,27 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
 
             <div className="relative flex cursor-pointer flex-row">
               <input
-                {...register("createPassword")}
+                {...register('createPassword')}
                 autoComplete="new-password"
-                type={open === false ? "password" : "text"}
-                placeholder={"Create password"}
+                type={open === false ? 'password' : 'text'}
+                placeholder={'Create password'}
                 onChange={handleCreatePasswordChange}
                 className={`
-                ${errors?.createPassword ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+                ${errors?.createPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
                 mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
               {/* hide/unhide password */}
               <div
-                className={`absolute right-3.5 top-2.5 text-2xl ${errors.createPassword ? "text-red-700" : "text-black dark:text-white"} `}
+                className={`absolute right-3.5 top-2.5 text-2xl ${errors.createPassword ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
-                  <VisibilityIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Show">
+                    <VisibilityIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 ) : (
-                  <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Hide">
+                    <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 )}
               </div>
             </div>
@@ -226,23 +231,27 @@ const CreateAccount: FC<CreateAccountProps> = ({ togglePage, setUserInfo }) => {
 
             <div className="relative flex cursor-pointer flex-row">
               <input
-                {...register("confirmPassword")}
+                {...register('confirmPassword')}
                 autoComplete="confirm-password"
-                placeholder={"Confirm password"}
-                type={open === false ? "password" : "text"}
+                placeholder={'Confirm password'}
+                type={open === false ? 'password' : 'text'}
                 onChange={handleConfirmPasswordChange}
                 className={`
-                ${errors?.confirmPassword ? "border-red-400 focus:border-red-400 focus:ring-red-400" : "border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400"}
+                ${errors?.confirmPassword ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
                 mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  placeholder:text-sm focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
               />
               {/* hide/unhide password */}
               <div
-                className={`absolute right-3.5 top-2.5 text-2xl ${errors.confirmPassword ? "text-red-700" : "text-black dark:text-white"} `}
+                className={`absolute right-3.5 top-2.5 text-2xl ${errors.confirmPassword ? 'text-red-700' : 'text-black dark:text-white'} `}
               >
                 {open === false ? (
-                  <VisibilityIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Show">
+                    <VisibilityIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 ) : (
-                  <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  <Tooltip title="Hide">
+                    <VisibilityOffIcon onClick={toggle} fontSize="small" />
+                  </Tooltip>
                 )}
               </div>
             </div>
