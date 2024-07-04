@@ -2,6 +2,8 @@
 
 import ToggleTheme from '../ToggleTheme';
 import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const NavBar = () => {
   return (
@@ -13,10 +15,17 @@ const NavBar = () => {
           <p className="mx-4 text-base font-medium">Budget Tracker</p>
         </div>
       </div>
-      <ul className="flex justify-between w-full max-w-screen-lg mx-auto lg:max-w-full">
-        <ToggleTheme style={''} height={32} width={32} />
-        {/* Toggle Theme */}
-        {/* Notification */}
+      {/* max-w-screen-sm */}
+      <ul className="flex w-1/2 justify-end mx-4">
+        <li className="flex my-auto mx-4">
+          <ToggleTheme style={'flex'} height={34} width={34} />
+        </li>
+        <li className="my-auto mx-4">
+          <NotificationsOutlinedIcon fontSize="large" className="cursor-pointer" />
+        </li>
+        <li className="my-auto mx-4">
+          <AccountCircleIcon fontSize="large" className="cursor-pointer" />
+        </li>
         {/* Profile  */}
       </ul>
     </header>
