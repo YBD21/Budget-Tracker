@@ -1,5 +1,6 @@
 'use client';
 import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -12,7 +13,10 @@ const NavBar = () => {
       {/* Title Name */}
       <div className="flex w-1/2">
         <div className="flex items-center mx-3.5">
-          <MenuIcon />
+          <IconButton size="small" edge="start" color="inherit" aria-label="menu">
+            <MenuIcon className="transition duration-300 ease-in-out dark:text-white dark:hover:text-white dark:hover:drop-shadow-[0_0_10px_rgba(255,255,255,1)] hover:text-black hover:drop-shadow-[0_0_10px_rgba(0,0,0,1)]" />
+          </IconButton>
+
           <p className="mx-4 text-base font-medium">Budget Tracker</p>
         </div>
       </div>
