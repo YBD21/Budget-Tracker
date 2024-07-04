@@ -6,6 +6,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleTheme from '../ToggleTheme';
+import Logo from '@/assets/logo.svg';
+import Image from 'next/image';
 
 const NavBar = () => {
   return (
@@ -18,7 +20,18 @@ const NavBar = () => {
               <MenuIcon className="transition duration-300 ease-in-out dark:text-white dark:hover:text-white dark:hover:drop-shadow-[0_0_10px_rgba(255,255,255,1)] hover:text-black hover:drop-shadow-[0_0_10px_rgba(0,0,0,1)]" />
             </IconButton>
 
-            <p className="mx-4 text-base font-medium">Budget Tracker</p>
+            <div className="mx-2.5 flex justify-between gap-1">
+              <Image
+                suppressHydrationWarning
+                src={Logo}
+                alt="Logo"
+                width={24}
+                height={24}
+                className="rounded-md border-2 border-solid dark:border-white"
+              />
+
+              <p className="text-base font-medium">BudgetTracker</p>
+            </div>
           </div>
         </div>
         {/* max-w-screen-sm */}

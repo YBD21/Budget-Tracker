@@ -5,7 +5,7 @@ import localFont from 'next/font/local';
 import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
-  title: 'Budget Tracker',
+  title: 'BudgetTracker',
   description: 'It an App',
 };
 
