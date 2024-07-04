@@ -1,18 +1,16 @@
 import { FC, useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useTheme } from 'next-themes';
 
-import darkModeIcon from '@/assets/darkmode.svg';
-import lightModeIcon from '@/assets/lightmode.svg';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import { DARK_THEME, LIGHT_THEME } from '@/constants/actionName';
 
 type ToggleThemeProps = {
   style?: string;
-  height?: number;
-  width?: number;
+  isLarge?: boolean;
 };
 
-const ToggleTheme: FC<ToggleThemeProps> = ({ style, height = 24, width = 24 }) => {
+const ToggleTheme: FC<ToggleThemeProps> = ({ style, isLarge = false }) => {
   const { resolvedTheme, setTheme } = useTheme();
 
   // Initialize theme state using useState
@@ -46,22 +44,16 @@ const ToggleTheme: FC<ToggleThemeProps> = ({ style, height = 24, width = 24 }) =
   return (
     <div className={`${style ? style : 'absolute right-4 top-0'} cursor-pointer`}>
       {theme === DARK_THEME ? (
-        <Image
+        <DarkModeOutlinedIcon
           suppressHydrationWarning
-          src={darkModeIcon}
-          alt="Dark Mode"
-          width={width}
-          height={height}
           onClick={toggleTheme}
+          fontSize={isLarge ? 'large' : 'medium'}
         />
       ) : (
-        <Image
+        <LightModeOutlinedIcon
           suppressHydrationWarning
-          src={lightModeIcon}
-          alt="Light Mode"
-          width={width}
-          height={height}
           onClick={toggleTheme}
+          fontSize={isLarge ? 'large' : 'medium'}
         />
       )}
     </div>
