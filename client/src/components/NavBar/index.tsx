@@ -18,10 +18,10 @@ const NavBar = () => {
       {/* max-w-screen-sm */}
       <ul className="flex w-1/2 justify-end mx-4">
         <li className="flex my-auto mx-4">
-          <ToggleTheme style={'flex'} isLarge={true} />
+          <ToggleTheme style={'flex'} />
         </li>
         <li className="my-auto mx-4">
-          <NotificationsOutlinedIcon fontSize="large" className="cursor-pointer" />
+          <NotificationsOutlinedIcon className="cursor-pointer" />
         </li>
         <li className="my-auto mx-4">
           <AccountCircleIcon fontSize="large" className="cursor-pointer" />
