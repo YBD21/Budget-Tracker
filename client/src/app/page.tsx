@@ -1,7 +1,7 @@
-import HomePage from '@/components/Home';
+import Dashboard from '@/components/Dashboard';
 
-function Home() {
-  return <HomePage />;
+function DashboardPage() {
+  return <Dashboard />;
 }
 
-export default Home;
+export default DashboardPage;

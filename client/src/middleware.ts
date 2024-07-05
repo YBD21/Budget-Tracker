@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-import { HOME, LOGIN, ACCESS_ONCE_ROUTES, PROTECTED_CLIENT_ROUTES } from './constants/Routes';
+import { DASHBOARD, LOGIN, ACCESS_ONCE_ROUTES, PROTECTED_CLIENT_ROUTES } from './constants/Routes';
 import { CLIENT } from './constants/actionName';
 import { USER_DATA } from './constants/queryKey';
 import { decodeUser } from './services/userServer';
@@ -31,7 +31,7 @@ export default async function middleware(req: NextRequest) {
   switch (role) {
     case CLIENT:
       if (ACCESS_ONCE_ROUTES.includes(pathname)) {
-        redirectPath = HOME;
+        redirectPath = DASHBOARD;
       }
       break;
     default:
