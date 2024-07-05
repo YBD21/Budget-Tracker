@@ -2,9 +2,13 @@ import { usePathname } from 'next/navigation';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
+import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
+import AutoFixNormalOutlinedIcon from '@mui/icons-material/AutoFixNormalOutlined';
 import { SvgIconComponent } from '@mui/icons-material';
 import SideBarItems from './SideBarItems';
-import { DASHBOARD } from '@/constants/Routes';
+import { CUSTOMIZATION, DASHBOARD, HISTORY } from '@/constants/Routes';
 
 type SidebarItem = {
   url: string;
@@ -23,9 +27,19 @@ const Sidebar = () => {
       Icon: DashboardOutlinedIcon,
       ActiveIcon: DashboardIcon,
     },
+    {
+      url: HISTORY,
+      title: 'History',
+      Icon: WatchLaterOutlinedIcon,
+      ActiveIcon: WatchLaterIcon,
+    },
+    {
+      url: CUSTOMIZATION,
+      title: 'Customization',
+      Icon: AutoFixNormalOutlinedIcon,
+      ActiveIcon: AutoFixNormalIcon,
+    },
   ];
-
-  // Dashboard,History,Customization
 
   // At the end Logout
   return (
