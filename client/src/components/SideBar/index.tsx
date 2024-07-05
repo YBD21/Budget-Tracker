@@ -6,7 +6,7 @@ const Sidebar = () => {
   const pathname = usePathname();
   //   const isItemActive = pathname?.startsWith(item?.url)
   return (
-    <nav className="w-16 px-2 shadow bg-gray-50 dark:bg-neutral-800 h-[93svh]">
+    <nav className="w-16 px-2 shadow-xl bg-gray-50 dark:bg-neutral-800 h-[93svh] border-r border-solid border-gray-200 dark:border-stone-900">
       <ul className="space-y-2 list-none">
         <li className="flex flex-col items-center py-2 px-4 cursor-pointer">
           <HomeOutlinedIcon fontSize="large" />
