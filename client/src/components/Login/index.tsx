@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import Tooltip from '@mui/material/Tooltip';
 
-import { FORGOTPASSWORD, HOME, SIGNUP } from '@/constants/Routes';
+import { FORGOTPASSWORD, DASHBOARD, SIGNUP } from '@/constants/Routes';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -112,7 +112,7 @@ const Login = () => {
     try {
       const respond = await loginUserMutation.mutateAsync(loginData);
       if (respond.status) {
-        router.replace(HOME);
+        router.replace(DASHBOARD);
       }
     } catch (err: any) {
       const errorMessage = err?.response?.data?.error_message || err?.message;
