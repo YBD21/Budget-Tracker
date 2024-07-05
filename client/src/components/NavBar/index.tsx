@@ -19,12 +19,12 @@ const NavBar: FC<NavProps> = ({ children }) => {
       <header className="sticky top-0 z-30 bg-gray-50 dark:bg-neutral-800 flex flex-row w-full drop-shadow-lg h-16">
         {/* Title Name */}
         <div className="flex w-1/2">
-          <div className="flex items-center mx-3.5">
-            <IconButton size="small" edge="start" color="inherit" aria-label="menu">
+          <div className="flex items-center ml-6">
+            <IconButton size="large" edge="start" color="inherit" aria-label="menu">
               <MenuIcon className="transition duration-300 ease-in-out dark:text-white dark:hover:text-white dark:hover:drop-shadow-[0_0_10px_rgba(255,255,255,1)] hover:text-black hover:drop-shadow-[0_0_10px_rgba(0,0,0,1)]" />
             </IconButton>
 
-            <div className="mx-2.5 flex justify-between gap-1">
+            <div className="mx-3.5 flex justify-between gap-1">
               <Image
                 suppressHydrationWarning
                 src={Logo}
@@ -50,10 +50,10 @@ const NavBar: FC<NavProps> = ({ children }) => {
             </Tooltip>
           </li>
 
+          {/* Profile  */}
           <li className="my-auto mx-4">
             <AccountCircleIcon fontSize="large" className="cursor-pointer" />
           </li>
-          {/* Profile  */}
         </ul>
       </header>
       <main className="flex-1 flex">
