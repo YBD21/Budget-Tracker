@@ -4,10 +4,9 @@ import NavBar from '../NavBar';
 
 const HomePage = () => {
   return (
-    <>
-      <NavBar />
+    <NavBar>
       <div className="text-red-700 dark:text-blue-300"> Home </div>
-    </>
+    </NavBar>
   );
 };
 

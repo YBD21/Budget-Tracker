@@ -1,17 +1,21 @@
 'use client';
+import { FC, ReactNode } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import Image from 'next/image';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleTheme from '../ToggleTheme';
 import Logo from '@/assets/logo.svg';
-import Image from 'next/image';
+import Sidebar from '../SideBar';
 
-const NavBar = () => {
+type NavProps = { children: ReactNode };
+
+const NavBar: FC<NavProps> = ({ children }) => {
   return (
-    <div className="overflow-visible">
+    <div className="overflow-visible h-svh">
       <header className="sticky top-0 z-30 bg-gray-50 dark:bg-neutral-800 flex flex-row w-full drop-shadow-lg h-16">
         {/* Title Name */}
         <div className="flex w-1/2">
@@ -52,6 +56,12 @@ const NavBar = () => {
           {/* Profile  */}
         </ul>
       </header>
+      <main className="flex-1 flex">
+        {/* Sidebar */}
+        <Sidebar />
+        {/* Main content */}
+        <div className="w-full px-8 py-2.5">{children}</div>
+      </main>
     </div>
   );
 };
