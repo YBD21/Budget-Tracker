@@ -9,6 +9,7 @@ import {
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
@@ -22,6 +23,14 @@ import {
 } from './dto/auth.dto';
 import { Request, Response } from 'express';
 import { UsersService } from 'src/users/users.service';
+import { AuthGuard } from './auth.guard';
+
+// Extend the Request interface to include accessData
+declare module 'express-serve-static-core' {
+  interface Request {
+    userData?: any;
+  }
+}
 
 @Controller('auth-system')
 export class AuthController {
@@ -30,18 +39,15 @@ export class AuthController {
     private readonly userService: UsersService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Get('user-data')
   async getUserData(
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
     try {
-      const accessToken = req.cookies.userData;
-      if (!accessToken || !(await this.authService.verifyToken(accessToken))) {
-        throw new UnauthorizedException();
-      }
-
-      return res.json(accessToken);
+      const respond = req.userData;
+      return res.json(respond);
     } catch (error) {
       throw new InternalServerErrorException();
     }
@@ -61,10 +67,10 @@ export class AuthController {
         // res.cookie('userData', respond.accessToken, {
         //   secure: true, // set to true to enable sending the cookie only over HTTPS
         //   httpOnly: true, // set to true to prevent client-side scripts from accessing the cookie
-        //   sameSite: 'strict',
+        //   sameSite: 'lax',
         //   expires: new Date(Date.now() + time),
         // });
-
+        res.setHeader('authorization', `Bearer ${respond.accessToken}`);
         return res.json(respond);
       } else if (respond.message) {
         return res.status(HttpStatus.BAD_REQUEST).json(respond);

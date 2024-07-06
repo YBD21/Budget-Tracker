@@ -17,13 +17,14 @@ export const setHttpOnlyUserData = (token: any): boolean => {
       httpOnly: true,
       path: '/',
       maxAge: time,
+      secure: true,
       expires: new Date(Date.now() + time),
       sameSite: 'strict',
     });
 
     return true;
   } catch (error: any) {
-    console.log(error.message);
+    // console.log(error.message);
     return false;
   }
 };
@@ -42,7 +43,14 @@ export const setHttpOnlyFindAccess = (token: any): boolean => {
 
     return true;
   } catch (error: any) {
-    console.log(error.message);
+    // console.log(error.message);
     return false;
   }
+};
+
+export const getHttpOnlyUserData = (): Promise<string | null> => {
+  return new Promise((resolve) => {
+    const token = cookies().get(USER_DATA) || null;
+    resolve(token?.value || null);
+  });
 };

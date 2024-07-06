@@ -1,9 +1,9 @@
-// import { loginUser } from '@/services/user'
-// import { useQuery } from '@tanstack/react-query'
+import { getUserData } from '@/services/user';
+import { useQuery } from '@tanstack/react-query';
 
-// export const useloginUser = () => {
-//   return useQuery({
-//     queryKey: ['currentUser'],
-//     queryFn: loginUser,
-//   })
-// }
+export const useUserData = () => {
+  return useQuery({
+    queryKey: ['currentUser'],
+    queryFn: getUserData,
+  });
+};
