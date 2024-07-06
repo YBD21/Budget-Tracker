@@ -2,12 +2,13 @@ import {
   Body,
   Controller,
   Get,
-  // HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   Patch,
   Post,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
@@ -29,7 +30,6 @@ export class AuthController {
     private readonly userService: UsersService,
   ) {}
 
-  // @HttpCode(HttpStatus.OK)
   @Get('user-data')
   async getUserData(
     @Req() req: Request,
@@ -38,18 +38,15 @@ export class AuthController {
     try {
       const accessToken = req.cookies.userData;
       if (!accessToken || !(await this.authService.verifyToken(accessToken))) {
-        return res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized');
+        throw new UnauthorizedException();
       }
 
       return res.json(accessToken);
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 
-  // @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
     @Res() res: Response,
@@ -73,9 +70,7 @@ export class AuthController {
         return res.status(HttpStatus.BAD_REQUEST).json(respond);
       }
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 
@@ -94,9 +89,7 @@ export class AuthController {
 
       return res.status(HttpStatus.BAD_REQUEST).json(respond);
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 
@@ -109,7 +102,7 @@ export class AuthController {
 
     const respond = await this.authService.handleVerifyCaptcha(recaptchaData);
 
-    return res.status(HttpStatus.CREATED).json(respond);
+    return res.status(HttpStatus.OK).json(respond);
   }
 
   @Post('find-account')
@@ -145,12 +138,10 @@ export class AuthController {
         };
         return res.status(HttpStatus.NOT_FOUND).send(respondData);
       } else {
-        return res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized'); // Stop further execution
+        throw new UnauthorizedException(); // Stop further execution
       }
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 
@@ -172,9 +163,7 @@ export class AuthController {
         return res.status(HttpStatus.OK).send(hashOfOTP);
       }
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 
@@ -203,9 +192,7 @@ export class AuthController {
         return res.status(HttpStatus.NOT_FOUND).send(respondData);
       }
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 
@@ -223,9 +210,7 @@ export class AuthController {
       }
       return res.status(HttpStatus.NOT_FOUND).send(respondData);
     } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 }
