@@ -11,10 +11,14 @@ type SideBarItemsProps = {
 
 const SideBarItems: FC<SideBarItemsProps> = ({ ActiveIcon, Icon, title, isActive }) => {
   return (
-    <li className={`flex flex-col items-center py-2 px-4 cursor-pointer`}>
-      <Tooltip title={title}>{isActive ? <ActiveIcon /> : <Icon />}</Tooltip>
-      {/* <p className="text-xs">{title}</p> */}
-    </li>
+    <Tooltip title={title} followCursor>
+      <li
+        className={`flex flex-col items-center py-2.5 px-4 cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded-xl`}
+      >
+        {isActive ? <ActiveIcon /> : <Icon />}
+        {/* <p className="text-xs">{title}</p> */}
+      </li>
+    </Tooltip>
   );
 };
 
