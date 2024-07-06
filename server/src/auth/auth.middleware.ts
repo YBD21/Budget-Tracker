@@ -1,4 +1,10 @@
-import { HttpStatus, Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NestMiddleware,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service'; // Adjust the import path as needed
 
@@ -9,18 +15,18 @@ declare module 'express-serve-static-core' {
   }
 }
 
-@Injectable()
-export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly authService: AuthService) {}
+// @Injectable()
+// export class AuthMiddleware implements NestMiddleware {
+//   constructor(private readonly authService: AuthService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
-    console.log('Request...');
-    // Example of using a method from AuthService
-    // const user = await this.authService.validateUser(req.headers.authorization);
-    // console.log(user);
-    next();
-  }
-}
+//   async use(req: Request, res: Response, next: NextFunction) {
+//     console.log('Request...');
+//     // Example of using a method from AuthService
+//     // const user = await this.authService.validateUser(req.headers.authorization);
+//     // console.log(user);
+//     next();
+//   }
+// }
 
 @Injectable()
 export class FindAccessMiddleware implements NestMiddleware {
@@ -35,7 +41,7 @@ export class FindAccessMiddleware implements NestMiddleware {
         await this.authService.verifyFindAccessToken(findAccessToken);
 
       if (accessData.status === false) {
-        return res.status(HttpStatus.UNAUTHORIZED).send('Unauthorized');
+        throw new UnauthorizedException();
       }
       req.accessData = accessData;
       next();
@@ -43,9 +49,7 @@ export class FindAccessMiddleware implements NestMiddleware {
       this.logger.error(
         `FindAccessMiddleware process failed: ${error.message}`,
       );
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+      throw new InternalServerErrorException();
     }
   }
 }
