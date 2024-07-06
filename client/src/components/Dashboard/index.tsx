@@ -5,8 +5,7 @@ import NavBar from '../NavBar';
 
 const Dashboard = () => {
   const { isPending: userLoading, data: currentUser } = useUserData();
-
-  if (userLoading) {
+  if (!userLoading) {
     console.log(currentUser);
   }
 
