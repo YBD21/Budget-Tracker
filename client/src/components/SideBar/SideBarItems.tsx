@@ -15,7 +15,7 @@ const SideBarItems = ({ ActiveIcon, Icon, title, isActive, url }: SideBarItemsPr
     <Tooltip title={title} followCursor>
       <Link href={url}>
         <li
-          className={`flex flex-col items-center py-2.5 px-4 cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded-xl`}
+          className={`flex flex-col items-center my-2.5 py-2.5 px-4 cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-xl ${isActive && 'bg-neutral-300 dark:bg-neutral-600'}`}
         >
           {isActive ? <ActiveIcon /> : <Icon />}
           {/* <p className="text-xs">{title}</p> */}
