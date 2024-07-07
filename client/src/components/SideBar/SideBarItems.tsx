@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Tooltip } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
 
@@ -9,7 +8,7 @@ type SideBarItemsProps = {
   isActive: boolean;
 };
 
-const SideBarItems: FC<SideBarItemsProps> = ({ ActiveIcon, Icon, title, isActive }) => {
+const SideBarItems = ({ ActiveIcon, Icon, title, isActive }: SideBarItemsProps) => {
   return (
     <Tooltip title={title} followCursor>
       <li

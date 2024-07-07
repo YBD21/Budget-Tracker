@@ -1,5 +1,5 @@
 'use client';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ import Sidebar from '../SideBar';
 
 type NavProps = { children: ReactNode };
 
-const NavBar: FC<NavProps> = ({ children }) => {
+const NavBar = ({ children }: NavProps) => {
   return (
     <div className="overflow-visible h-svh">
       <header className="sticky top-0 z-30 bg-gray-50 dark:bg-neutral-800 flex flex-row w-full drop-shadow-lg h-16">
