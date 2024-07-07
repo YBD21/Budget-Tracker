@@ -1,5 +1,7 @@
+import Customization from '@/components/Customization';
+
 const CustomizationPage = () => {
-  return <div>Customization</div>;
+  return <Customization />;
 };
 
 export default CustomizationPage;
