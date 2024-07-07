@@ -52,6 +52,7 @@ const Sidebar = () => {
             ActiveIcon={item.ActiveIcon}
             title={item.title}
             isActive={pathname?.startsWith(item.url) || false}
+            url={item.url}
           />
         ))}
       </ul>

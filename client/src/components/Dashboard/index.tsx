@@ -1,7 +1,6 @@
 'use client';
 
 import { useUserData } from '@/hooks/user/useUser';
-import NavBar from '../NavBar';
 
 const Dashboard = () => {
   const { isPending: userLoading, data: currentUser } = useUserData();
@@ -9,11 +8,7 @@ const Dashboard = () => {
     console.log(currentUser);
   }
 
-  return (
-    <NavBar>
-      <div className="text-red-700 dark:text-blue-300"> Dashboard </div>
-    </NavBar>
-  );
+  return <div className="text-red-700 dark:text-blue-300"> Dashboard </div>;
 };
 
 export default Dashboard;
