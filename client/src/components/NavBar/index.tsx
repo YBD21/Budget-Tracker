@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode } from 'react';
+import Link from 'next/link';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Image from 'next/image';
@@ -10,8 +10,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleTheme from '../ToggleTheme';
 import Logo from '@/assets/logo.svg';
 import Sidebar from '../SideBar';
+import { DASHBOARD } from '@/constants/Routes';
 
-type NavProps = { children: ReactNode };
+type NavProps = { children: React.ReactNode };
 
 const NavBar = ({ children }: NavProps) => {
   return (
@@ -20,11 +21,17 @@ const NavBar = ({ children }: NavProps) => {
         {/* Title Name */}
         <div className="flex w-1/2">
           <div className="flex items-center ml-6">
-            <IconButton size="large" edge="start" color="inherit" aria-label="menu">
-              <MenuIcon className="transition duration-300 ease-in-out dark:text-white dark:hover:text-white dark:hover:drop-shadow-[0_0_10px_rgba(255,255,255,1)] hover:text-black hover:drop-shadow-[0_0_10px_rgba(0,0,0,1)]" />
+            <IconButton
+              className="hover:bg-neutral-200 dark:hover:bg-neutral-700"
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon className="dark:text-white dark:hover:text-white" />
             </IconButton>
 
-            <div className="mx-3.5 flex justify-between gap-1">
+            <Link href={DASHBOARD} className="mx-3.5 flex justify-between gap-1">
               <Image
                 suppressHydrationWarning
                 src={Logo}
@@ -35,7 +42,7 @@ const NavBar = ({ children }: NavProps) => {
               />
 
               <p className="text-base font-medium">BudgetTracker</p>
-            </div>
+            </Link>
           </div>
         </div>
         {/* max-w-screen-sm */}
