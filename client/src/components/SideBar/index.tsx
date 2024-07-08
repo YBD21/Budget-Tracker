@@ -41,7 +41,10 @@ const Sidebar = () => {
     },
   ];
 
-  // At the end Logout
+  // Logout inside Profile
+
+  // when menu icon is clicked expand the SideBarItems
+  // Same Icon Size But with title Name no Tool Tip
   return (
     <nav className="w-20 px-2 shadow-xl bg-gray-50 dark:bg-neutral-800 h-[93svh] border-r border-solid border-gray-200 dark:border-stone-900">
       <ul className="space-y-2 list-none mt-2">
