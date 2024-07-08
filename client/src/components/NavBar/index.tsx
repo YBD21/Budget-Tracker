@@ -77,7 +77,7 @@ const NavBar = ({ children }: NavProps) => {
         {/* Sidebar */}
         <Sidebar isExpand={isExpand} />
         {/* Main content */}
-        <div className="w-full px-8 py-2.5">{children}</div>
+        <div className="w-full p-4">{children}</div>
       </main>
     </div>
   );
