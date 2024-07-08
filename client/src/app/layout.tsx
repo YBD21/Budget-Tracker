@@ -1,8 +1,10 @@
 import './globals.css';
 import { Metadata } from 'next';
+
 import ReactQueryProvider from '@/utils/ReactQueryProvider';
 import localFont from 'next/font/local';
 import { ThemeProvider } from 'next-themes';
+import ProgressBarProvider from '@/utils/ProgressBarProvider';
 
 export const metadata: Metadata = {
   title: 'BudgetTracker',
@@ -27,6 +29,7 @@ export default function RootLayout({
       </head> */}
 
       <body className={redditMono.className}>
+        <ProgressBarProvider />
         <ReactQueryProvider>
           {/* <StateProvider initialState={initialState} reducer={reducer}> */}
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
