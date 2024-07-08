@@ -1,15 +1,11 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand';
 
-export const useThemeName = create(
-  persist(
-    (set) => ({
-      theme: '', // initial
-      updateTheme: (newTheme) => set({ theme: newTheme }),
-      removeTheme: () => set({ theme: '' }),
-    }),
-    {
-      name: 'theme',
-    },
-  ),
-)
+type ThemeState = {
+  theme: string;
+  updateTheme: (newTheme: string) => void;
+};
+
+export const useThemeStore = create<ThemeState>((set) => ({
+  theme: '', // initial
+  updateTheme: (newTheme: string) => set({ theme: newTheme }),
+}));

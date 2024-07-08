@@ -1,10 +1,11 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import Tooltip from '@mui/material/Tooltip';
 
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import { DARK_THEME, LIGHT_THEME } from '@/constants/actionName';
+import { useThemeStore } from '@/context/Store';
 
 type ToggleThemeProps = {
   style?: string;
@@ -15,12 +16,12 @@ const ToggleTheme: FC<ToggleThemeProps> = ({ style, isLarge = false }) => {
   const { resolvedTheme, setTheme } = useTheme();
 
   // Initialize theme state using useState
-  const [theme, setThemeState] = useState('');
+  const { theme, updateTheme } = useThemeStore();
 
   // Function to toggle theme
   const toggleTheme = () => {
     const newTheme = theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    setThemeState(newTheme);
+    updateTheme(newTheme);
     // Update theme in localStorage
     localStorage.setItem('theme', newTheme);
     // Set theme using next-themes hook
@@ -31,12 +32,12 @@ const ToggleTheme: FC<ToggleThemeProps> = ({ style, isLarge = false }) => {
     const storedTheme = localStorage.getItem('theme');
 
     if (storedTheme) {
-      setThemeState(storedTheme);
+      updateTheme(storedTheme);
     } else {
       const newTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? DARK_THEME
         : LIGHT_THEME;
-      setThemeState(newTheme);
+      updateTheme(newTheme);
       // Set theme using next-themes hook
       setTheme(newTheme);
     }
