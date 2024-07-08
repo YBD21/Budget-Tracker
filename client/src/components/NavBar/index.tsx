@@ -1,4 +1,5 @@
 'use client';
+import { useState, ReactNode } from 'react';
 import Link from 'next/link';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -12,9 +13,15 @@ import Logo from '@/assets/logo.svg';
 import Sidebar from '../SideBar';
 import { DASHBOARD } from '@/constants/Routes';
 
-type NavProps = { children: React.ReactNode };
+type NavProps = { children: ReactNode };
 
 const NavBar = ({ children }: NavProps) => {
+  const [isExpand, setIsExpand] = useState(false);
+
+  const toggleExpand = (status: boolean) => {
+    setIsExpand(!status);
+  };
+
   return (
     <div className="overflow-visible h-svh">
       <header className="sticky top-0 z-30 bg-gray-50 dark:bg-neutral-800 flex flex-row w-full drop-shadow-lg h-16">
@@ -27,6 +34,9 @@ const NavBar = ({ children }: NavProps) => {
               edge="start"
               color="inherit"
               aria-label="menu"
+              onClick={() => {
+                toggleExpand(isExpand);
+              }}
             >
               <MenuIcon className="dark:text-white dark:hover:text-white" />
             </IconButton>
@@ -65,7 +75,7 @@ const NavBar = ({ children }: NavProps) => {
       </header>
       <main className="flex-1 flex">
         {/* Sidebar */}
-        <Sidebar />
+        <Sidebar isExpand={isExpand} />
         {/* Main content */}
         <div className="w-full px-8 py-2.5">{children}</div>
       </main>

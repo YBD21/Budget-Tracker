@@ -10,6 +10,10 @@ import { SvgIconComponent } from '@mui/icons-material';
 import SideBarItems from './SideBarItems';
 import { CUSTOMIZATION, DASHBOARD, HISTORY } from '@/constants/Routes';
 
+type SideBarProps = {
+  isExpand: boolean;
+};
+
 type SidebarItem = {
   url: string;
   title: string;
@@ -17,7 +21,7 @@ type SidebarItem = {
   Icon: SvgIconComponent;
 };
 
-const Sidebar = () => {
+const Sidebar = ({ isExpand }: SideBarProps) => {
   const pathname = usePathname();
 
   const itemList: SidebarItem[] = [
@@ -46,8 +50,10 @@ const Sidebar = () => {
   // when menu icon is clicked expand the SideBarItems
   // Same Icon Size But with title Name no Tool Tip
   return (
-    <nav className="w-20 px-2 shadow-xl bg-gray-50 dark:bg-neutral-800 h-[93svh] border-r border-solid border-gray-200 dark:border-stone-900">
-      <ul className="space-y-2 list-none mt-2">
+    <nav
+      className={`transition-[width] ease-linear duration-300 ${isExpand ? 'w-56' : 'w-20'} px-2 shadow-xl bg-gray-50 dark:bg-neutral-800 h-[93svh] border-r border-solid border-gray-200 dark:border-stone-900 `}
+    >
+      <ul className="space-y-2 list-none mt-2 transition-[width] ease-linear duration-300">
         {itemList.map((item, index) => (
           <SideBarItems
             key={index}
@@ -56,6 +62,7 @@ const Sidebar = () => {
             title={item.title}
             isActive={pathname === item.url}
             url={item.url}
+            isExpand={isExpand}
           />
         ))}
       </ul>
