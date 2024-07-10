@@ -40,7 +40,7 @@ const Dashboard = () => {
       <div className="flex flex-col mt-6 py-1.5">
         <p className="mx-2 text-xl font-semibold">Overview</p>
 
-        <div className="flex justify-between my-6 mx-2">
+        <div className="flex justify-between my-6 mx-2 lg:mx-auto lg:max-w-screen-lg lg:gap-24">
           {/* Income */}
           <OverviewCard
             title="Income"
