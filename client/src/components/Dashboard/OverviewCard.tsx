@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { SvgIconComponent } from '@mui/icons-material';
 
 type OverviewCardProps = {
@@ -10,7 +11,7 @@ type OverviewCardProps = {
   iconSize: 'large' | 'medium';
   priceIcon: 'Rs.' | string;
   priceColor: string;
-  price: Number;
+  price: number;
 };
 
 const OverviewCard = ({
@@ -23,10 +24,39 @@ const OverviewCard = ({
   price,
   iconSize,
 }: OverviewCardProps) => {
-  const formattedPrice = price?.toLocaleString('en-IN', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  const [formattedPrice, setFormattedPrice] = useState('0.00');
+  const [displayedPrice, setDisplayedPrice] = useState('0.00');
+
+  useEffect(() => {
+    const formatted =
+      price?.toLocaleString('en-IN', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) || '0.00';
+    setFormattedPrice(formatted);
+  }, [price]);
+
+  useEffect(() => {
+    let currentPrice = 0;
+    const finalPrice = parseFloat(formattedPrice.replace(/,/g, ''));
+
+    const interval = setInterval(() => {
+      if (currentPrice < finalPrice) {
+        currentPrice += Math.max(1, (finalPrice - currentPrice) / 10);
+        setDisplayedPrice(
+          currentPrice.toLocaleString('en-IN', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        );
+      } else {
+        clearInterval(interval);
+        setDisplayedPrice(formattedPrice);
+      }
+    }, 15); // Update interval, you can adjust this for a faster/slower effect
+
+    return () => clearInterval(interval);
+  }, [formattedPrice]);
 
   return (
     <div
@@ -36,8 +66,11 @@ const OverviewCard = ({
 
       <div className="flex flex-col mx-2">
         <p className="text-sm font-semibold mb-0.5">{title}</p>
-        <span className={`text-lg tracking-wider ${priceColor}`}>
-          {priceIcon} {formattedPrice}
+        <span
+          className={`transition-transform transform-gpu ease-in-out duration-700 text-lg tracking-wider ${priceColor} inline-block`}
+          key={displayedPrice} // This forces a re-render to apply the transition
+        >
+          {priceIcon} {displayedPrice}
         </span>
       </div>
     </div>

@@ -16,6 +16,9 @@ const Dashboard = () => {
   }
 
   const firstName = currentUser?.firstName;
+  const income = currentUser?.totalIncome;
+  const expense = currentUser?.totalExpense;
+  const balance = currentUser?.totalBalance;
 
   // if is Negative change Balance color
 
@@ -47,7 +50,7 @@ const Dashboard = () => {
             borderColor="border-green-400 dark:border-green-700"
             priceColor="text-green-700 dark:text-green-500"
             priceIcon="Rs."
-            price={15_000}
+            price={income}
           />
 
           {/* Expense */}
@@ -59,7 +62,7 @@ const Dashboard = () => {
             iconSize="large"
             priceColor="text-red-700 dark:text-red-500"
             priceIcon="Rs."
-            price={5_000}
+            price={expense}
           />
           {/* Balance */}
           <OverviewCard
@@ -70,7 +73,7 @@ const Dashboard = () => {
             iconSize="large"
             priceColor=""
             priceIcon="Rs."
-            price={10_000}
+            price={balance}
           />
         </div>
       </div>
