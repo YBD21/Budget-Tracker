@@ -26,7 +26,7 @@ const Dashboard = () => {
     <div className="flex-col">
       <div className="flex flex-row justify-between -m-4 px-3 pt-4 pb-1.5">
         <p className="mx-2 text-xl"> Hi,{firstName} 👋</p>
-        <div className="flex mx-5">
+        {/* <div className="flex mx-5">
           <Button
             title={
               <div className="flex justify-between text-base dark:text-white">
@@ -35,10 +35,10 @@ const Dashboard = () => {
             }
             type="primary"
           />
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col mt-6 py-1.5">
-        <p className="mx-2 text-xl font-semibold">Overview</p>
+        {/* <p className="m-1.5 text-xl font-semibold text-center">Overview</p> */}
 
         <div className="flex justify-between my-6 mx-2 lg:mx-auto lg:max-w-screen-lg lg:gap-24">
           {/* Income */}
