@@ -7,6 +7,7 @@ import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import Add from '@mui/icons-material/Add';
 import OverviewCard from './OverviewCard';
+import SearchBar from '../SearchBar';
 
 const Dashboard = () => {
   const { isPending: userLoading, data: currentUser } = useUserData();
@@ -76,6 +77,7 @@ const Dashboard = () => {
             price={balance}
           />
         </div>
+        <SearchBar />
       </div>
     </div>
   );
