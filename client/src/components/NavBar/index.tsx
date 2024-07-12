@@ -1,26 +1,23 @@
 'use client';
-import { useState, ReactNode } from 'react';
 import Link from 'next/link';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 import Image from 'next/image';
 
-import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+// import MenuIcon from '@mui/icons-material/Menu';
+// import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleTheme from '../ToggleTheme';
 import Logo from '@/assets/logo.svg';
-import Sidebar from '../SideBar';
+// import Sidebar from '../SideBar';
 import { DASHBOARD } from '@/constants/Routes';
 
-type NavProps = { children: ReactNode };
+type NavProps = { children: React.ReactNode };
 
 const NavBar = ({ children }: NavProps) => {
-  const [isExpand, setIsExpand] = useState(false);
+  // const [isExpand, setIsExpand] = useState(false);
 
-  const toggleExpand = (status: boolean) => {
-    setIsExpand(!status);
-  };
+  // const toggleExpand = (status: boolean) => {
+  //   setIsExpand(!status);
+  // };
 
   return (
     <div className="overflow-visible h-svh">
@@ -28,7 +25,7 @@ const NavBar = ({ children }: NavProps) => {
         {/* Title Name */}
         <div className="flex w-1/2">
           <div className="flex items-center ml-6">
-            <IconButton
+            {/* <IconButton
               className="hover:bg-neutral-200 dark:hover:bg-neutral-700"
               size="large"
               edge="start"
@@ -39,7 +36,7 @@ const NavBar = ({ children }: NavProps) => {
               }}
             >
               <MenuIcon className="dark:text-white dark:hover:text-white" />
-            </IconButton>
+            </IconButton> */}
 
             <Link href={DASHBOARD} className="mx-3.5 flex justify-between gap-1">
               <Image
@@ -56,16 +53,16 @@ const NavBar = ({ children }: NavProps) => {
           </div>
         </div>
         {/* max-w-screen-sm */}
-        <ul className="flex w-1/2 justify-end mx-4">
+        <ul className="flex w-1/2 justify-end mx-12">
           <li className="flex my-auto mx-4">
             <ToggleTheme style={'flex'} />
           </li>
 
-          <li className="my-auto mx-4">
+          {/* <li className="my-auto mx-4">
             <Tooltip title="Notification">
               <NotificationsOutlinedIcon className="cursor-pointer" />
             </Tooltip>
-          </li>
+          </li> */}
 
           {/* Profile  */}
           <li className="my-auto mx-4">
@@ -75,9 +72,9 @@ const NavBar = ({ children }: NavProps) => {
       </header>
       <main className="flex-1 flex">
         {/* Sidebar */}
-        <Sidebar isExpand={isExpand} />
+        {/* <Sidebar isExpand={isExpand} /> */}
         {/* Main content */}
-        <div className="w-full p-4">{children}</div>
+        <div className="w-full mx-8 my-6">{children}</div>
       </main>
     </div>
   );
