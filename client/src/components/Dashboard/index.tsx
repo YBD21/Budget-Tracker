@@ -24,7 +24,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex-col">
-      <div className="bg-gray-200 dark:bg-neutral-700 flex flex-row justify-between -m-4 px-3 pt-4 pb-1.5">
+      <div className="flex flex-row justify-between -m-4 px-3 pt-4 pb-1.5">
         <p className="mx-2 text-xl"> Hi,{firstName} 👋</p>
         <div className="flex mx-5">
           <Button
@@ -49,7 +49,7 @@ const Dashboard = () => {
             iconSize="large"
             borderColor="border-green-400 dark:border-green-700"
             priceColor="text-green-700 dark:text-green-500"
-            priceIcon="Rs."
+            currencyName="Rs."
             price={income}
           />
 
@@ -61,7 +61,7 @@ const Dashboard = () => {
             iconColor="text-red-500 dark:text-red-600"
             iconSize="large"
             priceColor="text-red-700 dark:text-red-500"
-            priceIcon="Rs."
+            currencyName="Rs."
             price={expense}
           />
           {/* Balance */}
@@ -72,7 +72,7 @@ const Dashboard = () => {
             iconColor=""
             iconSize="large"
             priceColor=""
-            priceIcon="Rs."
+            currencyName="Rs."
             price={balance}
           />
         </div>

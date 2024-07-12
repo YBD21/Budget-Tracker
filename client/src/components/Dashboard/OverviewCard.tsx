@@ -9,7 +9,7 @@ type OverviewCardProps = {
   iconColor: string;
   borderColor: string;
   iconSize: 'large' | 'medium';
-  priceIcon: 'Rs.' | string;
+  currencyName: string;
   priceColor: string;
   price: number;
 };
@@ -19,7 +19,7 @@ const OverviewCard = ({
   title,
   iconColor,
   borderColor,
-  priceIcon,
+  currencyName,
   priceColor,
   price,
   iconSize,
@@ -70,7 +70,7 @@ const OverviewCard = ({
           className={`transition-transform transform-gpu ease-in-out duration-700 text-lg tracking-wider ${priceColor} inline-block`}
           key={displayedPrice} // This forces a re-render to apply the transition
         >
-          {priceIcon} {displayedPrice}
+          {currencyName} {displayedPrice}
         </span>
       </div>
     </div>
