@@ -4,7 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = () => {
   return (
-    <div className="relative flex flex-1 items-center mb-10 mx-3.5">
+    <div className="relative flex flex-1 items-center mb-10 mx-3">
       <input
         type="text"
         placeholder="Search by title"
