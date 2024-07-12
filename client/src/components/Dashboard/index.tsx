@@ -38,10 +38,10 @@ const Dashboard = () => {
           />
         </div> */}
       </div>
-      <div className="flex flex-col mt-6 py-1.5">
+      <div className="flex flex-col mt-6 py-1.5 lg:mx-auto lg:max-w-screen-lg">
         {/* <p className="m-1.5 text-xl font-semibold text-center">Overview</p> */}
 
-        <div className="flex justify-between my-6 mx-2 lg:mx-auto lg:max-w-screen-lg lg:gap-24">
+        <div className="flex justify-between my-6 mx-2 lg:gap-24">
           {/* Income */}
           <OverviewCard
             title="Income"
