@@ -8,6 +8,7 @@ import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalance
 import Add from '@mui/icons-material/Add';
 import OverviewCard from './OverviewCard';
 import SearchBar from '../SearchBar';
+import DataTable from '../DataTable';
 
 const Dashboard = () => {
   const { isPending: userLoading, data: currentUser } = useUserData();
@@ -41,7 +42,7 @@ const Dashboard = () => {
       <div className="flex flex-col mt-6 py-1.5 lg:mx-auto lg:max-w-screen-lg">
         {/* <p className="m-1.5 text-xl font-semibold text-center">Overview</p> */}
 
-        <div className="flex justify-between my-6 mx-2 lg:gap-24">
+        <div className="flex justify-between my-8 mx-2 lg:gap-24">
           {/* Income */}
           <OverviewCard
             title="Income"
@@ -78,22 +79,10 @@ const Dashboard = () => {
           />
         </div>
         <SearchBar />
+        <DataTable />
       </div>
     </div>
   );
 };
 
 export default Dashboard;
-
-//  {/* bg-red-100 */}
-
-//    <div className="flex px-4 py-1.5 border border-solid border-gray-400 dark:border-stone-500 shadow dark:shadow-sm rounded-lg ">
-//    {/* text-red-600 */}
-//    <AccountBalanceWalletOutlinedIcon className="mr-2" fontSize="large" />
-
-//    <div className="flex flex-col mx-2">
-//      <p className="text-sm font-semibold mb-0.5">Balance</p>
-//      {/* text-red-800 */}
-//      <span className="text-lg tracking-wider">Rs. 14,000.00</span>
-//    </div>
-//  </div>

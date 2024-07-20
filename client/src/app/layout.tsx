@@ -5,6 +5,7 @@ import ReactQueryProvider from '@/utils/ReactQueryProvider';
 import localFont from 'next/font/local';
 import { ThemeProvider } from 'next-themes';
 import ProgressBarProvider from '@/utils/ProgressBarProvider';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 export const metadata: Metadata = {
   title: 'BudgetTracker',
@@ -33,7 +34,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           {/* <StateProvider initialState={initialState} reducer={reducer}> */}
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <AntdRegistry>{children}</AntdRegistry>
           </ThemeProvider>
           {/* </StateProvider> */}
         </ReactQueryProvider>
