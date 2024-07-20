@@ -79,7 +79,7 @@ const Dashboard = () => {
           />
         </div>
         {/* <SearchBar /> */}
-        <div className="mt-4">
+        <div className="mt-4" suppressHydrationWarning>
           <DataTable />
         </div>
       </div>

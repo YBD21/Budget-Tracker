@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
@@ -65,22 +65,27 @@ const columns: TableColumnsType<DataType> = [
   },
 ];
 
-const dataSource = Array.from<DataType>({ length: 20 }).map<DataType>((_, i) => ({
-  key: i,
-  date: `2023-07-${i + 1}`,
-  title: `Transaction ${i}`,
-  type: i % 2 === 0 ? 'Income' : 'Expense',
-  reoccur: i % 2 === 0,
-  amount: Math.floor(Math.random() * 1000),
-}));
-
 const DataTable: React.FC = () => {
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
       pageSize: 5,
     },
   });
+
+  const generateDataSource = useCallback(
+    (length: number) =>
+      Array.from<DataType>({ length }).map<DataType>((_, i) => ({
+        key: i,
+        date: `2023-07-${i + 1}`,
+        title: `Transaction ${i}`,
+        type: i % 2 === 0 ? 'Income' : 'Expense',
+        reoccur: i % 2 === 0,
+        amount: Math.floor(Math.random() * 1000), // This will need to be consistent
+      })),
+    []
+  );
 
   const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
@@ -90,6 +95,11 @@ const DataTable: React.FC = () => {
       sortField: Array.isArray(sorter) ? undefined : sorter.field,
     });
   };
+
+  useEffect(() => {
+    // Client-side data generation or fetching
+    setDataSource(generateDataSource(20));
+  }, []);
 
   return (
     <Table
