@@ -79,7 +79,9 @@ const Dashboard = () => {
           />
         </div>
         {/* <SearchBar /> */}
-        <DataTable />
+        <div className="mt-4">
+          <DataTable />
+        </div>
       </div>
     </div>
   );

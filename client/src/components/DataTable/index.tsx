@@ -37,8 +37,8 @@ const columns: TableColumnsType<DataType> = [
     title: 'Type',
     dataIndex: 'type',
     filters: [
-      { text: 'Income', value: 'Income' },
-      { text: 'Expense', value: 'Expense' },
+      { text: <span className="text-green-600 text-center">Income </span>, value: 'Income' },
+      { text: <span className="text-red-600 text-center">Expense</span>, value: 'Expense' },
     ],
     onFilter: (value, record) => record.type === value,
   },
@@ -97,6 +97,7 @@ const DataTable: React.FC = () => {
       dataSource={dataSource}
       onChange={handleTableChange}
       pagination={tableParams.pagination}
+      className="dark:bg-gray-50 rounded-lg"
     />
   );
 };
