@@ -1,51 +1,77 @@
 import { useState } from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
 
 interface DataType {
   key: React.Key;
-  name: string;
-  age: number;
-  address: string;
+  date: string;
+  title: string;
+  type: string;
+  reoccur: boolean;
+  amount: number;
 }
 
 interface TableParams {
   pagination?: TablePaginationConfig;
   sortField?: SorterResult<any>['field'];
   sortOrder?: SorterResult<any>['order'];
-  filters?: Parameters<GetProp<TableProps, 'onChange'>>[1];
+  filters?: Parameters<GetProp<TableProps<DataType>, 'onChange'>>[1];
 }
 
 const columns: TableColumnsType<DataType> = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    showSorterTooltip: { target: 'full-header' },
-    // specify the condition of filtering result
-    // here is that finding the name started with `value`
-    onFilter: (value, record) => record.name.indexOf(value as string) === 0,
-    sorter: (a, b) => a.name.length - b.name.length,
-    sortDirections: ['descend'],
+    title: 'Date',
+    dataIndex: 'date',
+    sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    sortDirections: ['descend', 'ascend'],
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    defaultSortOrder: 'descend',
-    sorter: (a, b) => a.age - b.age,
+    title: 'Title',
+    dataIndex: 'title',
+    onFilter: (value, record) => record.title.indexOf(value as string) === 0,
+    sorter: (a, b) => a.title.length - b.title.length,
+    sortDirections: ['descend', 'ascend'],
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    onFilter: (value, record) => record.address.indexOf(value as string) === 0,
+    title: 'Type',
+    dataIndex: 'type',
+    filters: [
+      { text: 'Income', value: 'Income' },
+      { text: 'Expense', value: 'Expense' },
+    ],
+    onFilter: (value, record) => record.type === value,
+  },
+  {
+    title: 'Reoccur',
+    dataIndex: 'reoccur',
+    filters: [
+      { text: 'Yes', value: true },
+      { text: 'No', value: false },
+    ],
+    onFilter: (value, record) => record.reoccur === value,
+    render: (reoccur) => (reoccur ? 'Yes' : 'No'),
+  },
+  {
+    title: 'Amount',
+    dataIndex: 'amount',
+    sorter: (a, b) => a.amount - b.amount,
+    sortDirections: ['descend', 'ascend'],
+  },
+  {
+    title: 'Action',
+    dataIndex: 'action',
+    render: (_, record) => <Button onClick={() => console.log(record.key)}>Edit</Button>,
   },
 ];
 
 const dataSource = Array.from<DataType>({ length: 20 }).map<DataType>((_, i) => ({
   key: i,
-  name: `Edward King ${i}`,
-  age: i + 24,
-  address: `London, Park Lane no. ${i}`,
+  date: `2023-07-${i + 1}`,
+  title: `Transaction ${i}`,
+  type: i % 2 === 0 ? 'Income' : 'Expense',
+  reoccur: i % 2 === 0,
+  amount: Math.floor(Math.random() * 1000),
 }));
 
 const DataTable: React.FC = () => {
@@ -56,18 +82,13 @@ const DataTable: React.FC = () => {
     },
   });
 
-  const handleTableChange: TableProps['onChange'] = (pagination, filters, sorter) => {
+  const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,
       sortOrder: Array.isArray(sorter) ? undefined : sorter.order,
       sortField: Array.isArray(sorter) ? undefined : sorter.field,
     });
-
-    // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      console.log('hello');
-    }
   };
 
   return (
@@ -75,7 +96,6 @@ const DataTable: React.FC = () => {
       columns={columns}
       dataSource={dataSource}
       onChange={handleTableChange}
-      showSorterTooltip={{ target: 'sorter-icon' }}
       pagination={tableParams.pagination}
     />
   );

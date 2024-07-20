@@ -78,7 +78,7 @@ const Dashboard = () => {
             price={balance}
           />
         </div>
-        <SearchBar />
+        {/* <SearchBar /> */}
         <DataTable />
       </div>
     </div>
