@@ -57,6 +57,15 @@ const columns: TableColumnsType<DataType> = [
     dataIndex: 'amount',
     sorter: (a, b) => a.amount - b.amount,
     sortDirections: ['descend', 'ascend'],
+    render: (amount) => {
+      // Format the amount with commas
+      const formattedAmount = new Intl.NumberFormat('en-IN', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(amount);
+      return `Rs. ${formattedAmount}`;
+    },
   },
   {
     title: 'Action',
@@ -82,7 +91,7 @@ const DataTable: React.FC = () => {
         title: `Transaction ${i}`,
         type: i % 2 === 0 ? 'Income' : 'Expense',
         reoccur: i % 2 === 0,
-        amount: Math.floor(Math.random() * 1000), // This will need to be consistent
+        amount: Math.floor(Math.random() * (99999 - 1000 + 1)) + 1000,
       })),
     []
   );
