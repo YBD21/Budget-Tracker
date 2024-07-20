@@ -19,6 +19,11 @@ interface TableParams {
   filters?: Parameters<GetProp<TableProps<DataType>, 'onChange'>>[1];
 }
 
+const styleIncome = <span className="text-green-600 text-center">Income </span>;
+const styleYes = <span className="text-green-700 text-center">Yes </span>;
+const styleExpense = <span className="text-red-600 text-center">Expense</span>;
+const styleNo = <span className="text-red-700 text-center">No</span>;
+
 const columns: TableColumnsType<DataType> = [
   {
     title: 'Date',
@@ -37,10 +42,11 @@ const columns: TableColumnsType<DataType> = [
     title: 'Type',
     dataIndex: 'type',
     filters: [
-      { text: <span className="text-green-600 text-center">Income </span>, value: 'Income' },
-      { text: <span className="text-red-600 text-center">Expense</span>, value: 'Expense' },
+      { text: styleIncome, value: 'Income' },
+      { text: styleExpense, value: 'Expense' },
     ],
     onFilter: (value, record) => record.type === value,
+    render: (type) => (type === 'Income' ? styleIncome : styleExpense),
   },
   {
     title: 'Reoccur',
@@ -50,7 +56,7 @@ const columns: TableColumnsType<DataType> = [
       { text: 'No', value: false },
     ],
     onFilter: (value, record) => record.reoccur === value,
-    render: (reoccur) => (reoccur ? 'Yes' : 'No'),
+    render: (reoccur) => (reoccur ? styleYes : styleNo),
   },
   {
     title: 'Amount',

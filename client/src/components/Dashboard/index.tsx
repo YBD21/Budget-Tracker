@@ -78,8 +78,9 @@ const Dashboard = () => {
             price={balance}
           />
         </div>
-        {/* <SearchBar /> */}
+
         <div className="mt-4" suppressHydrationWarning>
+          <SearchBar />
           <DataTable />
         </div>
       </div>
