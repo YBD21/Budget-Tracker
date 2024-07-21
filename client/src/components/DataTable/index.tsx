@@ -4,6 +4,7 @@ import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } fro
 import { SorterResult } from 'antd/es/table/interface';
 import { useThemeStore } from '@/context/Store';
 import StyleWrapper from './StyleWrapper';
+import ActionTab from './ActionTab';
 
 interface DataType {
   key: React.Key;
@@ -78,7 +79,7 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Action',
     dataIndex: 'action',
-    render: (_, record) => <Button onClick={() => console.log(record.key)}>Edit</Button>,
+    render: (_, record) => <ActionTab record={record} />,
   },
 ];
 
@@ -126,7 +127,6 @@ const DataTable: React.FC = () => {
         dataSource={dataSource}
         onChange={handleTableChange}
         pagination={tableParams.pagination}
-        // className="dark:bg-gray-50 rounded-lg"
       />
     </StyleWrapper>
   );
