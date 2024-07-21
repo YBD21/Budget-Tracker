@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
 import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
 import { useThemeStore } from '@/context/Store';
