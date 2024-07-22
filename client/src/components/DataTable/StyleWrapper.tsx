@@ -35,6 +35,10 @@ const StyleWrapper = styled.div`
       border-color: #ffffff;
     }
 
+    .ant-pagination-item-container > span {
+      color: #ffffff !important;
+    }
+
     .ant-pagination-item-active:hover {
       border-color: #ffffff !important;
       background-color: #333333;
@@ -121,6 +125,10 @@ const StyleWrapper = styled.div`
 
     .ant-pagination-item > a {
       color: #000000 !important;
+    }
+
+    .ant-pagination-item-container > span {
+      color: #333333 !important;
     }
   }
 `;

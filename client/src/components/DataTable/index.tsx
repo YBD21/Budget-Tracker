@@ -101,6 +101,8 @@ const DataTable: React.FC = () => {
     pagination: {
       current: 1,
       pageSize: 5,
+      total: 100,
+      showSizeChanger: false,
     },
   });
 
