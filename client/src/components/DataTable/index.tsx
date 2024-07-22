@@ -22,10 +22,21 @@ interface TableParams {
   filters?: Parameters<GetProp<TableProps<DataType>, 'onChange'>>[1];
 }
 
-const styleIncome = <span className="text-green-600 text-center">Income </span>;
-const styleYes = <span className="text-green-700 text-center">Yes </span>;
-const styleExpense = <span className="text-red-600 text-center">Expense</span>;
-const styleNo = <span className="text-red-700 text-center">No</span>;
+const styleIncome = (
+  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Income </span>
+);
+
+const styleYes = (
+  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Yes </span>
+);
+
+const styleExpense = (
+  <span className="text-red-600 dark:text-red-500 text-center font-semibold">Expense</span>
+);
+
+const styleNo = (
+  <span className="text-red-600 dark:text-red-500 text-center font-semibold">No</span>
+);
 
 const columns: TableColumnsType<DataType> = [
   {

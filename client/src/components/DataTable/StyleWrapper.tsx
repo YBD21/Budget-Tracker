@@ -2,13 +2,8 @@ import styled from '@emotion/styled';
 
 const StyleWrapper = styled.div`
   &.dark {
-    background-color: #1a1a1a; /* Dark background */
+    background-color: #1f1f1f; /* Dark background */
     color: #ffffff; /* Light text for dark mode */
-
-    .ant-table {
-      background-color: #1a1a1a;
-      color: #ffffff;
-    }
 
     .ant-table-thead > tr > th:hover {
       background-color: #333333 !important; /* Darker header for dark mode */
@@ -22,7 +17,7 @@ const StyleWrapper = styled.div`
     }
 
     .ant-table-tbody > tr > td {
-      background-color: #1a1a1a;
+      background-color: #1f1f1f;
       color: #ffffff;
       transition: none !important;
     }
@@ -38,6 +33,10 @@ const StyleWrapper = styled.div`
 
     .ant-pagination-item-active {
       border-color: #ffffff;
+    }
+
+    .ant-pagination-item-active:hover {
+      border-color: #ffffff !important;
       background-color: #333333;
       color: #ffffff;
     }
@@ -50,12 +49,32 @@ const StyleWrapper = styled.div`
       color: #ffffff; /* Ensure text remains readable on hover */
     }
 
-    .anticon {
+    .ant-dropdown-trigger {
       color: #ffffff;
     }
 
     .ant-table-cell-row-hover {
       background: none !important;
+    }
+
+    .active {
+      color: #1677ff !important;
+    }
+
+    .ant-table {
+      background: inherit !important;
+    }
+
+    .ant-table-column-sorter-inner {
+      color: #ffffff;
+    }
+
+    .ant-pagination-prev > button > span {
+      color: #ffffff !important;
+    }
+
+    .ant-pagination-next > button > span {
+      color: #ffffff !important;
     }
   }
 
