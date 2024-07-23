@@ -42,13 +42,13 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Date',
     dataIndex: 'date',
-    sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    sorter: true,
     sortDirections: ['descend'],
   },
   {
     title: 'Title',
     dataIndex: 'title',
-    sorter: (a, b) => a.title.length - b.title.length,
+    sorter: true,
     sortDirections: ['descend'],
   },
   {
@@ -74,7 +74,7 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Amount',
     dataIndex: 'amount',
-    sorter: (a, b) => a.amount - b.amount,
+    sorter: true,
     sortDirections: ['descend', 'ascend'],
     render: (amount) => {
       // Format the amount with commas
