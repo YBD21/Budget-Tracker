@@ -43,14 +43,13 @@ const columns: TableColumnsType<DataType> = [
     title: 'Date',
     dataIndex: 'date',
     sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    sortDirections: ['descend', 'ascend'],
+    sortDirections: ['descend'],
   },
   {
     title: 'Title',
     dataIndex: 'title',
-    onFilter: (value, record) => record.title.indexOf(value as string) === 0,
     sorter: (a, b) => a.title.length - b.title.length,
-    sortDirections: ['descend', 'ascend'],
+    sortDirections: ['descend'],
   },
   {
     title: 'Type',
@@ -101,7 +100,6 @@ const DataTable: React.FC = () => {
     pagination: {
       current: 1,
       pageSize: 5,
-      total: 100,
       showSizeChanger: false,
     },
   });
@@ -132,6 +130,14 @@ const DataTable: React.FC = () => {
     // Client-side data generation or fetching
     setDataSource(generateDataSource(20));
   }, []);
+
+  useEffect(() => {
+    const { pagination, sortField, sortOrder, filters } = tableParams;
+    console.log(pagination);
+    console.log('sortField :', sortField);
+    console.log('sortOrder :', sortOrder);
+    console.log('filters :', filters);
+  }, [tableParams]);
 
   return (
     <StyleWrapper className={`${theme === 'dark' ? 'dark' : 'light'} rounded-lg`}>
