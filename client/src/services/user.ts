@@ -5,6 +5,7 @@ export type BudgetDataByParams = {
   pagination: {
     current: number;
     pageSize: number;
+    showSizeChanger: boolean;
   };
   sortField: string | null;
   sortOrder: string | null | undefined;
