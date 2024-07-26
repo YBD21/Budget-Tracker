@@ -1,3 +1,4 @@
+import { TableParams } from '@/components/DataTable';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
 
@@ -30,20 +31,19 @@ export const getBudgetData = async () => {
   return response.data;
 };
 
-export const getBudgetDataByParams = async (userId: any, params: BudgetDataByParams) => {
+export const getBudgetDataByParams = async (userId: any, params: TableParams) => {
   const { pagination, sortField, sortOrder, filters } = params;
 
   // Extracting filters
-  const type = filters.type?.length ? filters.type[0] : null;
-  const reoccur = filters.reoccur?.length ? filters.reoccur[0] : null;
-  const sortOrderParam = sortOrder === undefined ? null : sortOrder;
+  const type = filters?.type?.length ? filters?.type[0] : null;
+  const reoccur = filters?.reoccur?.length ? filters?.reoccur[0] : null;
 
-  const response = await client().get(`/user/budget-list:${userId}`, {
+  const response = await client().get(`/user/budget-list/:${userId}`, {
     params: {
-      current: pagination.current,
-      pageSize: pagination.pageSize,
+      current: pagination?.current,
+      pageSize: pagination?.pageSize,
       sortField,
-      sortOrder: sortOrderParam,
+      sortOrder,
       type,
       reoccur,
     },

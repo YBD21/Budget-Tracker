@@ -5,6 +5,7 @@ import { SorterResult } from 'antd/es/table/interface';
 import { useThemeStore } from '@/context/Store';
 import StyleWrapper from './StyleWrapper';
 import ActionTab from './ActionTab';
+import { useUserAction } from '@/hooks/user/useUserAction';
 
 interface DataType {
   key: React.Key;
@@ -15,7 +16,7 @@ interface DataType {
   amount: number;
 }
 
-interface TableParams {
+export interface TableParams {
   pagination?: TablePaginationConfig;
   sortField?: SorterResult<any>['field'];
   sortOrder?: SorterResult<any>['order'];
@@ -60,6 +61,7 @@ const columns: TableColumnsType<DataType> = [
     ],
     onFilter: (value, record) => record.type === value,
     render: (type) => (type === 'Income' ? styleIncome : styleExpense),
+    filterMultiple: false,
   },
   {
     title: 'Reoccur',
@@ -70,6 +72,7 @@ const columns: TableColumnsType<DataType> = [
     ],
     onFilter: (value, record) => record.reoccur === value,
     render: (reoccur) => (reoccur ? styleYes : styleNo),
+    filterMultiple: false,
   },
   {
     title: 'Amount',
@@ -104,6 +107,8 @@ const DataTable: React.FC = () => {
     },
   });
 
+  const { budgetDataMutation } = useUserAction();
+
   const generateDataSource = useCallback(
     (length: number) =>
       Array.from<DataType>({ length }).map<DataType>((_, i) => ({
@@ -132,11 +137,25 @@ const DataTable: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const { pagination, sortField, sortOrder, filters } = tableParams;
-    console.log(pagination);
-    console.log('sortField :', sortField);
-    console.log('sortOrder :', sortOrder);
-    console.log('filters :', filters);
+    const fetchData = async () => {
+      try {
+        const { pagination, sortField, sortOrder, filters } = tableParams;
+        const userId = '11111';
+
+        console.log(pagination);
+        console.log('sortField :', sortField);
+        console.log('sortOrder :', sortOrder);
+        console.log('filters :', filters);
+
+        const mutateData = { userId, params: { pagination, sortField, sortOrder, filters } };
+        await budgetDataMutation.mutateAsync(mutateData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle the error, e.g., show an alert, log to an external service, etc.
+      }
+    };
+
+    fetchData();
   }, [tableParams]);
 
   return (
