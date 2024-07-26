@@ -1,9 +1,10 @@
+import { CURRENT_USER } from '@/constants/queryKey';
 import { getBudgetData, getUserData } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 
 export const useUserData = () => {
   return useQuery({
-    queryKey: ['currentUser'],
+    queryKey: [CURRENT_USER],
     queryFn: getUserData,
   });
 };

@@ -1,6 +1,7 @@
 import { TableParams } from '@/components/DataTable';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
+import { useUserStore } from '@/context/Store';
 
 export type BudgetDataByParams = {
   pagination: {
@@ -23,7 +24,7 @@ export const getUserData = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data;
+  return response?.data;
 };
 
 export const getBudgetData = async () => {

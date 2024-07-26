@@ -9,13 +9,20 @@ import Add from '@mui/icons-material/Add';
 import OverviewCard from './OverviewCard';
 import SearchBar from '../SearchBar';
 import DataTable from '../DataTable';
+import { useUserStore } from '@/context/Store';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
+  const { setUserData } = useUserStore();
   const { isPending: userLoading, data: currentUser } = useUserData();
 
-  if (!userLoading) {
-    console.log(currentUser);
-  }
+  // if (!userLoading) {
+  //   console.log(currentUser);
+  // }
+
+  useEffect(() => {
+    setUserData(currentUser);
+  }, [currentUser]);
 
   const firstName = currentUser?.firstName;
   const income = currentUser?.totalIncome;
