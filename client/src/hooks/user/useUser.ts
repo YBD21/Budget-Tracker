@@ -11,6 +11,6 @@ export const useUserData = () => {
 export const useBudgetData = () => {
   return useQuery({
     queryKey: ['budgetData'],
-    queryFn: () => getBudgetData(),
+    queryFn: () => getBudgetData,
   });
 };
