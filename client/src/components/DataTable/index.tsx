@@ -136,25 +136,25 @@ const DataTable: React.FC = () => {
     setDataSource(generateDataSource(20));
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const { pagination, sortField, sortOrder, filters } = tableParams;
+      const userId = '11111';
+
+      // console.log(pagination);
+      // console.log('sortField :', sortField);
+      // console.log('sortOrder :', sortOrder);
+      // console.log('filters :', filters);
+
+      const mutateData = { userId, params: { pagination, sortField, sortOrder, filters } };
+      await budgetDataMutation.mutateAsync(mutateData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle the error, e.g., show an alert, log to an external service, etc.
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { pagination, sortField, sortOrder, filters } = tableParams;
-        const userId = '11111';
-
-        console.log(pagination);
-        console.log('sortField :', sortField);
-        console.log('sortOrder :', sortOrder);
-        console.log('filters :', filters);
-
-        const mutateData = { userId, params: { pagination, sortField, sortOrder, filters } };
-        await budgetDataMutation.mutateAsync(mutateData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Handle the error, e.g., show an alert, log to an external service, etc.
-      }
-    };
-
     fetchData();
   }, [tableParams]);
 
