@@ -104,6 +104,7 @@ const DataTable: React.FC = () => {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
+      total: 20,
     },
   });
 

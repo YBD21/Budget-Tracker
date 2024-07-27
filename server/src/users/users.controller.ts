@@ -9,7 +9,8 @@ export class UsersController {
     @Param('userId') userId: string,
     @Query() query: any,
   ) {
-    const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
+    const { current, pageSize, sortField, sortOrder, type, reoccur, total } =
+      query;
 
     console.log('current:', current);
     console.log('pageSize:', pageSize);
@@ -17,6 +18,7 @@ export class UsersController {
     console.log('sortOrder:', sortOrder);
     console.log('type:', type);
     console.log('reoccur:', reoccur);
+    console.log('total', total);
     console.log('userId:', userId);
 
     return res.json('hello');
