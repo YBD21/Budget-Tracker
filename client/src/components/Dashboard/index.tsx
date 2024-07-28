@@ -13,7 +13,7 @@ import { useUserStore } from '@/context/Store';
 import { useEffect } from 'react';
 
 const Dashboard = () => {
-  const { setUserData } = useUserStore();
+  const { userData, setUserData } = useUserStore();
   const { isPending: userLoading, data: currentUser } = useUserData();
 
   // if (!userLoading) {
@@ -24,10 +24,10 @@ const Dashboard = () => {
     setUserData(currentUser);
   }, [currentUser]);
 
-  const firstName = currentUser?.firstName;
-  const income = currentUser?.totalIncome;
-  const expense = currentUser?.totalExpense;
-  const balance = currentUser?.totalBalance;
+  const firstName = userData?.firstName;
+  const income = userData?.totalIncome;
+  const expense = userData?.totalExpense;
+  const balance = userData?.totalBalance;
 
   // if is Negative change Balance color
 
