@@ -1,5 +1,5 @@
 import { CURRENT_USER } from '@/constants/queryKey';
-import { getBudgetData, getUserData } from '@/services/user';
+import { getBudgetDataByParams, getUserData } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 
 export const useUserData = () => {
@@ -9,9 +9,9 @@ export const useUserData = () => {
   });
 };
 
-export const useBudgetData = () => {
-  return useQuery({
-    queryKey: ['budgetData'],
-    queryFn: () => getBudgetData,
-  });
-};
+// export const useBudgetData = () => {
+//   return useQuery({
+//     queryKey: ['budgetData'],
+//     queryFn: () => getBudgetDataByParams,
+//   });
+// };

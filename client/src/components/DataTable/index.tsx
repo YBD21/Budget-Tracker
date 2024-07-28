@@ -99,19 +99,41 @@ const columns: TableColumnsType<DataType> = [
 const DataTable: React.FC = () => {
   const { theme } = useThemeStore();
   const { userData } = useUserStore();
+  const { budgetDataMutation } = useUserAction();
 
   const [dataSource, setDataSource] = useState<DataType[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const { pagination, sortField, sortOrder, filters } = tableParams;
+      const userId = userData?.id;
+
+      // console.log(pagination);
+      // console.log('sortField :', sortField);
+      // console.log('sortOrder :', sortOrder);
+      // console.log('filters :', filters);
+
+      const mutateData = { userId, params: { pagination, sortField, sortOrder, filters } };
+      const budgetData = await budgetDataMutation.mutateAsync(mutateData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle the error, e.g., show an alert, log to an external service, etc.
+    }
+  };
 
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
-      total: 20, // this should come from backend
     },
   });
 
-  const { budgetDataMutation } = useUserAction();
+  useEffect(() => {
+    fetchData();
+  }, [tableParams]);
+
+  // total: 20 // this should come from backend
 
   const generateDataSource = useCallback(
     (length: number) =>
@@ -139,28 +161,6 @@ const DataTable: React.FC = () => {
     // Client-side data generation or fetching
     setDataSource(generateDataSource(20));
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const { pagination, sortField, sortOrder, filters } = tableParams;
-      const userId = userData?.id;
-
-      // console.log(pagination);
-      // console.log('sortField :', sortField);
-      // console.log('sortOrder :', sortOrder);
-      // console.log('filters :', filters);
-
-      const mutateData = { userId, params: { pagination, sortField, sortOrder, filters } };
-      await budgetDataMutation.mutateAsync(mutateData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle the error, e.g., show an alert, log to an external service, etc.
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [tableParams]);
 
   return (
     <StyleWrapper className={`${theme === 'dark' ? 'dark' : 'light'} rounded-lg`}>
