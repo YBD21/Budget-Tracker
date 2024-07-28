@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
-import { useThemeStore } from '@/context/Store';
+import { useThemeStore, useUserStore } from '@/context/Store';
 import StyleWrapper from './StyleWrapper';
 import ActionTab from './ActionTab';
 import { useUserAction } from '@/hooks/user/useUserAction';
@@ -98,6 +98,8 @@ const columns: TableColumnsType<DataType> = [
 
 const DataTable: React.FC = () => {
   const { theme } = useThemeStore();
+  const { userData } = useUserStore();
+
   const [dataSource, setDataSource] = useState<DataType[]>([]);
 
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -141,7 +143,7 @@ const DataTable: React.FC = () => {
   const fetchData = async () => {
     try {
       const { pagination, sortField, sortOrder, filters } = tableParams;
-      const userId = '11111';
+      const userId = userData?.id;
 
       // console.log(pagination);
       // console.log('sortField :', sortField);

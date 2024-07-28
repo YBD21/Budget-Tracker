@@ -16,7 +16,7 @@ export const setHttpOnlyUserData = (token: any): boolean => {
       value: token,
       httpOnly: true,
       path: '/',
-      maxAge: time,
+      // maxAge: time,
       secure: true,
       expires: new Date(Date.now() + time),
       sameSite: 'strict',
@@ -37,7 +37,6 @@ export const setHttpOnlyFindAccess = (token: any): boolean => {
       value: token,
       httpOnly: true,
       path: '/',
-      maxAge: time,
       expires: new Date(Date.now() + time),
     });
 
