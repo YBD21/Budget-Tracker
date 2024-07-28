@@ -27,6 +27,7 @@ export class UsersService {
       totalIncome: 0,
       totalExpense: 0,
       totalBalance: 0,
+      totalPage: 1,
     };
 
     try {
@@ -64,8 +65,9 @@ export class UsersService {
       const summaryDoc = await budgetSummaryRef.get();
 
       if (summaryDoc.exists) {
-        const { totalIncome, totalExpense, totalBalance } = summaryDoc.data();
-        return { totalIncome, totalExpense, totalBalance };
+        const { totalIncome, totalExpense, totalBalance, totalPage } =
+          summaryDoc.data();
+        return { totalIncome, totalExpense, totalBalance, totalPage };
       } else {
         this.logger.warn(`Budget summary document does not exist`);
 
@@ -75,9 +77,9 @@ export class UsersService {
           const updateDoc = await budgetSummaryRef.get();
 
           if (updateDoc.exists) {
-            const { totalIncome, totalExpense, totalBalance } =
+            const { totalIncome, totalExpense, totalBalance, totalPage } =
               updateDoc.data();
-            return { totalIncome, totalExpense, totalBalance };
+            return { totalIncome, totalExpense, totalBalance, totalPage };
           }
         }
       }
