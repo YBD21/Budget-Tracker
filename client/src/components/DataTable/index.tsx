@@ -99,12 +99,13 @@ const columns: TableColumnsType<DataType> = [
 const DataTable: React.FC = () => {
   const { theme } = useThemeStore();
   const [dataSource, setDataSource] = useState<DataType[]>([]);
+
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
-      total: 20,
+      total: 20, // this should come from backend
     },
   });
 

@@ -47,7 +47,6 @@ export const getBudgetDataByParams = async (userId: any, params: TableParams) =>
       sortOrder,
       type,
       reoccur,
-      totalPage: pagination?.total,
     },
   });
   return response.data;
