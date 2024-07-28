@@ -27,11 +27,6 @@ export const getUserData = async () => {
   return response?.data;
 };
 
-export const getBudgetData = async () => {
-  const response = await client().get(`/user/budget-list`);
-  return response.data;
-};
-
 export const getBudgetDataByParams = async (userId: any, params: TableParams) => {
   const { pagination, sortField, sortOrder, filters } = params;
 
