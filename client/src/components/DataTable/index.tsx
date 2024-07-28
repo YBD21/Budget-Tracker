@@ -106,15 +106,18 @@ const DataTable: React.FC = () => {
   const fetchData = async () => {
     try {
       const { pagination, sortField, sortOrder, filters } = tableParams;
-      const userId = userData?.id;
-
       // console.log(pagination);
       // console.log('sortField :', sortField);
       // console.log('sortOrder :', sortOrder);
       // console.log('filters :', filters);
 
-      const mutateData = { userId, params: { pagination, sortField, sortOrder, filters } };
+      const mutateData = {
+        userId: userData?.id,
+        params: { pagination, sortField, sortOrder, filters },
+      };
       const budgetData = await budgetDataMutation.mutateAsync(mutateData);
+      console.log(budgetData.length);
+      setDataSource(budgetData);
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle the error, e.g., show an alert, log to an external service, etc.
@@ -126,27 +129,13 @@ const DataTable: React.FC = () => {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
+      total: userData?.totalPage,
     },
   });
 
   useEffect(() => {
     fetchData();
   }, [tableParams]);
-
-  // total: 20 // this should come from backend
-
-  const generateDataSource = useCallback(
-    (length: number) =>
-      Array.from<DataType>({ length }).map<DataType>((_, i) => ({
-        key: i,
-        date: `2023-07-${i + 1}`,
-        title: `Transaction ${i}`,
-        type: i % 2 === 0 ? 'Income' : 'Expense',
-        reoccur: i % 2 === 0,
-        amount: Math.floor(Math.random() * (99999 - 1000 + 1)) + 1000,
-      })),
-    []
-  );
 
   const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
@@ -156,11 +145,6 @@ const DataTable: React.FC = () => {
       sortField: Array.isArray(sorter) ? undefined : sorter.field,
     });
   };
-
-  useEffect(() => {
-    // Client-side data generation or fetching
-    setDataSource(generateDataSource(20));
-  }, []);
 
   return (
     <StyleWrapper className={`${theme === 'dark' ? 'dark' : 'light'} rounded-lg`}>

@@ -27,14 +27,14 @@ export const getUserData = async () => {
   return response?.data;
 };
 
-export const getBudgetDataByParams = async (userId: any, params: TableParams) => {
+export const getBudgetDataByParams = async (params: TableParams) => {
   const { pagination, sortField, sortOrder, filters } = params;
 
   // Extracting filters
   const type = filters?.type?.length ? filters?.type[0] : null;
   const reoccur = filters?.reoccur?.length ? filters?.reoccur[0] : null;
 
-  const response = await client().get(`/user/budget-list/:${userId}`, {
+  const response = await client().get(`/user/budget-list/`, {
     params: {
       current: pagination?.current,
       pageSize: pagination?.pageSize,

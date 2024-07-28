@@ -83,6 +83,7 @@ export class AuthService {
     totalIncome: number,
     totalExpense: number,
     totalBalance: number,
+    totalPage: number,
   ) {
     const filterData = {
       firstName,
@@ -93,6 +94,7 @@ export class AuthService {
       totalIncome,
       totalExpense,
       totalBalance,
+      totalPage,
     };
     const token = this.jwtService.sign(filterData);
     return token;
@@ -150,7 +152,7 @@ export class AuthService {
         Email: userEmail,
       } = snapshot.val();
 
-      const { totalIncome, totalExpense, totalBalance } =
+      const { totalIncome, totalExpense, totalBalance, totalPage } =
         await this.userService.getBudgetSummary(loginDTO.email);
       const token = this.generateToken(
         firstName,
@@ -161,6 +163,7 @@ export class AuthService {
         totalIncome,
         totalExpense,
         totalBalance,
+        totalPage,
       );
 
       // update last seen Date
