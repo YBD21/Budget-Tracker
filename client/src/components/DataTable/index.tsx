@@ -27,16 +27,20 @@ const styleIncome = (
   <span className="text-green-600 dark:text-green-500 text-center font-semibold">Income </span>
 );
 
-const styleYes = (
-  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Yes </span>
-);
-
 const styleExpense = (
   <span className="text-red-600 dark:text-red-500 text-center font-semibold">Expense</span>
 );
 
-const styleNo = (
-  <span className="text-red-600 dark:text-red-500 text-center font-semibold">No</span>
+const yearly = (
+  <span className="text-red-600 dark:text-red-500 text-center font-semibold">Yearly</span>
+);
+
+const monthly = (
+  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Month</span>
+);
+
+const once = (
+  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Once</span>
 );
 
 const columns: TableColumnsType<DataType> = [
@@ -67,11 +71,19 @@ const columns: TableColumnsType<DataType> = [
     title: 'Reoccur',
     dataIndex: 'reoccur',
     filters: [
-      { text: 'Yes', value: true },
-      { text: 'No', value: false },
+      { text: yearly, value: 'Year' },
+      { text: monthly, value: 'Month' },
+      { text: once, value: 'Once' },
     ],
     onFilter: (value, record) => record.reoccur === value,
-    render: (reoccur) => (reoccur ? styleYes : styleNo),
+    render: (reoccur) => {
+      if (reoccur === 'Year') {
+        return yearly;
+      } else if (reoccur === 'Month') {
+        return monthly;
+      }
+      return once;
+    },
     filterMultiple: false,
   },
   {
