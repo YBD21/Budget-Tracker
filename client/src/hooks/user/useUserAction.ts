@@ -17,11 +17,13 @@ export const useUserAction = () => {
           return newData;
         }
 
-        const mergedData = [...newData, ...oldData];
-        const uniqueData = mergedData.filter(
-          (item, index, self) => index === self.findIndex((t) => t.id === item.id)
-        );
-        return uniqueData;
+        // const mergedData = [...newData, ...oldData];
+        // const uniqueData = mergedData.filter(
+        //   (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+        // );
+        // return uniqueData;
+
+        return newData;
       });
     },
   });
