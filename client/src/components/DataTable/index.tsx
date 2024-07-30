@@ -32,15 +32,15 @@ const styleExpense = (
 );
 
 const yearly = (
-  <span className="text-red-600 dark:text-red-500 text-center font-semibold">Yearly</span>
+  <span className="text-gray-700 dark:text-gray-300 text-center font-semibold">Yearly</span>
 );
 
 const monthly = (
-  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Month</span>
+  <span className="text-blue-500 dark:text-blue-400 text-center font-semibold">Monthly</span>
 );
 
 const once = (
-  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Once</span>
+  <span className="text-stone-600 dark:text-stone-400 text-center font-semibold">Once</span>
 );
 
 const columns: TableColumnsType<DataType> = [
