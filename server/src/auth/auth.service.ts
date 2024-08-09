@@ -44,14 +44,19 @@ export class AuthService {
     return bcrypt.compare(pass, hash);
   }
 
-  async verifyToken(token: string): Promise<boolean> {
+  async verifyToken(token: string) {
     try {
       const secretKey = this.getSecretKey();
-      await this.jwtService.verifyAsync(token, { secret: secretKey });
-      return true; // Token is valid
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: secretKey,
+      });
+      return {
+        status: true,
+        ...payload,
+      }; // Token is valid
     } catch (err) {
       this.logger.error(`Token verification failed: ${err.message}`);
-      return false; // Token is invalid
+      return { status: false }; // Token is invalid
     }
   }
 

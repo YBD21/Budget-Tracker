@@ -12,7 +12,7 @@ export class UsersController {
     const userData = req.userData;
     const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
 
-    console.log('hello', userData);
+    console.log('userId:', userData?.id);
 
     console.log('current:', current);
     console.log('pageSize:', pageSize);
