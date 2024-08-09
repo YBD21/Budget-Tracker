@@ -9,6 +9,8 @@ export class UsersService {
   private readonly logger = new Logger(UsersService.name);
   constructor(private readonly firebaseService: FirebaseService) {}
 
+  private readonly budgetRefPath = 'Users';
+
   getUniqueIdFromEmail(email: string) {
     const hash = crypto.createHash('sha256');
     const uniqueId = hash.update(email).digest('hex');
@@ -17,10 +19,10 @@ export class UsersService {
 
   async createBudgetSummary(email: string): Promise<boolean> {
     const userId = this.getUniqueIdFromEmail(email);
-    const budgetRefPath = 'Users';
+
     const fireStoreRef = this.firebaseService
       .getFirestore()
-      .collection(budgetRefPath)
+      .collection(this.budgetRefPath)
       .doc(userId);
 
     const newSummary = {
@@ -54,11 +56,9 @@ export class UsersService {
   async getBudgetSummary(email: string): Promise<BudgetSummary> {
     const userId = this.getUniqueIdFromEmail(email);
 
-    const budgetRefPath = 'Users';
-
     const budgetSummaryRef = this.firebaseService
       .getFirestore()
-      .collection(budgetRefPath)
+      .collection(this.budgetRefPath)
       .doc(userId);
 
     try {
@@ -91,5 +91,20 @@ export class UsersService {
         'An error occurred while fetching budget summary. Please try again later.',
       );
     }
+  }
+
+  async getBudgetData(userId, query) {
+    console.log(userId);
+    console.log(query);
+
+    const path = 'BudgetEntry';
+
+    const budgetDataRef = this.firebaseService
+      .getFirestore()
+      .collection(`${this.budgetRefPath}/${userId}/${path}`);
+
+    const getBudgetList = await budgetDataRef.get();
+
+    console.log(getBudgetList);
   }
 }

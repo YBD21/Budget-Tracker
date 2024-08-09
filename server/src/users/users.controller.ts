@@ -20,7 +20,6 @@ export class UsersController {
     console.log('sortOrder:', sortOrder);
     console.log('type:', type);
     console.log('reoccur:', reoccur);
-    // console.log('userId:', userId);
 
     const generateDataSource = (length) =>
       Array.from({ length }).map((_, i) => ({
