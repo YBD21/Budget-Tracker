@@ -47,18 +47,21 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Date',
     dataIndex: 'date',
+    align: 'center',
     sorter: true,
     sortDirections: ['descend'],
   },
   {
     title: 'Title',
     dataIndex: 'title',
+    align: 'center',
     sorter: true,
     sortDirections: ['descend'],
   },
   {
     title: 'Type',
     dataIndex: 'type',
+    align: 'center',
     filters: [
       { text: styleIncome, value: 'Income' },
       { text: styleExpense, value: 'Expense' },
@@ -70,6 +73,7 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Reoccur',
     dataIndex: 'reoccur',
+    align: 'center',
     filters: [
       { text: yearly, value: 'Year' },
       { text: monthly, value: 'Month' },
@@ -89,8 +93,10 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Amount',
     dataIndex: 'amount',
+    align: 'center',
     sorter: true,
     sortDirections: ['descend', 'ascend'],
+
     render: (amount) => {
       // Format the amount with commas
       const formattedAmount = new Intl.NumberFormat('en-IN', {
@@ -104,6 +110,7 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Action',
     dataIndex: 'action',
+    align: 'center',
     render: (_, record) => <ActionTab record={record} />,
   },
 ];
