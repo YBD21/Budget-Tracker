@@ -131,7 +131,6 @@ const DataTable: React.FC = () => {
       // console.log('filters :', filters);
 
       const mutateData = {
-        userId: userData?.id,
         params: { pagination, sortField, sortOrder, filters },
       };
       const budgetData = await budgetDataMutation.mutateAsync(mutateData);
