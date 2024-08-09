@@ -1,11 +1,18 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Query, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 
 @Controller('user')
 export class UsersController {
   @Get('budget-list')
-  async sendlist(@Res() res: Response, @Query() query: any) {
+  async sendlist(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query() query: any,
+  ) {
+    const userData = req.userData;
     const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
+
+    console.log('hello', userData);
 
     console.log('current:', current);
     console.log('pageSize:', pageSize);

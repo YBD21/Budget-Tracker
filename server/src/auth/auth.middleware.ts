@@ -15,19 +15,6 @@ declare module 'express-serve-static-core' {
   }
 }
 
-// @Injectable()
-// export class AuthMiddleware implements NestMiddleware {
-//   constructor(private readonly authService: AuthService) {}
-
-//   async use(req: Request, res: Response, next: NextFunction) {
-//     console.log('Request...');
-//     // Example of using a method from AuthService
-//     // const user = await this.authService.validateUser(req.headers.authorization);
-//     // console.log(user);
-//     next();
-//   }
-// }
-
 @Injectable()
 export class FindAccessMiddleware implements NestMiddleware {
   private readonly logger = new Logger(FindAccessMiddleware.name);
