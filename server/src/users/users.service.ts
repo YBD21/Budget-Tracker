@@ -97,11 +97,11 @@ export class UsersService {
     console.log(userId);
     console.log(query);
 
-    const path = 'BudgetEntry';
+    const budgetPath = 'BudgetEntry';
 
     const budgetDataRef = this.firebaseService
       .getFirestore()
-      .collection(`${this.budgetRefPath}/${userId}/${path}`);
+      .collection(`${this.budgetRefPath}/${userId}/${budgetPath}`);
 
     const getBudgetList = await budgetDataRef.get();
 
