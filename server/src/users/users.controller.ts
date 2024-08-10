@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Controller('user')
@@ -34,5 +34,17 @@ export class UsersController {
     const dataSource = generateDataSource(10);
 
     return res.json(dataSource);
+  }
+
+  @Post('create-budget')
+  async createBudget(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() data: any,
+  ) {
+    const userData = req.userData;
+    console.log('userId:', userData?.id);
+    console.log(data);
+    return res.json('hello');
   }
 }
