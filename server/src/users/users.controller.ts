@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { BudgetDTO } from './dto/users.dto';
 
 @Controller('user')
 export class UsersController {
@@ -40,11 +41,11 @@ export class UsersController {
   async createBudget(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() data: any,
+    @Body() budgetData: BudgetDTO,
   ) {
     const userData = req.userData;
     console.log('userId:', userData?.id);
-    console.log(data);
+    console.log(budgetData);
     return res.json('hello');
   }
 }
