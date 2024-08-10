@@ -9,7 +9,8 @@ export class UsersService {
   private readonly logger = new Logger(UsersService.name);
   constructor(private readonly firebaseService: FirebaseService) {}
 
-  private readonly budgetRefPath = 'Users';
+  private readonly usersCollectionPath = 'Users';
+  private readonly budgetEntryCollectionPath = 'BudgetEntry';
 
   getUniqueIdFromEmail(email: string) {
     const hash = crypto.createHash('sha256');
@@ -22,7 +23,7 @@ export class UsersService {
 
     const fireStoreRef = this.firebaseService
       .getFirestore()
-      .collection(this.budgetRefPath)
+      .collection(this.usersCollectionPath)
       .doc(userId);
 
     const newSummary = {
@@ -58,7 +59,7 @@ export class UsersService {
 
     const budgetSummaryRef = this.firebaseService
       .getFirestore()
-      .collection(this.budgetRefPath)
+      .collection(this.usersCollectionPath)
       .doc(userId);
 
     try {
@@ -97,11 +98,11 @@ export class UsersService {
     console.log(userId);
     console.log(query);
 
-    const budgetPath = 'BudgetEntry';
-
     const budgetDataRef = this.firebaseService
       .getFirestore()
-      .collection(`${this.budgetRefPath}/${userId}/${budgetPath}`);
+      .collection(
+        `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
+      );
 
     const getBudgetList = await budgetDataRef.get();
 
