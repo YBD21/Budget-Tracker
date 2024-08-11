@@ -11,7 +11,6 @@ export class UpdateBudgetService {
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
 
-  // update totalEntry and totalPage
   async updateBudgetSummary({
     userId,
     amount,
@@ -64,4 +63,9 @@ export class UpdateBudgetService {
       );
     }
   }
+
+  // update totalEntry and totalPage
+  // updatePaginationStats
+  // take userId update totalEntry count by 1
+  // should return the exact number of totalPage count needed
 }
