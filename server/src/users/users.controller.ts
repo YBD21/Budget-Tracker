@@ -1,9 +1,28 @@
-import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { BudgetDTO } from './dto/users.dto';
+import { UsersService } from './users.service';
+import { CreateBudgetService } from './create.service';
+import { UpdateBudgetService } from './update.service';
 
 @Controller('user')
 export class UsersController {
+  constructor(
+    private readonly logger = new Logger(UsersController.name),
+    private readonly userService: UsersService,
+    private readonly createBudget: CreateBudgetService,
+    private readonly updateBudget: UpdateBudgetService,
+  ) {}
+
   @Get('budget-list')
   async sendlist(
     @Req() req: Request,
@@ -38,14 +57,28 @@ export class UsersController {
   }
 
   @Post('create-budget')
-  async createBudget(
+  async handleCreateBudget(
     @Req() req: Request,
     @Res() res: Response,
     @Body() budgetData: BudgetDTO,
   ) {
-    const userData = req.userData;
-    console.log('userId:', userData?.id);
-    console.log(budgetData);
-    return res.json('hello');
+    const userData = req?.userData;
+    const userId = userData?.id;
+
+    try {
+      const [status, updateStatus] = await Promise.all([
+        this.createBudget.createBudget(userId, budgetData),
+        this.updateBudget.updateBudgetSummary({
+          userId,
+          amount: budgetData.amount,
+          type: budgetData.type,
+        }),
+      ]);
+
+      return res.send(status && updateStatus);
+    } catch (error) {
+      this.logger.error('Error occurred while creating budget', error.stack);
+      throw error;
+    }
   }
 }

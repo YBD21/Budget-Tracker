@@ -10,7 +10,7 @@ export type BudgetSummary = {
 export type updateBudget = {
   userId: any;
   amount: number;
-  type: 'Income' | 'Expense';
+  type: string;
 };
 
 export class BudgetDTO {

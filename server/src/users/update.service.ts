@@ -11,6 +11,7 @@ export class UpdateBudgetService {
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
 
+  // update totalEntry and totalPage
   async updateBudgetSummary({
     userId,
     amount,
