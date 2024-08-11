@@ -70,7 +70,7 @@ export class UsersService {
           summaryDoc.data();
         return { totalIncome, totalExpense, totalBalance, totalPage };
       } else {
-        this.logger.warn(`Budget summary document does not exist`);
+        this.logger.warn(`Budget summary document does not exist.`);
 
         const status = await this.createBudgetSummary(email);
 

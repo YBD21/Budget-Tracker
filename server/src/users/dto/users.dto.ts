@@ -7,6 +7,12 @@ export type BudgetSummary = {
   totalPage: number;
 };
 
+export type updateBudget = {
+  userId: any;
+  amount: number;
+  type: 'Income' | 'Expense';
+};
+
 export class BudgetDTO {
   @IsNumber()
   @IsNotEmpty()

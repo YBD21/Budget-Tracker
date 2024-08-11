@@ -5,11 +5,12 @@ import { FirebaseModule } from 'src/firebase/firebase.module';
 import { UserDataMiddleware } from './users.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { CreateBudgetService } from './create.service';
+import { UpdateBudgetService } from './update.service';
 
 @Module({
   imports: [FirebaseModule, AuthModule],
   controllers: [UsersController],
-  providers: [UsersService, CreateBudgetService],
+  providers: [UsersService, CreateBudgetService, UpdateBudgetService],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
