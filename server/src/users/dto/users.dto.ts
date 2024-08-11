@@ -5,6 +5,7 @@ export type BudgetSummary = {
   totalExpense: number;
   totalBalance: number;
   totalPage: number;
+  totalEntry: number;
 };
 
 export type updateBudget = {
