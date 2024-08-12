@@ -16,8 +16,8 @@ import { UpdateBudgetService } from './update.service';
 
 @Controller('user')
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
   constructor(
-    private readonly logger = new Logger(UsersController.name),
     private readonly userService: UsersService,
     private readonly createBudget: CreateBudgetService,
     private readonly updateBudget: UpdateBudgetService,
