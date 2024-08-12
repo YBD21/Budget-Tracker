@@ -88,19 +88,17 @@ export class UpdateBudgetService {
             totalPage,
           };
 
-          const remainder = totalEntry % 5;
+          const remainder = updatedSummary?.totalEntry % 5;
 
-          if (remainder !== 0 && updatedSummary?.totalEntry > 5 * totalPage) {
+          const multiple = 5 * totalPage;
+
+          if (remainder !== 0 && updatedSummary?.totalEntry > multiple) {
             // increase totalPage count by one
             updatedSummary.totalPage = totalPage + 1;
           }
 
-          if (updatedSummary.totalPage === totalPage) {
-            delete updatedSummary.totalPage;
-            transaction.update(budgetSummaryRef, updatedSummary);
-          } else {
-            transaction.update(budgetSummaryRef, updatedSummary);
-          }
+          transaction.update(budgetSummaryRef, updatedSummary);
+
           return true;
         },
       );
