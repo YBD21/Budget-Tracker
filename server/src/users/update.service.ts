@@ -64,9 +64,6 @@ export class UpdateBudgetService {
     }
   }
 
-  // take userId update totalEntry count by 1
-  // should return the exact number of totalPage count needed
-
   async updateEntryAndPageCount(userId: any): Promise<boolean> {
     const fireStoreDB = this.firebaseService.getFirestore();
 
