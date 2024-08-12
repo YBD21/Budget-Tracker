@@ -27,7 +27,7 @@ export class UpdateBudgetService {
         async (transaction) => {
           const doc = await transaction.get(budgetSummaryRef);
           if (!doc.exists) {
-            this.logger.warn(`Budget summary document does not exist.`);
+            this.logger.error(`Budget summary document does not exist.`);
             return false;
           }
 
@@ -64,8 +64,55 @@ export class UpdateBudgetService {
     }
   }
 
-  // update totalEntry and totalPage
-  // updatePaginationStats
   // take userId update totalEntry count by 1
   // should return the exact number of totalPage count needed
+
+  async updateEntryAndPageCount(userId: any): Promise<boolean> {
+    const fireStoreDB = this.firebaseService.getFirestore();
+
+    const budgetSummaryRef = fireStoreDB
+      .collection(this.usersCollectionPath)
+      .doc(userId);
+
+    try {
+      const transactionStatus = await fireStoreDB.runTransaction(
+        async (transaction) => {
+          const doc = await transaction.get(budgetSummaryRef);
+          if (!doc.exists) {
+            this.logger.error(`Budget summary document does not exist.`);
+            return false;
+          }
+          const { totalEntry, totalPage } = doc.data();
+          const updatedSummary = {
+            totalEntry: totalEntry + 1,
+            totalPage,
+          };
+
+          const remainder = totalEntry % 5;
+
+          if (remainder !== 0 && updatedSummary?.totalEntry > 5 * totalPage) {
+            // increase totalPage count by one
+            updatedSummary.totalPage = totalPage + 1;
+          }
+
+          if (updatedSummary.totalPage === totalPage) {
+            delete updatedSummary.totalPage;
+            transaction.update(budgetSummaryRef, updatedSummary);
+          } else {
+            transaction.update(budgetSummaryRef, updatedSummary);
+          }
+          return true;
+        },
+      );
+
+      return transactionStatus;
+    } catch (error) {
+      this.logger.error(
+        `UpdateBudgetService:updateEntryAndPageCount process failed: ${error.message}`,
+      );
+      throw new Error(
+        'An error occurred while updating budget summary. Please try again later.',
+      );
+    }
+  }
 }
