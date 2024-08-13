@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { BudgetDTO } from './dto/users.dto';
@@ -9,6 +9,7 @@ export class CreateBudgetService {
   private readonly logger = new Logger(CreateBudgetService.name);
   constructor(
     private readonly firebaseService: FirebaseService,
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
   ) {}
 

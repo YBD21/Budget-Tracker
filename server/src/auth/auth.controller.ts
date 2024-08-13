@@ -22,8 +22,8 @@ import {
   VerifyCodeDTO,
 } from './dto/auth.dto';
 import { Request, Response } from 'express';
-import { UsersService } from 'src/users/users.service';
 import { AuthGuard } from './auth.guard';
+import { CreateBudgetService } from 'src/users/create.service';
 
 // Extend the Request interface to include accessData
 declare module 'express-serve-static-core' {
@@ -36,7 +36,7 @@ declare module 'express-serve-static-core' {
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UsersService,
+    private readonly createService: CreateBudgetService,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -89,7 +89,7 @@ export class AuthController {
       const respond = await this.authService.createAccount(signUpData);
 
       if (respond.status === true) {
-        await this.userService.createBudgetSummary(signUpData.email);
+        await this.createService.createBudgetSummary(signUpData.email);
         return res.status(HttpStatus.OK).json(respond);
       }
 

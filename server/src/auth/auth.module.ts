@@ -1,18 +1,24 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  forwardRef,
+} from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { FindAccessMiddleware } from './auth.middleware';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
     ConfigModule,
     FirebaseModule,
+    forwardRef(() => UsersModule), // Use forwardRef here
     HttpModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -38,7 +44,7 @@ import { FindAccessMiddleware } from './auth.middleware';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService],
+  providers: [AuthService],
   exports: [AuthService],
 })
 export class AuthModule implements NestModule {

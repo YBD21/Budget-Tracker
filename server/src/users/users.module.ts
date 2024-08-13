@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  forwardRef,
+} from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
@@ -8,9 +13,13 @@ import { CreateBudgetService } from './create.service';
 import { UpdateBudgetService } from './update.service';
 
 @Module({
-  imports: [FirebaseModule, AuthModule],
+  imports: [
+    FirebaseModule,
+    forwardRef(() => AuthModule), // Use forwardRef here
+  ],
   controllers: [UsersController],
   providers: [UsersService, CreateBudgetService, UpdateBudgetService],
+  exports: [UsersService, CreateBudgetService],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
