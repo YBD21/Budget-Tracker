@@ -85,9 +85,11 @@ export class UsersService {
   }
 
   async getBudgetData(userId: any, query: any) {
-    console.log(userId);
+    const fireStoreDB = this.firebaseService.getFirestore();
     const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
-    console.log(query);
+
+    console.log('userId:', userId);
+    console.log('Query:', query);
 
     console.log('current:', current);
     console.log('pageSize:', pageSize);
@@ -96,14 +98,37 @@ export class UsersService {
     console.log('type:', type);
     console.log('reoccur:', reoccur);
 
-    const budgetDataRef = this.firebaseService
-      .getFirestore()
-      .collection(
+    // Initialize as Query instead of CollectionReference
+    let budgetDataRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =
+      fireStoreDB.collection(
         `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
       );
 
-    const getBudgetList = await budgetDataRef.get();
+    // Apply filters dynamically if they exist in the query
+    if (type) {
+      budgetDataRef = budgetDataRef.where('type', '==', type);
+    }
 
-    console.log(getBudgetList);
+    if (reoccur) {
+      budgetDataRef = budgetDataRef.where('reoccur', '==', reoccur);
+    }
+
+    // Apply sorting dynamically
+    if (sortField && sortOrder) {
+      budgetDataRef = budgetDataRef.orderBy(sortField, sortOrder);
+    } else {
+      // Default sorting (optional)
+      budgetDataRef = budgetDataRef.orderBy('date', 'asc');
+    }
+
+    // Apply pagination
+    budgetDataRef = budgetDataRef.limit(parseInt(pageSize));
+
+    // Execute query and return data
+    const snapshot = await budgetDataRef.get();
+    return snapshot.docs.map((doc) => ({
+      key: doc.id, // Add the document ID as a key
+      ...doc.data(), // Spread the rest of the document data
+    }));
   }
 }

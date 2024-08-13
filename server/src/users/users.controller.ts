@@ -35,8 +35,6 @@ export class UsersController {
 
     const result = await this.userService.getBudgetData(userId, query);
 
-    console.log(result);
-
     const generateDataSource = (length) =>
       Array.from({ length }).map((_, i) => ({
         key: i,
@@ -49,7 +47,9 @@ export class UsersController {
 
     const dataSource = generateDataSource(10);
 
-    return res.json(dataSource);
+    console.log(dataSource);
+
+    return res.json(result);
   }
 
   @Post('create-budget')
