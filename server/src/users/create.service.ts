@@ -1,21 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as crypto from 'crypto';
+
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { BudgetDTO } from './dto/users.dto';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class CreateBudgetService {
   private readonly logger = new Logger(CreateBudgetService.name);
-  constructor(private readonly firebaseService: FirebaseService) {}
+  constructor(
+    private readonly firebaseService: FirebaseService,
+    private readonly userService: UsersService,
+  ) {}
 
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
-
-  getUniqueIdFromEmail(email: string) {
-    const hash = crypto.createHash('sha256');
-    const uniqueId = hash.update(email).digest('hex');
-    return uniqueId;
-  }
 
   async createBudget(userId: any, budgetData: BudgetDTO): Promise<boolean> {
     const unixTimestamp = new Date().getTime();
@@ -44,7 +42,7 @@ export class CreateBudgetService {
   }
 
   async createBudgetSummary(email: string): Promise<boolean> {
-    const userId = this.getUniqueIdFromEmail(email);
+    const userId = this.userService.getUniqueIdFromEmail(email);
 
     const fireStoreRef = this.firebaseService
       .getFirestore()

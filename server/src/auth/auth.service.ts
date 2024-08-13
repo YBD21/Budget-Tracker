@@ -11,10 +11,10 @@ import {
   ResetPasswordSuccessResponse,
   VerifyCaptchaResponse,
 } from './dto/auth.dto';
-import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { HttpService } from '@nestjs/axios';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {

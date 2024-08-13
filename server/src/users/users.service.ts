@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-// import { ResetPasswordSuccessResponse } from 'src/auth/dto/auth.dto';
+import * as crypto from 'crypto';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { BudgetSummary } from './dto/users.dto';
 import { CreateBudgetService } from './create.service';
@@ -15,8 +15,14 @@ export class UsersService {
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
 
+  getUniqueIdFromEmail(email: string) {
+    const hash = crypto.createHash('sha256');
+    const uniqueId = hash.update(email).digest('hex');
+    return uniqueId;
+  }
+
   async getBudgetSummary(email: string): Promise<BudgetSummary> {
-    const userId = this.createBudgetService.getUniqueIdFromEmail(email);
+    const userId = this.getUniqueIdFromEmail(email);
 
     const budgetSummaryRef = this.firebaseService
       .getFirestore()
