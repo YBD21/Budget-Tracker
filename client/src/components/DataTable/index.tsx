@@ -147,7 +147,7 @@ const DataTable: React.FC = () => {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
-      total: userData?.totalPage,
+      total: userData?.totalEntry,
     },
   });
 
