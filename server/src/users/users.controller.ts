@@ -30,16 +30,12 @@ export class UsersController {
     @Query() query: any,
   ) {
     const userData = req.userData;
-    const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
 
-    console.log('userId:', userData?.id);
+    const userId = userData?.id;
 
-    console.log('current:', current);
-    console.log('pageSize:', pageSize);
-    console.log('sortField:', sortField);
-    console.log('sortOrder:', sortOrder);
-    console.log('type:', type);
-    console.log('reoccur:', reoccur);
+    const result = await this.userService.getBudgetData(userId, query);
+
+    console.log(result);
 
     const generateDataSource = (length) =>
       Array.from({ length }).map((_, i) => ({

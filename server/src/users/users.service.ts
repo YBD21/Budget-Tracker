@@ -84,9 +84,17 @@ export class UsersService {
     }
   }
 
-  async getBudgetData(userId, query) {
+  async getBudgetData(userId: any, query: any) {
     console.log(userId);
+    const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
     console.log(query);
+
+    console.log('current:', current);
+    console.log('pageSize:', pageSize);
+    console.log('sortField:', sortField);
+    console.log('sortOrder:', sortOrder);
+    console.log('type:', type);
+    console.log('reoccur:', reoccur);
 
     const budgetDataRef = this.firebaseService
       .getFirestore()
