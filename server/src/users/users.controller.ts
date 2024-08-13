@@ -35,19 +35,19 @@ export class UsersController {
 
     const result = await this.userService.getBudgetData(userId, query);
 
-    const generateDataSource = (length) =>
-      Array.from({ length }).map((_, i) => ({
-        key: i,
-        date: `2023-07-${i + 1}`,
-        title: `Transaction ${i}`,
-        type: i % 2 === 0 ? 'Income' : 'Expense',
-        reoccur: i % 3 === 0 ? 'Year' : i % 3 === 1 ? 'Month' : 'Once', // Update reoccur to be 'Year', 'Month', or 'Once'
-        amount: Math.floor(Math.random() * (99999 - 1000 + 1)) + 1000,
-      }));
+    // const generateDataSource = (length) =>
+    //   Array.from({ length }).map((_, i) => ({
+    //     key: i,
+    //     date: `2023-07-${i + 1}`,
+    //     title: `Transaction ${i}`,
+    //     type: i % 2 === 0 ? 'Income' : 'Expense',
+    //     reoccur: i % 3 === 0 ? 'Year' : i % 3 === 1 ? 'Month' : 'Once', // Update reoccur to be 'Year', 'Month', or 'Once'
+    //     amount: Math.floor(Math.random() * (99999 - 1000 + 1)) + 1000,
+    //   }));
 
-    const dataSource = generateDataSource(10);
+    // const dataSource = generateDataSource(10);
 
-    console.log(dataSource);
+    // console.log(dataSource);
 
     return res.json(result);
   }
