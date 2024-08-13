@@ -147,11 +147,24 @@ const DataTable: React.FC = () => {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
-      total: userData?.totalEntry,
+      total: 1,
     },
   });
 
+  // find another way later
   useEffect(() => {
+    // Update tableParams when userData changes
+    setTableParams((prev) => ({
+      ...prev,
+      pagination: {
+        ...prev.pagination,
+        total: userData?.totalEntry ?? 0, // Set to 0 if userData?.totalEntry is undefined
+      },
+    }));
+  }, [userData]);
+
+  useEffect(() => {
+    console.log(tableParams);
     fetchData();
   }, [tableParams]);
 
