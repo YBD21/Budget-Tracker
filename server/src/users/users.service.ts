@@ -88,8 +88,8 @@ export class UsersService {
     const fireStoreDB = this.firebaseService.getFirestore();
     const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
 
-    console.log('userId:', userId);
-    console.log('Query:', query);
+    // console.log('userId:', userId);
+    // console.log('Query:', query);
 
     console.log('current:', current);
     console.log('pageSize:', pageSize);

@@ -55,8 +55,6 @@ const columns: TableColumnsType<DataType> = [
     title: 'Title',
     dataIndex: 'title',
     align: 'center',
-    sorter: true,
-    sortDirections: ['descend'],
   },
   {
     title: 'Type',
