@@ -34,27 +34,11 @@ const DataTable: React.FC = () => {
       current: 1,
       pageSize: 5,
       showSizeChanger: false,
-      total: 1,
     },
   });
 
-  const prevTableParamsRef = useRef<TableParams>(tableParams);
-  const fetchTriggeredByDataSourceRef = useRef<boolean>(false);
+  const [totalRecords, setTotalRecords] = useState<number>(userData?.totalEntry || 1);
 
-  // Effect to update pagination based on userData
-  useEffect(() => {
-    if (userData) {
-      setTableParams((prev) => ({
-        ...prev,
-        pagination: {
-          ...prev.pagination,
-          total: userData.totalEntry ?? 0,
-        },
-      }));
-    }
-  }, [userData]);
-
-  // Fetch data function
   const fetchData = useCallback(async () => {
     try {
       const { pagination, sortField, sortOrder, filters } = tableParams;
@@ -62,42 +46,23 @@ const DataTable: React.FC = () => {
         params: { pagination, sortField, sortOrder, filters },
       });
 
-      setDataSource(budgetData);
+      setDataSource(budgetData?.data);
+
+      setTotalRecords(budgetData?.total || 0);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [budgetDataMutation, tableParams]);
+  }, [budgetDataMutation, totalRecords, tableParams]);
 
-  // Effect to manage fetching data based on tableParams changes
   useEffect(() => {
-    if (
-      prevTableParamsRef.current.pagination !== tableParams.pagination ||
-      prevTableParamsRef.current.sortField !== tableParams.sortField ||
-      prevTableParamsRef.current.sortOrder !== tableParams.sortOrder ||
-      prevTableParamsRef.current.filters !== tableParams.filters
-    ) {
-      if (!fetchTriggeredByDataSourceRef.current) {
-        fetchData();
-      } else {
-        fetchTriggeredByDataSourceRef.current = false;
-      }
-      prevTableParamsRef.current = tableParams;
+    if (userData) {
+      setTotalRecords(userData.totalEntry || 1);
     }
+  }, [userData]);
+
+  useEffect(() => {
+    fetchData();
   }, [tableParams]);
-
-  // Effect to update pagination based on dataSource length
-  useEffect(() => {
-    if (dataSource.length < 5 && dataSource.length > 0) {
-      setTableParams((prev) => ({
-        ...prev,
-        pagination: {
-          ...prev.pagination,
-          total: prev.pagination?.current ? prev.pagination.current * 5 : 5,
-        },
-      }));
-      fetchTriggeredByDataSourceRef.current = true; // Set ref to prevent fetch
-    }
-  }, [dataSource]);
 
   const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
@@ -230,7 +195,12 @@ const DataTable: React.FC = () => {
         columns={columns}
         dataSource={dataSource}
         onChange={handleTableChange}
-        pagination={tableParams.pagination}
+        pagination={{
+          current: tableParams.pagination?.current,
+          pageSize: tableParams.pagination?.pageSize,
+          total: totalRecords,
+          showSizeChanger: false,
+        }}
         loading={budgetDataMutation?.isPending}
       />
     </StyleWrapper>
