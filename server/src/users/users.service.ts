@@ -124,13 +124,21 @@ export class UsersService {
         }
       }
 
+      const totalCount = await budgetDataRef.count().get();
+
       budgetDataRef = budgetDataRef.limit(pageSizeInt);
 
       const snapshot = await budgetDataRef.get();
-      return snapshot.docs.map((doc) => ({
-        key: doc.id,
-        ...doc.data(),
-      }));
+
+      const result = {
+        data: snapshot.docs.map((doc) => ({
+          key: doc.id,
+          ...doc.data(),
+        })),
+        total: totalCount.data().count,
+      };
+
+      return result;
     } catch (error) {
       this.logger.error(
         'Firestore requires an index for this query:',
