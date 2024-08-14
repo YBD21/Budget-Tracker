@@ -98,13 +98,11 @@ export class UsersService {
     console.log('type:', type);
     console.log('reoccur:', reoccur);
 
-    // Initialize as Query instead of CollectionReference
     let budgetDataRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =
       fireStoreDB.collection(
         `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
       );
 
-    // Apply filters dynamically if they exist in the query
     if (type) {
       budgetDataRef = budgetDataRef.where('type', '==', type);
     }
@@ -113,22 +111,33 @@ export class UsersService {
       budgetDataRef = budgetDataRef.where('reoccur', '==', reoccur);
     }
 
-    // Apply sorting dynamically
     if (sortField && sortOrder) {
       budgetDataRef = budgetDataRef.orderBy(sortField, sortOrder);
     } else {
-      // Default sorting (optional)
       budgetDataRef = budgetDataRef.orderBy('date', 'asc');
     }
 
-    // Apply pagination
-    budgetDataRef = budgetDataRef.limit(parseInt(pageSize));
+    const pageSizeInt = parseInt(pageSize);
 
-    // Execute query and return data
+    // For pagination
+    if (current > 1) {
+      const previousPageSnapshot = await budgetDataRef
+        .limit((current - 1) * pageSizeInt)
+        .get();
+
+      if (!previousPageSnapshot.empty) {
+        const lastDocument =
+          previousPageSnapshot.docs[previousPageSnapshot.docs.length - 1];
+        budgetDataRef = budgetDataRef.startAfter(lastDocument);
+      }
+    }
+
+    budgetDataRef = budgetDataRef.limit(pageSizeInt);
+
     const snapshot = await budgetDataRef.get();
     return snapshot.docs.map((doc) => ({
-      key: doc.id, // Add the document ID as a key
-      ...doc.data(), // Spread the rest of the document data
+      key: doc.id,
+      ...doc.data(),
     }));
   }
 }
