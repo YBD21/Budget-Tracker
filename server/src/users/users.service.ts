@@ -112,6 +112,8 @@ export class UsersService {
 
       const pageSizeInt = parseInt(pageSize);
 
+      const totalCount = await budgetDataRef.count().get();
+
       if (current > 1) {
         const previousPageSnapshot = await budgetDataRef
           .limit((current - 1) * pageSizeInt)
@@ -123,8 +125,6 @@ export class UsersService {
           budgetDataRef = budgetDataRef.startAfter(lastDocument);
         }
       }
-
-      const totalCount = await budgetDataRef.count().get();
 
       budgetDataRef = budgetDataRef.limit(pageSizeInt);
 
