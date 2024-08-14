@@ -132,15 +132,10 @@ export class UsersService {
         ...doc.data(),
       }));
     } catch (error) {
-      if (error.code === 'failed-precondition') {
-        this.logger.error(
-          'Firestore requires an index for this query:',
-          error.message,
-        );
-        // Extract the URL from the error message (if provided) and provide it to the user or log it
-      } else {
-        throw error; // rethrow other errors
-      }
+      this.logger.error(
+        'Firestore requires an index for this query:',
+        error.message,
+      );
     }
   }
 }
