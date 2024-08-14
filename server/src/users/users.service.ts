@@ -85,59 +85,62 @@ export class UsersService {
   }
 
   async getBudgetData(userId: any, query: any) {
-    const fireStoreDB = this.firebaseService.getFirestore();
-    const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
+    try {
+      const fireStoreDB = this.firebaseService.getFirestore();
+      const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
 
-    // console.log('userId:', userId);
-    // console.log('Query:', query);
+      let budgetDataRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =
+        fireStoreDB.collection(
+          `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
+        );
 
-    console.log('current:', current);
-    console.log('pageSize:', pageSize);
-    console.log('sortField:', sortField);
-    console.log('sortOrder:', sortOrder);
-    console.log('type:', type);
-    console.log('reoccur:', reoccur);
+      if (type) {
+        budgetDataRef = budgetDataRef.where('type', '==', type);
+      }
 
-    let budgetDataRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =
-      fireStoreDB.collection(
-        `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
-      );
+      if (reoccur) {
+        budgetDataRef = budgetDataRef.where('reoccur', '==', reoccur);
+      }
 
-    if (type) {
-      budgetDataRef = budgetDataRef.where('type', '==', type);
-    }
+      const firestoreSortOrder = sortOrder === 'descend' ? 'desc' : 'asc';
 
-    if (reoccur) {
-      budgetDataRef = budgetDataRef.where('reoccur', '==', reoccur);
-    }
+      if (sortField) {
+        budgetDataRef = budgetDataRef.orderBy(sortField, firestoreSortOrder);
+      } else {
+        budgetDataRef = budgetDataRef.orderBy('date', 'asc');
+      }
 
-    if (sortField && sortOrder) {
-      budgetDataRef = budgetDataRef.orderBy(sortField, sortOrder);
-    } else {
-      budgetDataRef = budgetDataRef.orderBy('date', 'asc');
-    }
+      const pageSizeInt = parseInt(pageSize);
 
-    const pageSizeInt = parseInt(pageSize);
+      if (current > 1) {
+        const previousPageSnapshot = await budgetDataRef
+          .limit((current - 1) * pageSizeInt)
+          .get();
 
-    // For pagination
-    if (current > 1) {
-      const previousPageSnapshot = await budgetDataRef
-        .limit((current - 1) * pageSizeInt)
-        .get();
+        if (!previousPageSnapshot.empty) {
+          const lastDocument =
+            previousPageSnapshot.docs[previousPageSnapshot.docs.length - 1];
+          budgetDataRef = budgetDataRef.startAfter(lastDocument);
+        }
+      }
 
-      if (!previousPageSnapshot.empty) {
-        const lastDocument =
-          previousPageSnapshot.docs[previousPageSnapshot.docs.length - 1];
-        budgetDataRef = budgetDataRef.startAfter(lastDocument);
+      budgetDataRef = budgetDataRef.limit(pageSizeInt);
+
+      const snapshot = await budgetDataRef.get();
+      return snapshot.docs.map((doc) => ({
+        key: doc.id,
+        ...doc.data(),
+      }));
+    } catch (error) {
+      if (error.code === 'failed-precondition') {
+        this.logger.error(
+          'Firestore requires an index for this query:',
+          error.message,
+        );
+        // Extract the URL from the error message (if provided) and provide it to the user or log it
+      } else {
+        throw error; // rethrow other errors
       }
     }
-
-    budgetDataRef = budgetDataRef.limit(pageSizeInt);
-
-    const snapshot = await budgetDataRef.get();
-    return snapshot.docs.map((doc) => ({
-      key: doc.id,
-      ...doc.data(),
-    }));
   }
 }
