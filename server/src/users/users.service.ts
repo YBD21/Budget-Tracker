@@ -104,7 +104,7 @@ export class UsersService {
 
       const firestoreSortOrder = sortOrder === 'descend' ? 'desc' : 'asc';
 
-      if (sortField) {
+      if (sortField && sortOrder) {
         budgetDataRef = budgetDataRef.orderBy(sortField, firestoreSortOrder);
       } else {
         budgetDataRef = budgetDataRef.orderBy('date', 'asc');
