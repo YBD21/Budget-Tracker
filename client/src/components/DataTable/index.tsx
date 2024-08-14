@@ -50,6 +50,11 @@ const columns: TableColumnsType<DataType> = [
     align: 'center',
     sorter: true,
     sortDirections: ['descend'],
+    render: (timestamp: number) => {
+      const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
+      const formattedDate = date.toLocaleDateString('en-CA'); // Format as YYYY/MM/DD
+      return formattedDate;
+    },
   },
   {
     title: 'Title',
