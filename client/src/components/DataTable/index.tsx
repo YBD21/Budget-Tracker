@@ -39,20 +39,22 @@ const DataTable: React.FC = () => {
   });
 
   const prevTableParamsRef = useRef<TableParams>(tableParams);
-  const dataSourceUpdatedRef = useRef<boolean>(false);
+  const fetchTriggeredByDataSourceRef = useRef<boolean>(false);
 
-  // Update tableParams when userData changes
+  // Effect to update pagination based on userData
   useEffect(() => {
-    setTableParams((prev) => ({
-      ...prev,
-      pagination: {
-        ...prev.pagination,
-        total: userData?.totalEntry ?? 0,
-      },
-    }));
-    dataSourceUpdatedRef.current = false; // Set flag to indicate update
+    if (userData) {
+      setTableParams((prev) => ({
+        ...prev,
+        pagination: {
+          ...prev.pagination,
+          total: userData.totalEntry ?? 0,
+        },
+      }));
+    }
   }, [userData]);
 
+  // Fetch data function
   const fetchData = useCallback(async () => {
     try {
       const { pagination, sortField, sortOrder, filters } = tableParams;
@@ -61,12 +63,12 @@ const DataTable: React.FC = () => {
       });
 
       setDataSource(budgetData);
-      dataSourceUpdatedRef.current = false; // Reset flag after fetching
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   }, [budgetDataMutation, tableParams]);
 
+  // Effect to manage fetching data based on tableParams changes
   useEffect(() => {
     if (
       prevTableParamsRef.current.pagination !== tableParams.pagination ||
@@ -74,8 +76,10 @@ const DataTable: React.FC = () => {
       prevTableParamsRef.current.sortOrder !== tableParams.sortOrder ||
       prevTableParamsRef.current.filters !== tableParams.filters
     ) {
-      if (!dataSourceUpdatedRef.current) {
+      if (!fetchTriggeredByDataSourceRef.current) {
         fetchData();
+      } else {
+        fetchTriggeredByDataSourceRef.current = false;
       }
       prevTableParamsRef.current = tableParams;
     }
@@ -83,15 +87,15 @@ const DataTable: React.FC = () => {
 
   // Effect to update pagination based on dataSource length
   useEffect(() => {
-    if (dataSource.length < 5 && dataSource.length !== 0) {
+    if (dataSource.length < 5 && dataSource.length > 0) {
       setTableParams((prev) => ({
         ...prev,
         pagination: {
           ...prev.pagination,
-          total: prev.pagination?.current ?? 1 * 5,
+          total: prev.pagination?.current ? prev.pagination.current * 5 : 5,
         },
       }));
-      dataSourceUpdatedRef.current = true; // Set flag to indicate update
+      fetchTriggeredByDataSourceRef.current = true; // Set ref to prevent fetch
     }
   }, [dataSource]);
 
