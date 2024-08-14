@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Table } from 'antd';
 import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
@@ -23,128 +23,12 @@ export interface TableParams {
   filters?: Parameters<GetProp<TableProps<DataType>, 'onChange'>>[1];
 }
 
-const styleIncome = (
-  <span className="text-green-600 dark:text-green-500 text-center font-semibold">Income </span>
-);
-
-const styleExpense = (
-  <span className="text-red-600 dark:text-red-500 text-center font-semibold">Expense</span>
-);
-
-const yearly = (
-  <span className="text-gray-700 dark:text-gray-300 text-center font-semibold">Yearly</span>
-);
-
-const monthly = (
-  <span className="text-blue-500 dark:text-blue-400 text-center font-semibold">Monthly</span>
-);
-
-const once = (
-  <span className="text-stone-600 dark:text-stone-400 text-center font-semibold">Once</span>
-);
-
-const columns: TableColumnsType<DataType> = [
-  {
-    title: 'Date',
-    dataIndex: 'date',
-    align: 'center',
-    sorter: true,
-    sortDirections: ['descend'],
-    render: (timestamp: number) => {
-      const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
-      const formattedDate = date.toLocaleDateString('en-CA'); // Format as YYYY/MM/DD
-      return formattedDate;
-    },
-  },
-  {
-    title: 'Title',
-    dataIndex: 'title',
-    align: 'center',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'type',
-    align: 'center',
-    filters: [
-      { text: styleIncome, value: 'Income' },
-      { text: styleExpense, value: 'Expense' },
-    ],
-    onFilter: (value, record) => record.type === value,
-    render: (type) => (type === 'Income' ? styleIncome : styleExpense),
-    filterMultiple: false,
-  },
-  {
-    title: 'Reoccur',
-    dataIndex: 'reoccur',
-    align: 'center',
-    filters: [
-      { text: yearly, value: 'Year' },
-      { text: monthly, value: 'Month' },
-      { text: once, value: 'Once' },
-    ],
-    onFilter: (value, record) => record.reoccur === value,
-    render: (reoccur) => {
-      if (reoccur === 'Year') {
-        return yearly;
-      } else if (reoccur === 'Month') {
-        return monthly;
-      }
-      return once;
-    },
-    filterMultiple: false,
-  },
-  {
-    title: 'Amount',
-    dataIndex: 'amount',
-    align: 'center',
-    sorter: true,
-    sortDirections: ['descend', 'ascend'],
-
-    render: (amount) => {
-      // Format the amount with commas
-      const formattedAmount = new Intl.NumberFormat('en-IN', {
-        style: 'decimal',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(amount);
-      return `Rs. ${formattedAmount}`;
-    },
-  },
-  {
-    title: 'Action',
-    dataIndex: 'action',
-    align: 'center',
-    render: (_, record) => <ActionTab record={record} />,
-  },
-];
-
 const DataTable: React.FC = () => {
   const { theme } = useThemeStore();
   const { userData } = useUserStore();
   const { budgetDataMutation } = useUserAction();
 
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-
-  const fetchData = async () => {
-    try {
-      const { pagination, sortField, sortOrder, filters } = tableParams;
-      // console.log(pagination);
-      // console.log('sortField :', sortField);
-      // console.log('sortOrder :', sortOrder);
-      // console.log('filters :', filters);
-
-      const mutateData = {
-        params: { pagination, sortField, sortOrder, filters },
-      };
-      const budgetData = await budgetDataMutation.mutateAsync(mutateData);
-      console.log(budgetData.length);
-      setDataSource(budgetData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle the error, e.g., show an alert, log to an external service, etc.
-    }
-  };
-
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -154,22 +38,62 @@ const DataTable: React.FC = () => {
     },
   });
 
-  // find another way later
+  const prevTableParamsRef = useRef<TableParams>(tableParams);
+  const dataSourceUpdatedRef = useRef<boolean>(false);
+
+  // Update tableParams when userData changes
   useEffect(() => {
-    // Update tableParams when userData changes
     setTableParams((prev) => ({
       ...prev,
       pagination: {
         ...prev.pagination,
-        total: userData?.totalEntry ?? 0, // Set to 0 if userData?.totalEntry is undefined
+        total: userData?.totalEntry ?? 0,
       },
     }));
+    dataSourceUpdatedRef.current = false; // Set flag to indicate update
   }, [userData]);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const { pagination, sortField, sortOrder, filters } = tableParams;
+      const budgetData = await budgetDataMutation.mutateAsync({
+        params: { pagination, sortField, sortOrder, filters },
+      });
+
+      setDataSource(budgetData);
+      dataSourceUpdatedRef.current = false; // Reset flag after fetching
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, [budgetDataMutation, tableParams]);
+
   useEffect(() => {
-    console.log(tableParams);
-    fetchData();
+    if (
+      prevTableParamsRef.current.pagination !== tableParams.pagination ||
+      prevTableParamsRef.current.sortField !== tableParams.sortField ||
+      prevTableParamsRef.current.sortOrder !== tableParams.sortOrder ||
+      prevTableParamsRef.current.filters !== tableParams.filters
+    ) {
+      if (!dataSourceUpdatedRef.current) {
+        fetchData();
+      }
+      prevTableParamsRef.current = tableParams;
+    }
   }, [tableParams]);
+
+  // Effect to update pagination based on dataSource length
+  useEffect(() => {
+    if (dataSource.length < 5 && dataSource.length !== 0) {
+      setTableParams((prev) => ({
+        ...prev,
+        pagination: {
+          ...prev.pagination,
+          total: prev.pagination?.current ?? 1 * 5,
+        },
+      }));
+      dataSourceUpdatedRef.current = true; // Set flag to indicate update
+    }
+  }, [dataSource]);
 
   const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
@@ -180,6 +104,122 @@ const DataTable: React.FC = () => {
     });
   };
 
+  const columns: TableColumnsType<DataType> = useMemo(
+    () => [
+      {
+        title: 'Date',
+        dataIndex: 'date',
+        align: 'center',
+        sorter: true,
+        sortDirections: ['descend'],
+        render: (timestamp: number) => new Date(timestamp * 1000).toLocaleDateString('en-CA'),
+      },
+      {
+        title: 'Title',
+        dataIndex: 'title',
+        align: 'center',
+      },
+      {
+        title: 'Type',
+        dataIndex: 'type',
+        align: 'center',
+        filters: [
+          {
+            text: (
+              <span className="text-green-600 dark:text-green-500 text-center font-semibold">
+                Income{' '}
+              </span>
+            ),
+            value: 'Income',
+          },
+          {
+            text: (
+              <span className="text-red-600 dark:text-red-500 text-center font-semibold">
+                Expense
+              </span>
+            ),
+            value: 'Expense',
+          },
+        ],
+        onFilter: (value, record) => record.type === value,
+        render: (type) =>
+          type === 'Income' ? (
+            <span className="text-green-600 dark:text-green-500 text-center font-semibold">
+              Income{' '}
+            </span>
+          ) : (
+            <span className="text-red-600 dark:text-red-500 text-center font-semibold">
+              Expense
+            </span>
+          ),
+        filterMultiple: false,
+      },
+      {
+        title: 'Reoccur',
+        dataIndex: 'reoccur',
+        align: 'center',
+        filters: [
+          {
+            text: (
+              <span className="text-gray-700 dark:text-gray-300 text-center font-semibold">
+                Yearly
+              </span>
+            ),
+            value: 'Year',
+          },
+          {
+            text: (
+              <span className="text-blue-500 dark:text-blue-400 text-center font-semibold">
+                Monthly
+              </span>
+            ),
+            value: 'Month',
+          },
+          {
+            text: (
+              <span className="text-stone-600 dark:text-stone-400 text-center font-semibold">
+                Once
+              </span>
+            ),
+            value: 'Once',
+          },
+        ],
+        onFilter: (value, record) => record.reoccur === value,
+        render: (reoccur) =>
+          reoccur === 'Year' ? (
+            <span className="text-gray-700 dark:text-gray-300 text-center font-semibold">
+              Yearly
+            </span>
+          ) : reoccur === 'Month' ? (
+            <span className="text-blue-500 dark:text-blue-400 text-center font-semibold">
+              Monthly
+            </span>
+          ) : (
+            <span className="text-stone-600 dark:text-stone-400 text-center font-semibold">
+              Once
+            </span>
+          ),
+        filterMultiple: false,
+      },
+      {
+        title: 'Amount',
+        dataIndex: 'amount',
+        align: 'center',
+        sorter: true,
+        sortDirections: ['descend', 'ascend'],
+        render: (amount) =>
+          `Rs. ${new Intl.NumberFormat('en-IN', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount)}`,
+      },
+      {
+        title: 'Action',
+        dataIndex: 'action',
+        align: 'center',
+        render: (_, record) => <ActionTab record={record} />,
+      },
+    ],
+    []
+  );
+
   return (
     <StyleWrapper className={`${theme === 'dark' ? 'dark' : 'light'} rounded-lg`}>
       <Table
@@ -187,6 +227,7 @@ const DataTable: React.FC = () => {
         dataSource={dataSource}
         onChange={handleTableChange}
         pagination={tableParams.pagination}
+        loading={budgetDataMutation?.isPending}
       />
     </StyleWrapper>
   );

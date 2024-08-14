@@ -21,8 +21,10 @@ const Dashboard = () => {
   // }
 
   useEffect(() => {
-    setUserData(currentUser);
-  }, [currentUser]);
+    if (!userLoading) {
+      setUserData(currentUser);
+    }
+  }, [currentUser, userLoading]);
 
   const firstName = userData?.firstName;
   const income = userData?.totalIncome;
