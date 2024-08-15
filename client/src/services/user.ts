@@ -1,20 +1,21 @@
 import { TableParams } from '@/components/DataTable';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
+import { budgetDataMutationType } from '@/hooks/user/useUserAction';
 
-export type BudgetDataByParams = {
-  pagination: {
-    current: number;
-    pageSize: number;
-    showSizeChanger: boolean;
-  };
-  sortField: string | null;
-  sortOrder: string | null | undefined;
-  filters: {
-    type: Array<string> | null;
-    reoccur: Array<boolean> | null;
-  };
-};
+// export type BudgetDataByParams = {
+//   pagination: {
+//     current: number;
+//     pageSize: number;
+//     showSizeChanger: boolean;
+//   };
+//   sortField: string | null;
+//   sortOrder: string | null | undefined;
+//   filters: {
+//     type: Array<string> | null;
+//     reoccur: Array<boolean> | null;
+//   };
+// };
 
 export const getUserData = async () => {
   const token = await getHttpOnlyUserData();
@@ -26,7 +27,7 @@ export const getUserData = async () => {
   return response?.data;
 };
 
-export const getBudgetDataByParams = async (params: TableParams) => {
+export const getBudgetDataByParams = async ({ params, searchData }: budgetDataMutationType) => {
   const { pagination, sortField, sortOrder, filters } = params;
 
   // Extracting filters
@@ -41,6 +42,7 @@ export const getBudgetDataByParams = async (params: TableParams) => {
       sortOrder,
       type,
       reoccur,
+      searchData,
     },
   });
   return response.data;

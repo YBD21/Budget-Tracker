@@ -2,15 +2,17 @@ import { TableParams } from '@/components/DataTable';
 import { getBudgetDataByParams } from '@/services/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type budgetDataMutationType = {
-  params: TableParams; // BudgetDataByParams
+export type budgetDataMutationType = {
+  params: TableParams;
+  searchData: string;
 };
 
 export const useUserAction = () => {
   const queryClient = useQueryClient();
 
   const budgetDataMutation = useMutation({
-    mutationFn: ({ params }: budgetDataMutationType) => getBudgetDataByParams(params),
+    mutationFn: ({ params, searchData }: budgetDataMutationType) =>
+      getBudgetDataByParams({ params, searchData }),
     onSuccess: (newData) => {
       queryClient.setQueryData(['budgetData'], (oldData: any) => {
         if (!oldData) {

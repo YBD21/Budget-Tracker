@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Table } from 'antd';
 import type { GetProp, TableColumnsType, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
-import { useThemeStore, useUserStore } from '@/context/Store';
+import { useSearchStore, useThemeStore, useUserStore } from '@/context/Store';
 import StyleWrapper from './StyleWrapper';
 import ActionTab from './ActionTab';
 import { useUserAction } from '@/hooks/user/useUserAction';
@@ -26,6 +26,7 @@ export interface TableParams {
 const DataTable: React.FC = () => {
   const { theme } = useThemeStore();
   const { userData } = useUserStore();
+  const { searchData } = useSearchStore();
   const { budgetDataMutation } = useUserAction();
 
   const [dataSource, setDataSource] = useState<DataType[]>([]);
@@ -44,6 +45,7 @@ const DataTable: React.FC = () => {
       const { pagination, sortField, sortOrder, filters } = tableParams;
       const budgetData = await budgetDataMutation.mutateAsync({
         params: { pagination, sortField, sortOrder, filters },
+        searchData,
       });
 
       setDataSource(budgetData?.data);
@@ -52,7 +54,7 @@ const DataTable: React.FC = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [budgetDataMutation, totalRecords, tableParams]);
+  }, [budgetDataMutation, totalRecords, tableParams, searchData]);
 
   useEffect(() => {
     if (userData) {
@@ -62,7 +64,7 @@ const DataTable: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [tableParams]);
+  }, [tableParams, searchData]);
 
   const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
