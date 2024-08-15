@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ThemeState, UserState } from './types/StoreTypes';
+import { ThemeState, UserState } from './types/Store';
 
 export const useThemeStore = create<ThemeState>((set) => ({
   theme: '', // initial
