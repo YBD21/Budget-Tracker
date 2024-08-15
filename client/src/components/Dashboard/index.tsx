@@ -37,21 +37,11 @@ const Dashboard = () => {
     <div className="flex-col">
       <div className="flex flex-row justify-between -m-4 px-3 pt-4 pb-1.5">
         <p className="mx-2 text-xl"> Hi,{firstName} 👋</p>
-        {/* <div className="flex mx-5">
-          <Button
-            title={
-              <div className="flex justify-between text-base dark:text-white">
-                <Add className="mr-2" fontSize="medium" /> Add
-              </div>
-            }
-            type="primary"
-          />
-        </div> */}
       </div>
       <div className="flex flex-col mt-6 py-1.5 lg:mx-auto lg:max-w-screen-lg">
-        {/* <p className="m-1.5 text-xl font-semibold text-center">Overview</p> */}
+        <p className="m-1.5 text-xl font-semibold text-center">Overview</p>
 
-        <div className="flex justify-between my-8 mx-2 lg:gap-24">
+        <div className="flex justify-between my-8 mx-2 lg:gap-24 gap-4">
           {/* Income */}
           <OverviewCard
             title="Income"
@@ -89,7 +79,20 @@ const Dashboard = () => {
         </div>
 
         <div className="mt-4" suppressHydrationWarning>
-          <SearchBar />
+          <div className="flex justify-between">
+            <SearchBar />
+            <div className="flex-row mx-5">
+              <Button
+                title={
+                  <div className="flex justify-between text-base dark:text-white">
+                    <Add className="mr-2" fontSize="medium" /> Add
+                  </div>
+                }
+                type="primary"
+              />
+            </div>
+          </div>
+
           <DataTable />
         </div>
       </div>

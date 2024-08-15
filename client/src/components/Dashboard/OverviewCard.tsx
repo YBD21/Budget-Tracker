@@ -67,7 +67,7 @@ const OverviewCard = ({
       <div className="flex flex-col mx-2">
         <p className="text-sm font-semibold mb-0.5">{title}</p>
         <span
-          className={`transition-transform transform-gpu ease-in-out duration-700 text-lg tracking-wider ${priceColor} inline-block`}
+          className={`transition-transform transform-gpu ease-in-out duration-700 text-lg tracking-wider ${priceColor} inline-block sm:text-base`}
           key={displayedPrice} // This forces a re-render to apply the transition
         >
           {currencyName} {displayedPrice}
