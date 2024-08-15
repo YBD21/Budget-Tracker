@@ -1,8 +1,10 @@
 'use client';
 
+import { useSearchStore } from '@/context/Store';
 import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = () => {
+  const { searchData, setSearchData } = useSearchStore();
   return (
     <div className="relative flex items-center mb-8 mx-1.5">
       <input
