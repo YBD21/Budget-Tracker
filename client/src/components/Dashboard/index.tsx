@@ -16,10 +16,6 @@ const Dashboard = () => {
   const { userData, setUserData } = useUserStore();
   const { isPending: userLoading, data: currentUser } = useUserData();
 
-  // if (!userLoading) {
-  //   console.log(currentUser);
-  // }
-
   useEffect(() => {
     if (!userLoading) {
       setUserData(currentUser);
