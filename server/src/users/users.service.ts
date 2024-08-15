@@ -97,6 +97,12 @@ export class UsersService {
         searchData,
       } = query;
 
+      // Limit searchData to 40 characters
+      const maxSearchLength = 40;
+      const truncatedSearchData = searchData
+        ? searchData.substring(0, maxSearchLength)
+        : '';
+
       let budgetDataRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =
         fireStoreDB.collection(
           `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
@@ -112,7 +118,7 @@ export class UsersService {
       }
 
       // Apply search filter if searchData is provided
-      if (searchData) {
+      if (truncatedSearchData) {
         budgetDataRef = budgetDataRef
           .where('title', '>=', searchData)
           .where('title', '<=', searchData + '\uf8ff');
