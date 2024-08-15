@@ -75,7 +75,7 @@ const Dashboard = () => {
         </div>
 
         <div className="mt-4" suppressHydrationWarning>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-6">
             <SearchBar />
             <div className="flex-row mx-5">
               <Button
