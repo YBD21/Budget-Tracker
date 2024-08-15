@@ -9,6 +9,6 @@ export type UserState = {
 };
 
 export type SearchState = {
-  searchData: string | null;
+  searchData: any;
   setSearchData: (newData: string) => void;
 };

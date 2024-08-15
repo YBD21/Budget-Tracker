@@ -12,6 +12,6 @@ export const useUserStore = create<UserState>((set) => ({
 }));
 
 export const useSearchStore = create<SearchState>((set) => ({
-  searchData: null, // initial
+  searchData: '', // initial
   setSearchData: (newData: string) => set({ searchData: newData }),
 }));
