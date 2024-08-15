@@ -87,19 +87,35 @@ export class UsersService {
   async getBudgetData(userId: any, query: any) {
     try {
       const fireStoreDB = this.firebaseService.getFirestore();
-      const { current, pageSize, sortField, sortOrder, type, reoccur } = query;
+      const {
+        current,
+        pageSize,
+        sortField,
+        sortOrder,
+        type,
+        reoccur,
+        searchData,
+      } = query;
 
       let budgetDataRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =
         fireStoreDB.collection(
           `${this.usersCollectionPath}/${userId}/${this.budgetEntryCollectionPath}`,
         );
 
+      // Apply filters based on the query parameters
       if (type) {
         budgetDataRef = budgetDataRef.where('type', '==', type);
       }
 
       if (reoccur) {
         budgetDataRef = budgetDataRef.where('reoccur', '==', reoccur);
+      }
+
+      // Apply search filter if searchData is provided
+      if (searchData) {
+        budgetDataRef = budgetDataRef
+          .where('title', '>=', searchData)
+          .where('title', '<=', searchData + '\uf8ff');
       }
 
       const firestoreSortOrder = sortOrder === 'descend' ? 'desc' : 'asc';
