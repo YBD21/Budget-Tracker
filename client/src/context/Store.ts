@@ -1,14 +1,5 @@
 import { create } from 'zustand';
-
-type ThemeState = {
-  theme: string;
-  updateTheme: (newTheme: string) => void;
-};
-
-type UserState = {
-  userData: any;
-  setUserData: (newData: any) => void;
-};
+import { ThemeState, UserState } from './types/StoreTypes';
 
 export const useThemeStore = create<ThemeState>((set) => ({
   theme: '', // initial
