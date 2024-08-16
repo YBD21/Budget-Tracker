@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, ConfigProvider, theme } from 'antd';
 import type { GetProp, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
 import { useSearchStore, useThemeStore, useUserStore } from '@/context/Store';
@@ -16,7 +16,7 @@ export interface TableParams {
 }
 
 const DataTable: React.FC = () => {
-  const { theme } = useThemeStore();
+  const { theme: themeValue } = useThemeStore();
   const { userData } = useUserStore();
   const { searchData } = useSearchStore();
   const { budgetDataMutation } = useUserAction();
@@ -68,7 +68,12 @@ const DataTable: React.FC = () => {
   };
 
   return (
-    <StyleWrapper className={`${theme === 'dark' ? 'dark' : 'light'} rounded-lg`}>
+    <ConfigProvider
+      theme={{
+        algorithm: themeValue === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      }}
+    >
+      <StyleWrapper className={`${themeValue === 'light' ? 'light' : 'dark'} rounded-lg`}>
       <Table
         columns={useColumns()}
         dataSource={dataSource}
@@ -81,7 +86,8 @@ const DataTable: React.FC = () => {
         }}
         loading={budgetDataMutation?.isPending}
       />
-    </StyleWrapper>
+      </StyleWrapper>
+    </ConfigProvider>
   );
 };
 

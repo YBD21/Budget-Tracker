@@ -10,23 +10,6 @@ const StyleWrapper = styled.div`
       color: #ffffff;
     }
 
-    .ant-table-thead > tr > th {
-      background-color: #333333; /* Darker header for dark mode */
-      color: #ffffff;
-      transition: none !important;
-    }
-
-    .ant-table-tbody > tr > td {
-      background-color: #1f1f1f;
-      color: #ffffff;
-      transition: none !important;
-    }
-
-    .ant-pagination-item {
-      background-color: #1a1a1a;
-      border-color: #ffffff;
-    }
-
     .ant-pagination-item > a {
       color: #ffffff !important;
     }
@@ -91,18 +74,6 @@ const StyleWrapper = styled.div`
       color: #000000;
     }
 
-    .ant-table-thead > tr > th {
-      background-color: #f0f0f0; /* Lighter header for light mode */
-      color: #000000;
-      transition: none !important;
-    }
-
-    .ant-table-tbody > tr > td {
-      background-color: #ffffff;
-      color: #000000;
-      transition: none !important;
-    }
-
     .ant-pagination-item {
       background-color: #ffffff;
       color: #000000;
@@ -113,14 +84,6 @@ const StyleWrapper = styled.div`
       border-color: #000000;
       background-color: #e6e6e6;
       color: #000000;
-    }
-
-    .ant-table-tbody > tr:hover {
-      background-color: #e6e6e6; /* Slightly darker background on hover */
-    }
-
-    .ant-table-tbody > tr:hover > td {
-      color: #000000; /* Ensure text remains readable on hover */
     }
 
     .ant-pagination-item > a {
