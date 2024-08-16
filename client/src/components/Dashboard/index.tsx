@@ -11,6 +11,7 @@ import SearchBar from '../SearchBar';
 import DataTable from '../DataTable';
 import { useUserStore } from '@/context/Store';
 import { useEffect } from 'react';
+import AddBudget from '../AddBudget';
 
 const Dashboard = () => {
   const { userData, setUserData } = useUserStore();
@@ -77,16 +78,7 @@ const Dashboard = () => {
         <div className="mt-4" suppressHydrationWarning>
           <div className="flex justify-between gap-6">
             <SearchBar />
-            <div className="flex-row mx-5">
-              <Button
-                title={
-                  <div className="flex justify-between text-base dark:text-white">
-                    <Add className="mr-2" fontSize="medium" /> Add
-                  </div>
-                }
-                type="primary"
-              />
-            </div>
+            <AddBudget />
           </div>
 
           <DataTable />
