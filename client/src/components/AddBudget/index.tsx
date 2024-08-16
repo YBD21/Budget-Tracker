@@ -34,7 +34,6 @@ const AddBudget = () => {
         type="primary"
       />
 
-      {/* [theme.defaultAlgorithm, theme.darkAlgorithm] */}
       <ConfigProvider
         theme={{
           algorithm: themevalue === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
