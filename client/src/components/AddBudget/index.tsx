@@ -5,6 +5,7 @@ import Button from '../Button';
 import Add from '@mui/icons-material/Add';
 import { Modal, ConfigProvider, theme } from 'antd';
 import { useThemeStore } from '@/context/Store';
+import CloseIcon from '@mui/icons-material/Close';
 
 const AddBudget = () => {
   const { theme: themevalue } = useThemeStore();
@@ -40,13 +41,16 @@ const AddBudget = () => {
         }}
       >
         <Modal
+          centered
           title="Basic Modal"
           open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
+          closeIcon={
+            <CloseIcon className="scale-110 text-red-600 dark:text-red-700 pointer-events-none" />
+          }
+          onCancel={handleCancel} // works on close button
           footer={(_) => (
             <>
-              <Button title={'Custom Button'}></Button>
+              <Button type="primary" title={'Custom Button'}></Button>
             </>
           )}
         >
