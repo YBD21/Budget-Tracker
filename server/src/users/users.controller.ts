@@ -8,12 +8,14 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { BudgetDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './create.service';
 import { UpdateBudgetService } from './update.service';
+import { UserGuard } from './user.guard';
 
 @Controller('user')
 export class UsersController {
@@ -91,7 +93,7 @@ export class UsersController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(UserGuard)
   @Get('my-data')
   async getUserData(
     @Req() req: Request,
@@ -99,6 +101,7 @@ export class UsersController {
   ): Promise<Response> {
     try {
       const respond = req.userData;
+      // add function to get their data
       return res.json(respond);
     } catch (error) {
       throw new InternalServerErrorException();
