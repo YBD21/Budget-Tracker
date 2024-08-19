@@ -16,9 +16,19 @@ import { budgetDataMutationType } from '@/hooks/user/useUserAction';
 //   };
 // };
 
-export const getUserData = async () => {
+export const getBudgetOverview = async () => {
   const token = await getHttpOnlyUserData();
-  const response = await client().get(`/user/my-data`, {
+  const response = await client().get(`/user/budget-overview`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response?.data;
+};
+
+export const getUserName = async () => {
+  const token = await getHttpOnlyUserData();
+  const response = await client().get(`/user/user-name`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

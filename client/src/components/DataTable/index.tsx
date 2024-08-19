@@ -7,7 +7,7 @@ import StyleWrapper from './StyleWrapper';
 
 import { useUserAction } from '@/hooks/user/useUserAction';
 import { DataType, useColumns } from './Columns';
-import { useUserData } from '@/hooks/user/useUser';
+import { useBudgetOverview } from '@/hooks/user/useUser';
 
 export interface TableParams {
   pagination?: TablePaginationConfig;
@@ -17,7 +17,7 @@ export interface TableParams {
 }
 
 const DataTable: React.FC = () => {
-  const { data: currentUser } = useUserData();
+  const { data: currentUser } = useBudgetOverview();
   const { theme: themeValue } = useThemeStore();
   // const { userData } = useUserStore();
   const { searchData } = useSearchStore();

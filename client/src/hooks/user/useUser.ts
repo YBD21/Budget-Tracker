@@ -1,17 +1,17 @@
-import { CURRENT_USER } from '@/constants/queryKey';
-import { getUserData } from '@/services/user';
+import { BUDGET_OVERVIEW, CURRENT_USER } from '@/constants/queryKey';
+import { getBudgetOverview, getUserName } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 
-export const useUserData = () => {
+export const useBudgetOverview = () => {
   return useQuery({
-    queryKey: [CURRENT_USER],
-    queryFn: getUserData,
+    queryKey: [BUDGET_OVERVIEW],
+    queryFn: getBudgetOverview,
   });
 };
 
-// export const useBudgetData = () => {
-//   return useQuery({
-//     queryKey: ['budgetData'],
-//     queryFn: () => getBudgetDataByParams,
-//   });
-// };
+export const useUserName = () => {
+  return useQuery({
+    queryKey: [CURRENT_USER],
+    queryFn: getUserName,
+  });
+};

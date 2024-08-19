@@ -1,6 +1,6 @@
 'use client';
 
-import { useUserData } from '@/hooks/user/useUser';
+import { useBudgetOverview, useUserName } from '@/hooks/user/useUser';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
@@ -10,12 +10,13 @@ import DataTable from '../DataTable';
 import AddBudget from '../AddBudget';
 
 const Dashboard = () => {
-  const { data: currentUser } = useUserData();
+  const { data: userData } = useUserName();
+  const { data: budgetData } = useBudgetOverview();
 
-  const firstName = currentUser?.firstName;
-  const income = currentUser?.totalIncome;
-  const expense = currentUser?.totalExpense;
-  const balance = currentUser?.totalBalance;
+  const firstName = userData?.firstName;
+  const income = budgetData?.totalIncome;
+  const expense = budgetData?.totalExpense;
+  const balance = budgetData?.totalBalance;
 
   // if is Negative change Balance color
 

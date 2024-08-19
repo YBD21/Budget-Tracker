@@ -1,4 +1,6 @@
-export const CURRENT_USER = 'currentUser';
+export const CURRENT_USER = 'CurrentUser';
+export const BUDGET_OVERVIEW = 'BudgetOverview';
+
+// Cookies Name
 export const USER_DATA = 'userData';
 export const FIND_ACCESS = 'findAccess';
-export const CSRF = '_csrf';
