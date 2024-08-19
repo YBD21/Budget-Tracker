@@ -79,29 +79,11 @@ export class AuthService {
     }
   }
 
-  generateToken(
-    firstName: string,
-    lastName: string,
-    role: string,
-    id: string,
-    email: string,
-    totalIncome: number,
-    totalExpense: number,
-    totalBalance: number,
-    totalPage: number,
-    totalEntry: number,
-  ) {
+  generateToken(role: string, id: string, email: string) {
     const filterData = {
-      firstName,
-      lastName,
       role,
       id,
       email,
-      totalIncome,
-      totalExpense,
-      totalBalance,
-      totalPage,
-      totalEntry,
     };
     const token = this.jwtService.sign(filterData);
     return token;
@@ -152,27 +134,12 @@ export class AuthService {
       }
 
       const {
-        FirstName: firstName,
-        LastName: lastName,
         AccountType: role,
         AccountID: accountId,
         Email: userEmail,
       } = snapshot.val();
 
-      const { totalIncome, totalExpense, totalBalance, totalPage, totalEntry } =
-        await this.userService.getBudgetSummary(loginDTO.email);
-      const token = this.generateToken(
-        firstName,
-        lastName,
-        role,
-        accountId,
-        userEmail,
-        totalIncome,
-        totalExpense,
-        totalBalance,
-        totalPage,
-        totalEntry,
-      );
+      const token = this.generateToken(role, accountId, userEmail);
 
       // update last seen Date
       const currentDate = new Date().toString();

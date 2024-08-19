@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  InternalServerErrorException,
   Logger,
   Post,
   Query,
@@ -87,6 +88,19 @@ export class UsersController {
     } catch (error) {
       this.logger.error('Error occurred while creating budget', error.stack);
       throw error;
+    }
+  }
+
+  @Get('my-data')
+  async getUserData(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
+    try {
+      const respond = req.userData;
+      return res.json(respond);
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 }
