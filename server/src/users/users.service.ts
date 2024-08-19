@@ -51,9 +51,10 @@ export class UsersService {
     }
   }
 
-  async getBudgetSummary(email: string): Promise<BudgetSummary> {
-    const userId = this.getUniqueIdFromEmail(email);
-
+  async getBudgetSummary(
+    email: string,
+    userId: string,
+  ): Promise<BudgetSummary> {
     const budgetSummaryRef = this.firebaseService
       .getFirestore()
       .collection(this.usersCollectionPath)

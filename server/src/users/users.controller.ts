@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BudgetDTO, UserData } from './dto/users.dto';
+import { BudgetDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './create.service';
 import { UpdateBudgetService } from './update.service';
@@ -94,27 +94,26 @@ export class UsersController {
   }
 
   @UseGuards(UserGuard)
-  @Get('my-data')
-  async getMyData(
+  @Get('budget-overview')
+  async getBudgetOverview(
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
     try {
       const userEmail = req.userData?.email;
+      const userId = req.userData?.id;
 
-      const [userName, budgetSummary] = await Promise.all([
-        this.userService.getUserName(userEmail),
-        this.userService.getBudgetSummary(userEmail),
-      ]);
-
-      const respond: UserData = {
-        ...userName,
-        ...budgetSummary,
-      };
+      const respond = await this.userService.getBudgetSummary(
+        userEmail,
+        userId,
+      );
 
       return res.json(respond);
     } catch (error) {
-      this.logger.error('Error occurred while fetching UserData', error.stack);
+      this.logger.error(
+        'Error occurred while fetching budget overview !',
+        error.message,
+      );
       throw new InternalServerErrorException();
     }
   }
