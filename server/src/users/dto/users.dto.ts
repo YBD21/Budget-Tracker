@@ -1,5 +1,10 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
+export type UserName = {
+  firstName: string;
+  lastName: string;
+};
+
 export type BudgetSummary = {
   totalIncome: number;
   totalExpense: number;

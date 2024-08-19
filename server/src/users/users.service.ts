@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { FirebaseService } from 'src/firebase/firebase.service';
-import { BudgetSummary } from './dto/users.dto';
+import { BudgetSummary, UserName } from './dto/users.dto';
 import { CreateBudgetService } from './create.service';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class UsersService {
     return uniqueId;
   }
 
-  async getUserName(email: string) {
+  async getUserName(email: string): Promise<UserName> {
     const mailDomain = email.split('@')[1].split('.')[0];
     const userId = this.getUniqueIdFromEmail(email);
 
