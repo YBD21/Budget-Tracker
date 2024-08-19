@@ -108,8 +108,8 @@ export class UsersController {
       ]);
 
       const respond: UserData = {
-        userName,
-        budgetSummary,
+        ...userName,
+        ...budgetSummary,
       };
 
       return res.json(respond);
