@@ -21,15 +21,38 @@ export class UsersService {
     return uniqueId;
   }
 
+  async getUserName(email: string) {
+    const mailDomain = email.split('@')[1].split('.')[0];
+    const userId = this.getUniqueIdFromEmail(email);
+
+    const loginReferencePath = `SignWithEmail/${mailDomain}/${userId}`;
+    const databaseReference = this.firebaseService
+      .getDatabase()
+      .ref(loginReferencePath);
+
+    try {
+      const snapshot = await databaseReference.once('value');
+
+      if (!snapshot.exists()) {
+        this.logger.warn(`Get username attempt with incorrect email: ${email}`);
+      }
+
+      return {
+        firstName: snapshot.val().FirstName,
+        lastName: snapshot.val().LastName,
+      };
+    } catch (error) {
+      this.logger.error(
+        `UsersService:getUserName process failed: ${error.message}`,
+      );
+      throw new Error(
+        'An error occurred while fetching user name. Please try again later.',
+      );
+    }
+  }
+
   async getBudgetSummary(email: string): Promise<BudgetSummary> {
     const userId = this.getUniqueIdFromEmail(email);
-    // const mailDomain = email.split('@')[1].split('.')[0];
-
-    // const loginReferencePath = `SignWithEmail/${mailDomain}/${userId}`;
-
-    // const databaseReference = this.firebaseService
-    //   .getDatabase()
-    //   .ref(loginReferencePath);
 
     const budgetSummaryRef = this.firebaseService
       .getFirestore()
