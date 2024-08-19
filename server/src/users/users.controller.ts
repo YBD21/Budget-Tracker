@@ -95,14 +95,23 @@ export class UsersController {
 
   @UseGuards(UserGuard)
   @Get('my-data')
-  async getUserData(
+  async getMyData(
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
     try {
-      const respond = req.userData;
+      const userEmail = req.userData?.email;
+
       // add function to get their data
-      return res.json(respond);
+      // firstName: string,
+      // lastName: string,
+      // totalIncome: number,
+      // totalExpense: number,
+      // totalBalance: number,
+      // totalPage: number,
+      // totalEntry: number,
+      return res.json(userEmail);
+      // return res.json(respond);
     } catch (error) {
       throw new InternalServerErrorException();
     }

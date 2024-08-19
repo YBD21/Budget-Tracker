@@ -21,10 +21,15 @@ export class UsersService {
     return uniqueId;
   }
 
-  // update this to get userName as well
-  // remove email paramater ?
   async getBudgetSummary(email: string): Promise<BudgetSummary> {
     const userId = this.getUniqueIdFromEmail(email);
+    // const mailDomain = email.split('@')[1].split('.')[0];
+
+    // const loginReferencePath = `SignWithEmail/${mailDomain}/${userId}`;
+
+    // const databaseReference = this.firebaseService
+    //   .getDatabase()
+    //   .ref(loginReferencePath);
 
     const budgetSummaryRef = this.firebaseService
       .getFirestore()
