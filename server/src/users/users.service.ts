@@ -21,6 +21,8 @@ export class UsersService {
     return uniqueId;
   }
 
+  // update this to get userName as well
+  // remove email paramater ?
   async getBudgetSummary(email: string): Promise<BudgetSummary> {
     const userId = this.getUniqueIdFromEmail(email);
 
