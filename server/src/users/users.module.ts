@@ -11,11 +11,13 @@ import { UserDataMiddleware } from './users.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { CreateBudgetService } from './create.service';
 import { UpdateBudgetService } from './update.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     FirebaseModule,
     forwardRef(() => AuthModule), // Use forwardRef here
+    JwtModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, CreateBudgetService, UpdateBudgetService],
