@@ -1,4 +1,3 @@
-import { TableParams } from '@/components/DataTable';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
 import { budgetDataMutationType } from '@/hooks/user/useUserAction';
@@ -19,7 +18,7 @@ import { budgetDataMutationType } from '@/hooks/user/useUserAction';
 
 export const getUserData = async () => {
   const token = await getHttpOnlyUserData();
-  const response = await client().get(`/auth-system/user-data`, {
+  const response = await client().get(`/user/my-data`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
