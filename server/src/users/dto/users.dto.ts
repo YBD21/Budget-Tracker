@@ -13,6 +13,11 @@ export type BudgetSummary = {
   totalEntry: number;
 };
 
+export type UserData = {
+  userName: UserName;
+  budgetSummary: BudgetSummary;
+};
+
 export type updateBudget = {
   userId: any;
   amount: number;

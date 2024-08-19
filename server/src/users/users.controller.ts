@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BudgetDTO } from './dto/users.dto';
+import { BudgetDTO, UserData } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './create.service';
 import { UpdateBudgetService } from './update.service';
@@ -89,7 +89,7 @@ export class UsersController {
       return res.send(status && updateStatus && updateEntry);
     } catch (error) {
       this.logger.error('Error occurred while creating budget', error.stack);
-      throw error;
+      throw new InternalServerErrorException();
     }
   }
 
@@ -102,17 +102,19 @@ export class UsersController {
     try {
       const userEmail = req.userData?.email;
 
-      // add function to get their data
-      // firstName: string,
-      // lastName: string,
-      // totalIncome: number,
-      // totalExpense: number,
-      // totalBalance: number,
-      // totalPage: number,
-      // totalEntry: number,
-      return res.json(userEmail);
-      // return res.json(respond);
+      const [userName, budgetSummary] = await Promise.all([
+        this.userService.getUserName(userEmail),
+        this.userService.getBudgetSummary(userEmail),
+      ]);
+
+      const respond: UserData = {
+        userName,
+        budgetSummary,
+      };
+
+      return res.json(respond);
     } catch (error) {
+      this.logger.error('Error occurred while fetching UserData', error.stack);
       throw new InternalServerErrorException();
     }
   }
