@@ -117,4 +117,26 @@ export class UsersController {
       throw new InternalServerErrorException();
     }
   }
+
+  @UseGuards(UserGuard)
+  @Get('user-name')
+  async getFullName(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
+    try {
+      const userEmail = req.userData?.email;
+      const userId = req.userData?.id;
+
+      const respond = await this.userService.getUserName(userEmail, userId);
+
+      return res.json(respond);
+    } catch (error) {
+      this.logger.error(
+        'Error occurred while fetching budget overview !',
+        error.message,
+      );
+      throw new InternalServerErrorException();
+    }
+  }
 }

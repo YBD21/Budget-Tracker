@@ -21,10 +21,8 @@ export class UsersService {
     return uniqueId;
   }
 
-  async getUserName(email: string): Promise<UserName> {
+  async getUserName(email: string, userId: string): Promise<UserName> {
     const mailDomain = email.split('@')[1].split('.')[0];
-    const userId = this.getUniqueIdFromEmail(email);
-
     const loginReferencePath = `SignWithEmail/${mailDomain}/${userId}`;
     const databaseReference = this.firebaseService
       .getDatabase()
@@ -115,7 +113,7 @@ export class UsersService {
     }
   }
 
-  async getBudgetData(userId: any, query: any) {
+  async getBudgetData(userId: string, query: any) {
     try {
       const fireStoreDB = this.firebaseService.getFirestore();
       const {
