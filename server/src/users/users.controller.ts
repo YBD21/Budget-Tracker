@@ -91,6 +91,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Get('my-data')
   async getUserData(
     @Req() req: Request,

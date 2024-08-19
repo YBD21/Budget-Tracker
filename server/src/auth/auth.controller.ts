@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   HttpStatus,
   InternalServerErrorException,
   Patch,
@@ -9,7 +8,6 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
@@ -22,7 +20,6 @@ import {
   VerifyCodeDTO,
 } from './dto/auth.dto';
 import { Request, Response } from 'express';
-import { AuthGuard } from './auth.guard';
 import { CreateBudgetService } from 'src/users/create.service';
 
 // Extend the Request interface to include accessData
@@ -38,20 +35,6 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly createService: CreateBudgetService,
   ) {}
-
-  @UseGuards(AuthGuard)
-  @Get('user-data')
-  async getUserData(
-    @Req() req: Request,
-    @Res() res: Response,
-  ): Promise<Response> {
-    try {
-      const respond = req.userData;
-      return res.json(respond);
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
-  }
 
   @Post('login')
   async login(
