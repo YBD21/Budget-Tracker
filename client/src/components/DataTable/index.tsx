@@ -2,11 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table, ConfigProvider, theme } from 'antd';
 import type { GetProp, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
-import { useSearchStore, useThemeStore, useUserStore } from '@/context/Store';
+import { useSearchStore, useThemeStore } from '@/context/Store';
 import StyleWrapper from './StyleWrapper';
 
 import { useUserAction } from '@/hooks/user/useUserAction';
 import { DataType, useColumns } from './Columns';
+import { useUserData } from '@/hooks/user/useUser';
 
 export interface TableParams {
   pagination?: TablePaginationConfig;
@@ -16,8 +17,9 @@ export interface TableParams {
 }
 
 const DataTable: React.FC = () => {
+  const { data: currentUser } = useUserData();
   const { theme: themeValue } = useThemeStore();
-  const { userData } = useUserStore();
+  // const { userData } = useUserStore();
   const { searchData } = useSearchStore();
   const { budgetDataMutation } = useUserAction();
 
@@ -30,7 +32,7 @@ const DataTable: React.FC = () => {
     },
   });
 
-  const [totalRecords, setTotalRecords] = useState<number>(userData?.totalEntry || 1);
+  const [totalRecords, setTotalRecords] = useState<number>(currentUser?.totalEntry || 1);
 
   const fetchData = useCallback(async () => {
     try {
@@ -49,10 +51,10 @@ const DataTable: React.FC = () => {
   }, [budgetDataMutation, totalRecords, tableParams, searchData]);
 
   useEffect(() => {
-    if (userData) {
-      setTotalRecords(userData.totalEntry || 1);
+    if (currentUser) {
+      setTotalRecords(currentUser.totalEntry || 1);
     }
-  }, [userData]);
+  }, [currentUser]);
 
   useEffect(() => {
     fetchData();
@@ -74,18 +76,18 @@ const DataTable: React.FC = () => {
       }}
     >
       <StyleWrapper className={`${themeValue === 'light' ? 'light' : 'dark'} rounded-lg`}>
-      <Table
-        columns={useColumns()}
-        dataSource={dataSource}
-        onChange={handleTableChange}
-        pagination={{
-          current: tableParams.pagination?.current,
-          pageSize: tableParams.pagination?.pageSize,
-          total: totalRecords,
-          showSizeChanger: false,
-        }}
-        loading={budgetDataMutation?.isPending}
-      />
+        <Table
+          columns={useColumns()}
+          dataSource={dataSource}
+          onChange={handleTableChange}
+          pagination={{
+            current: tableParams.pagination?.current,
+            pageSize: tableParams.pagination?.pageSize,
+            total: totalRecords,
+            showSizeChanger: false,
+          }}
+          loading={budgetDataMutation?.isPending}
+        />
       </StyleWrapper>
     </ConfigProvider>
   );

@@ -7,24 +7,15 @@ import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalance
 import OverviewCard from './OverviewCard';
 import SearchBar from '../SearchBar';
 import DataTable from '../DataTable';
-import { useUserStore } from '@/context/Store';
-import { useEffect } from 'react';
 import AddBudget from '../AddBudget';
 
 const Dashboard = () => {
-  const { userData, setUserData } = useUserStore();
-  const { isPending: userLoading, data: currentUser } = useUserData();
+  const { data: currentUser } = useUserData();
 
-  useEffect(() => {
-    if (!userLoading) {
-      setUserData(currentUser);
-    }
-  }, [currentUser, userLoading]);
-
-  const firstName = userData?.firstName;
-  const income = userData?.totalIncome;
-  const expense = userData?.totalExpense;
-  const balance = userData?.totalBalance;
+  const firstName = currentUser?.firstName;
+  const income = currentUser?.totalIncome;
+  const expense = currentUser?.totalExpense;
+  const balance = currentUser?.totalBalance;
 
   // if is Negative change Balance color
 
