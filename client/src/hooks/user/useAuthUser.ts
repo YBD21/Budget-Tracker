@@ -1,4 +1,3 @@
-import { CURRENT_USER } from '@/constants/queryKey';
 import {
   createAccount,
   findAccount,
@@ -8,7 +7,7 @@ import {
   verifyCaptcha,
   verifyOtp,
 } from '@/services/authUser';
-import { decodeUser, setHttpOnlyFindAccess, setHttpOnlyUserData } from '@/services/userServer';
+import { setHttpOnlyFindAccess, setHttpOnlyUserData } from '@/services/userServer';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useAuthUser = () => {
@@ -18,17 +17,12 @@ export const useAuthUser = () => {
     mutationFn: loginUser,
     onSuccess: async (data) => {
       const setCookiesStatus = setHttpOnlyUserData(data.accessToken);
-      if (setCookiesStatus) {
-        const decodeData = await decodeUser(data.accessToken);
-        queryClient.setQueryData([CURRENT_USER], decodeData);
-      }
     },
   });
 
   const verifyCaptchaMutation = useMutation({
     mutationFn: verifyCaptcha,
     onSuccess: (data) => {
-      // eslint-disable-next-line no-unused-vars
       const setCookiesStatus = setHttpOnlyFindAccess(data.token);
     },
   });
@@ -40,7 +34,6 @@ export const useAuthUser = () => {
   const findAccountMutation = useMutation({
     mutationFn: findAccount,
     onSuccess: (data) => {
-      // eslint-disable-next-line no-unused-vars
       const setCookiesStatus = setHttpOnlyFindAccess(data.token);
     },
   });

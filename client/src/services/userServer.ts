@@ -24,7 +24,7 @@ export const setHttpOnlyUserData = (token: any): boolean => {
 
     return true;
   } catch (error: any) {
-    // console.log(error.message);
+    console.log('Error while setting up HTTP Only Cookie !', error.message);
     return false;
   }
 };
