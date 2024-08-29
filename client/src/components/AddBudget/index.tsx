@@ -5,11 +5,12 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '../Button';
 import Add from '@mui/icons-material/Add';
-import { Modal, ConfigProvider, theme } from 'antd';
+import { DatePicker, Modal, ConfigProvider, theme } from 'antd';
 import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StyledDatePickerWrapper from './StyledDatePickerWrapper';
 
 type Inputs = {
   title: string;
@@ -20,7 +21,7 @@ type Inputs = {
 };
 
 const AddBudget = () => {
-  const { theme: themevalue } = useThemeStore();
+  const { theme: themeValue } = useThemeStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const typeOptions = ['Income', 'Expense'];
@@ -57,6 +58,7 @@ const AddBudget = () => {
   };
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -83,7 +85,7 @@ const AddBudget = () => {
 
       <ConfigProvider
         theme={{
-          algorithm: themevalue === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
+          algorithm: themeValue === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
         <Modal
@@ -182,18 +184,28 @@ const AddBudget = () => {
                   <label className="block text-sm font-semibold text-gray-800 dark:text-neutral-300">
                     Date
                   </label>
-                  {/* Error Message Type
-                  {errors?.type && (
-                    <span className="text-red-600 text-xs mt-1 block">{errors.type.message}</span>
-                  )} */}
+
                   <div className="relative mt-2">
-                    <input
-                      {...register('date')}
-                      type="date"
-                      className={`
-                        ${errors?.date ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-                        mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
-                    />
+                    <StyledDatePickerWrapper
+                      error={!errors.date}
+                      darkMode={themeValue === 'light' ? false : true}
+                    >
+                      <Controller
+                        name="date"
+                        control={control}
+                        rules={{ required: 'Date is required!' }}
+                        render={({ field }) => (
+                          <DatePicker
+                            {...field}
+                            value={field.value ? new Date(field.value) : null}
+                          />
+                        )}
+                      />
+
+                      {/* {errors.date && (
+                      <span className="text-red-600 text-xs mt-1 block">{errors.date.message}</span>
+                    )} */}
+                    </StyledDatePickerWrapper>
                   </div>
                 </div>
                 {/* Amount */}
