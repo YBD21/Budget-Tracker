@@ -1,5 +1,4 @@
 'use client';
-import './DatePickerWrapper.css';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,6 +9,7 @@ import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from 'react-hook-form';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StyledDatePickerWrapper from './StyledDatePickerWrapper';
 
 type Inputs = {
   title: string;
@@ -184,15 +184,22 @@ const AddBudget = () => {
                     Date
                   </label>
 
-                  <div className={`${themeValue === 'light' ? 'light' : 'dark'} relative mt-2`}>
-                    <Controller
-                      name="date"
-                      control={control}
-                      rules={{ required: 'Date is required!' }}
-                      render={({ field }) => (
-                        <DatePicker {...field} value={field.value ? new Date(field.value) : null} />
-                      )}
-                    />
+                  <div className={`relative mt-2`}>
+                    <StyledDatePickerWrapper
+                      className={`${themeValue === 'light' ? 'light' : 'dark'}`}
+                    >
+                      <Controller
+                        name="date"
+                        control={control}
+                        rules={{ required: 'Date is required!' }}
+                        render={({ field }) => (
+                          <DatePicker
+                            {...field}
+                            value={field.value ? new Date(field.value) : null}
+                          />
+                        )}
+                      />
+                    </StyledDatePickerWrapper>
                     {/* {errors.date && (
                       <span className="text-red-600 text-xs mt-1 block">{errors.date.message}</span>
                     )} */}
@@ -214,8 +221,8 @@ const AddBudget = () => {
                     // onChange={handleClearErrors}
                     // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
                     className={`
-              ${errors?.title ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
-              mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
+              ${errors?.title ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-300'}
+              mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none  focus:ring-2 focus:ring-opacity-40 dark:bg-neutral-700`}
                   />
                 </div>
               </div>
