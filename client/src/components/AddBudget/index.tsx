@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '../Button';
 import Add from '@mui/icons-material/Add';
-import { DatePicker, Modal, ConfigProvider, theme } from 'antd';
+import { DatePicker, Modal, ConfigProvider, theme, DatePickerProps } from 'antd';
 import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from 'react-hook-form';
@@ -186,18 +186,14 @@ const AddBudget = () => {
 
                   <div className={`relative mt-2`}>
                     <StyledDatePickerWrapper
+                      error={errors?.date ? true : false}
                       className={`${themeValue === 'light' ? 'light' : 'dark'}`}
                     >
                       <Controller
                         name="date"
                         control={control}
                         rules={{ required: 'Date is required!' }}
-                        render={({ field }) => (
-                          <DatePicker
-                            {...field}
-                            value={field.value ? new Date(field.value) : null}
-                          />
-                        )}
+                        render={({ field: { onChange } }) => <DatePicker onChange={onChange} />}
                       />
                     </StyledDatePickerWrapper>
                     {/* {errors.date && (
