@@ -2,27 +2,28 @@ import styled from '@emotion/styled';
 
 interface StyledDatePickerWrapperProps {
   error?: boolean;
-  darkMode?: boolean;
 }
 
+// background-color: rgb(64 64 64);
+
 const StyleWrapper = styled.div<StyledDatePickerWrapperProps>`
-  .ant-picker {
-    border: 2px solid black;
-    border-radius: 6px;
-    padding: 0.375rem 1rem;
-    width: 100%;
-    color: #000000;
+  // .ant-picker {
+  //   border: 2px solid black;
+  //   border-radius: 6px;
+  //   padding: 0.375rem 1rem;
+  //   width: 100%;
+  //   color: #000000;
 
-    &:hover {
-      border-color: #000000;
-    }
+  //   &:hover {
+  //     border-color: #000000;
+  //   }
 
-    &:focus,
-    &:active {
-      border-color: #000000;
-      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
-    }
-  }
+  //   &:focus,
+  //   &:active {
+  //     border-color: #000000;
+  //     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
+  //   }
+  // }
 
   &.light {
     .ant-picker-outlined:focus-within {
@@ -67,24 +68,31 @@ const StyleWrapper = styled.div<StyledDatePickerWrapperProps>`
 
   /* Dark mode styles */
   &.dark {
-    .ant-picker {
-      background-color: #e6e6e6;
-      color: #ffffff;
-      border-color: #ffffff;
-
-      &:hover {
-        border-color: #ffffff;
-      }
-
-      &:focus,
-      &:active {
-        border-color: #ffffff;
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
-      }
+    .ant-picker-outlined {
+      border: 2px solid rgb(163 163 163);
+      border-radius: 6px;
+      padding: 0.375rem 1rem;
+      width: 100%;
+      background-color: rgb(64 64 64) !important;
+      outline: none;
     }
 
-    .ant-picker-outlined:focus-within {
-      border-color: #ffffff;
+    .ant-picker-outlined:focus {
+      outline: none;
+      border-color: #737373; /* Equivalent to neutral-500 */
+      box-shadow: 0 0 0 2px rgba(156, 163, 175, 1); /* Equivalent to ring-neutral-400 with ring width of 2px */
+    }
+
+    .ant-picker-outlined:focus {
+      --tw-ring-opacity: 0.4;
+      box-shadow: 0 0 0 calc(2px + var(--tw-ring-offset-width))
+        rgba(156, 163, 175, var(--tw-ring-opacity));
+    }
+
+    .ant-picker-outlined:active {
+      --tw-ring-offset-shadow: 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
     }
 
     .ant-picker-input > input {

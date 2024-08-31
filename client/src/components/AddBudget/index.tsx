@@ -188,7 +188,7 @@ const AddBudget = () => {
                   <div className="relative mt-2">
                     <StyledDatePickerWrapper
                       error={!errors.date}
-                      darkMode={themeValue === 'light' ? false : true}
+                      className={`${themeValue === 'light' ? 'light' : 'dark'}`}
                     >
                       <Controller
                         name="date"
