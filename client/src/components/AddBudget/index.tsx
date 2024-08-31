@@ -7,9 +7,10 @@ import Add from '@mui/icons-material/Add';
 import { DatePicker, Modal, ConfigProvider, theme, DatePickerProps } from 'antd';
 import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StyledDatePickerWrapper from './StyledDatePickerWrapper';
+import ErrorMessage from '../ErrorMessage';
 
 type Inputs = {
   title: string;
@@ -48,6 +49,8 @@ const AddBudget = () => {
       .oneOf(['Once', 'Monthly', 'Yearly'], 'Reoccur must be Once, Monthly, or Yearly')
       .required('Reoccur is required!'),
     amount: Yup.number()
+      .nullable()
+      .typeError('Amount is required!')
       .positive('Amount must be a positive number')
       .required('Amount is required!'),
   });
@@ -68,6 +71,18 @@ const AddBudget = () => {
 
   const handleAfterClose = () => {
     reset();
+  };
+
+  const handleLoginSubmit: SubmitHandler<Inputs> = async (data) => {
+    const budgetData = {
+      title: data?.title,
+      date: data?.date,
+      reoccur: data?.reoccur,
+      type: data.type,
+      amount: data?.amount,
+    };
+
+    console.log(budgetData);
   };
 
   return (
@@ -96,7 +111,12 @@ const AddBudget = () => {
           closeIcon={<CloseIcon className="scale-110 text-red-600 dark:text-red-700" />}
           footer={(_) => (
             <div className="w-1/4 flex justify-center mx-auto mt-10">
-              <Button small type="primary" title="Submit"></Button>
+              <Button
+                handleClick={handleSubmit(handleLoginSubmit)}
+                small
+                type="primary"
+                title="Submit"
+              ></Button>
             </div>
           )}
         >
@@ -117,7 +137,7 @@ const AddBudget = () => {
               ${errors?.title ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
               mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
                 />
-                {/* <ErrorMessage errorName={errors?.title} /> */}
+                <ErrorMessage errorName={errors?.title} />
               </div>
               {/* Type and Reoccur -- Select Box */}
               <div className="flex flex-row gap-16">
@@ -126,10 +146,6 @@ const AddBudget = () => {
                   <label className="block text-sm font-semibold text-gray-800 dark:text-neutral-300">
                     Type
                   </label>
-                  {/* Error Message Type
-                  {errors?.type && (
-                    <span className="text-red-600 text-xs mt-1 block">{errors.type.message}</span>
-                  )} */}
                   <div className="relative mt-2">
                     <select
                       {...register('type')}
@@ -153,10 +169,6 @@ const AddBudget = () => {
                   <label className="block text-sm font-semibold text-gray-800 dark:text-neutral-300">
                     Reoccur
                   </label>
-                  {/* Error Message Type
-                  {errors?.type && (
-                    <span className="text-red-600 text-xs mt-1 block">{errors.type.message}</span>
-                  )} */}
                   <div className="relative mt-2">
                     <select
                       {...register('reoccur')}
@@ -190,15 +202,14 @@ const AddBudget = () => {
                       className={`${themeValue === 'light' ? 'light' : 'dark'}`}
                     >
                       <Controller
-                        name="date"
+                        {...register('date')}
                         control={control}
-                        rules={{ required: 'Date is required!' }}
-                        render={({ field: { onChange } }) => <DatePicker onChange={onChange} />}
+                        render={({ field: { onChange } }) => (
+                          <DatePicker format="YYYY/MM/DD" onChange={onChange} />
+                        )}
                       />
                     </StyledDatePickerWrapper>
-                    {/* {errors.date && (
-                      <span className="text-red-600 text-xs mt-1 block">{errors.date.message}</span>
-                    )} */}
+                    <ErrorMessage errorName={errors?.date} />
                   </div>
                 </div>
                 {/* Amount */}
@@ -206,10 +217,7 @@ const AddBudget = () => {
                   <label className="block text-sm font-semibold text-gray-800 dark:text-neutral-300">
                     Amount
                   </label>
-                  {/* Error Message Type
-                  {errors?.type && (
-                    <span className="text-red-600 text-xs mt-1 block">{errors.type.message}</span>
-                  )} */}
+
                   <input
                     {...register('amount')}
                     type="number"
@@ -220,6 +228,7 @@ const AddBudget = () => {
               ${errors?.title ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-300'}
               mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none  focus:ring-2 focus:ring-opacity-40 dark:bg-neutral-700`}
                   />
+                  <ErrorMessage errorName={errors?.amount} />
                 </div>
               </div>
             </form>
