@@ -1,5 +1,5 @@
 'use client';
-
+import './DatePickerWrapper.css';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,7 +10,6 @@ import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from 'react-hook-form';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import StyledDatePickerWrapper from './StyledDatePickerWrapper';
 
 type Inputs = {
   title: string;
@@ -185,27 +184,18 @@ const AddBudget = () => {
                     Date
                   </label>
 
-                  <div className="relative mt-2">
-                    <StyledDatePickerWrapper
-                      error={!errors.date}
-                      className={`${themeValue === 'light' ? 'light' : 'dark'}`}
-                    >
-                      <Controller
-                        name="date"
-                        control={control}
-                        rules={{ required: 'Date is required!' }}
-                        render={({ field }) => (
-                          <DatePicker
-                            {...field}
-                            value={field.value ? new Date(field.value) : null}
-                          />
-                        )}
-                      />
-
-                      {/* {errors.date && (
+                  <div className={`${themeValue === 'light' ? 'light' : 'dark'} relative mt-2`}>
+                    <Controller
+                      name="date"
+                      control={control}
+                      rules={{ required: 'Date is required!' }}
+                      render={({ field }) => (
+                        <DatePicker {...field} value={field.value ? new Date(field.value) : null} />
+                      )}
+                    />
+                    {/* {errors.date && (
                       <span className="text-red-600 text-xs mt-1 block">{errors.date.message}</span>
                     )} */}
-                    </StyledDatePickerWrapper>
                   </div>
                 </div>
                 {/* Amount */}
