@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { TableColumnsType } from 'antd';
 import ActionTab from './ActionTab';
+import { render } from 'react-dom';
 
 export interface DataType {
   key: React.Key;
@@ -19,8 +20,11 @@ export const useColumns = (): TableColumnsType<DataType> => {
         dataIndex: 'date',
         align: 'center',
         sorter: true,
-        sortDirections: ['descend'],
-        render: (timestamp: number) => new Date(timestamp * 1000).toLocaleDateString('en-CA'),
+        sortDirections: ['ascend'],
+        render: (timestamp: number) =>
+          timestamp * 1000
+            ? new Date(timestamp * 1000).toLocaleDateString('en-CA')
+            : new Date(timestamp).toLocaleDateString('en-CA'),
       },
       {
         title: 'Title',
