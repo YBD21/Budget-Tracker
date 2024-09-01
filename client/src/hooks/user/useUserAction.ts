@@ -1,5 +1,5 @@
 import { TableParams } from '@/components/DataTable';
-import { getBudgetDataByParams } from '@/services/budget';
+import { createBudget, getBudgetDataByParams } from '@/services/budget';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export type budgetDataMutationType = {
@@ -30,7 +30,12 @@ export const useUserAction = () => {
     },
   });
 
+  const addBudgetMutation = useMutation({
+    mutationFn: createBudget,
+  });
+
   return {
     budgetDataMutation,
+    addBudgetMutation,
   };
 };

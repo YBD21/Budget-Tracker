@@ -11,8 +11,9 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StyledDatePickerWrapper from './StyledDatePickerWrapper';
 import ErrorMessage from '../ErrorMessage';
+import { useUserAction } from '@/hooks/user/useUserAction';
 
-type Inputs = {
+export type AddBudgetInputs = {
   title: string;
   date: Date;
   type: 'Income' | 'Expense';
@@ -23,6 +24,8 @@ type Inputs = {
 const AddBudget = () => {
   const { theme: themeValue } = useThemeStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { addBudgetMutation } = useUserAction();
 
   const typeOptions = ['Income', 'Expense'];
   const reoccurOptions = ['Once', 'Monthly', 'Yearly'];
@@ -49,7 +52,6 @@ const AddBudget = () => {
       .oneOf(['Once', 'Monthly', 'Yearly'], 'Reoccur must be Once, Monthly, or Yearly')
       .required('Reoccur is required!'),
     amount: Yup.number()
-      .nullable()
       .typeError('Amount is required!')
       .positive('Amount must be a positive number')
       .required('Amount is required!'),
@@ -73,7 +75,12 @@ const AddBudget = () => {
     reset();
   };
 
-  const handleLoginSubmit: SubmitHandler<Inputs> = async (data) => {
+  const handleClearErrors = () => {
+    // Clear errors when input value changes
+    clearErrors();
+  };
+
+  const handleLoginSubmit: SubmitHandler<AddBudgetInputs> = async (data) => {
     const budgetData = {
       title: data?.title,
       date: data?.date,
@@ -82,7 +89,13 @@ const AddBudget = () => {
       amount: data?.amount,
     };
 
-    console.log(budgetData);
+    try {
+      const respond = await addBudgetMutation.mutateAsync(budgetData);
+      console.log(respond);
+    } catch (error: any) {
+      console.log(error.message);
+      // added toster from ant design later
+    }
   };
 
   return (
@@ -222,10 +235,10 @@ const AddBudget = () => {
                     {...register('amount')}
                     type="number"
                     autoComplete="off"
-                    // onChange={handleClearErrors}
+                    onChange={handleClearErrors}
                     // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
                     className={`
-              ${errors?.title ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-300'}
+              ${errors?.amount ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-300'}
               mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none  focus:ring-2 focus:ring-opacity-40 dark:bg-neutral-700`}
                   />
                   <ErrorMessage errorName={errors?.amount} />

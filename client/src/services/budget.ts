@@ -1,3 +1,4 @@
+import { AddBudgetInputs } from '@/components/AddBudget';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
 import { budgetDataMutationType } from '@/hooks/user/useUserAction';
@@ -31,4 +32,9 @@ export const getBudgetDataByParams = async ({ params, searchData }: budgetDataMu
     },
   });
   return response.data;
+};
+
+export const createBudget = async (data: AddBudgetInputs) => {
+  const respond = await client().post(`/user/create-budget/`, data);
+  return respond.data;
 };
