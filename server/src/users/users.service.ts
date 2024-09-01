@@ -158,7 +158,7 @@ export class UsersService {
       if (sortField && sortOrder) {
         budgetDataRef = budgetDataRef.orderBy(sortField, firestoreSortOrder);
       } else {
-        budgetDataRef = budgetDataRef.orderBy('date', 'asc');
+        budgetDataRef = budgetDataRef.orderBy('date', 'desc');
       }
 
       const pageSizeInt = parseInt(pageSize);
