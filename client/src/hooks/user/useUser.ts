@@ -1,5 +1,6 @@
 import { BUDGET_OVERVIEW, CURRENT_USER } from '@/constants/queryKey';
-import { getBudgetOverview, getUserName } from '@/services/user';
+import { getBudgetOverview } from '@/services/budget';
+import { getUserName } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 
 export const useBudgetOverview = () => {

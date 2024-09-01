@@ -178,7 +178,7 @@ const Login = () => {
                   <Tooltip title="Hide">
                     <VisibilityOffIcon onClick={toggle} fontSize="small" />
                   </Tooltip>
-                )} 
+                )}
               </div>
 
               <ErrorMessage errorName={errors?.password} />

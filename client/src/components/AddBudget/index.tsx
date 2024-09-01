@@ -14,7 +14,7 @@ import ErrorMessage from '../ErrorMessage';
 
 type Inputs = {
   title: string;
-  date: Date; // numbers
+  date: Date;
   type: 'Income' | 'Expense';
   reoccur: 'Once' | 'Monthly' | 'Yearly';
   amount: number;

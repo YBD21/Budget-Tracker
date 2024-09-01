@@ -1,5 +1,5 @@
 import { TableParams } from '@/components/DataTable';
-import { getBudgetDataByParams } from '@/services/user';
+import { getBudgetDataByParams } from '@/services/budget';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export type budgetDataMutationType = {
