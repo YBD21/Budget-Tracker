@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export type UserName = {
   firstName: string;
@@ -22,9 +22,9 @@ export type updateBudget = {
 };
 
 export class BudgetDTO {
-  @IsNumber()
+  @IsDateString()
   @IsNotEmpty()
-  date: number;
+  date: Date;
 
   @IsString()
   @IsNotEmpty()
