@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, ConfigProvider, theme } from 'antd';
+import { Table } from 'antd';
 import type { GetProp, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
 import { useSearchStore, useThemeStore } from '@/context/Store';
@@ -19,7 +19,7 @@ export interface TableParams {
 const DataTable: React.FC = () => {
   const { data: currentUser } = useBudgetOverview();
   const { theme: themeValue } = useThemeStore();
-  // const { userData } = useUserStore();
+
   const { searchData } = useSearchStore();
   const { budgetDataMutation } = useUserAction();
 
@@ -70,26 +70,20 @@ const DataTable: React.FC = () => {
   };
 
   return (
-    <ConfigProvider
-      theme={{
-        algorithm: themeValue === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
-      }}
-    >
-      <StyleWrapper className={`${themeValue === 'light' ? 'light' : 'dark'} rounded-lg`}>
-        <Table
-          columns={useColumns()}
-          dataSource={dataSource}
-          onChange={handleTableChange}
-          pagination={{
-            current: tableParams.pagination?.current,
-            pageSize: tableParams.pagination?.pageSize,
-            total: totalRecords,
-            showSizeChanger: false,
-          }}
-          loading={budgetDataMutation?.isPending}
-        />
-      </StyleWrapper>
-    </ConfigProvider>
+    <StyleWrapper className={`${themeValue === 'light' ? 'light' : 'dark'} rounded-lg`}>
+      <Table
+        columns={useColumns()}
+        dataSource={dataSource}
+        onChange={handleTableChange}
+        pagination={{
+          current: tableParams.pagination?.current,
+          pageSize: tableParams.pagination?.pageSize,
+          total: totalRecords,
+          showSizeChanger: false,
+        }}
+        loading={budgetDataMutation?.isPending}
+      />
+    </StyleWrapper>
   );
 };
 
