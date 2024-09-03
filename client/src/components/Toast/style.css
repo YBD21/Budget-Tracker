@@ -1,0 +1,11 @@
+/* Transition effect for smooth appearance */
+.ant-message-notice {
+  transition: all 0.3s ease-in-out !important; /* Smooth transition */
+}
+
+.dark-toast {
+  .ant-message-notice-content {
+    background-color: #1f1f1f !important; /* Dark background */
+    color: #fff !important; /* Light text */
+  }
+}

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '../Button';
 import Add from '@mui/icons-material/Add';
-import { DatePicker, Modal, ConfigProvider, message, theme } from 'antd';
+import { DatePicker, Modal } from 'antd';
 import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StyledDatePickerWrapper from './StyledDatePickerWrapper';
 import ErrorMessage from '../ErrorMessage';
 import { useUserAction } from '@/hooks/user/useUserAction';
+import { showToast } from '../Toast';
 
 export type AddBudgetInputs = {
   title: string;
@@ -80,14 +81,16 @@ const AddBudget = () => {
   };
 
   const handleLoginSubmit: SubmitHandler<AddBudgetInputs> = async (data) => {
-    // const budgetData = {
-    //   title: data?.title,
-    //   date: data?.date,
-    //   reoccur: data?.reoccur,
-    //   type: data.type,
-    //   amount: data?.amount,
-    // };
-    // console.log(token);
+    const budgetData = {
+      title: data?.title,
+      date: data?.date,
+      reoccur: data?.reoccur,
+      type: data.type,
+      amount: data?.amount,
+    };
+
+    showToast({ type: 'error', content: 'Operation completed successfully!' });
+
     // try {
     //   // const respond = await addBudgetMutation.mutateAsync(budgetData);
     //   showToast({ type: 'success', content: 'Operation completed successfully!' });
