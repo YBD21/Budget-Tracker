@@ -6,7 +6,7 @@ type ButtonProps = {
   title: string | ReactNode;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
   isDisable?: boolean;
-  type?: 'primary';
+  type?: 'primary' | 'error';
   small?: boolean;
   isPending?: boolean;
 };
@@ -18,8 +18,12 @@ function Button({ title, handleClick, isDisable, type, small, isPending }: Butto
       buttonStyle = `${'bg-black text-white focus:ring-black active:ring-black hover:ring-black dark:bg-neutral-600 dark:focus:ring-neutral-400 dark:active:ring-neutral-400 dark:hover:ring-neutral-400 dark:border dark:border-neutral-400'}`;
       break;
 
+    case 'error':
+      buttonStyle = `bg-red-900 dark:bg-red-800 rounded-lg focus:ring-red-500 active:ring-red-500 hover:ring-red-400 dark:border dark:border-red-800 hover:ring-2 hover:ring-opacity-50 focus:outline-none focus:ring-2 focus:ring-opacity-50 active:ring-4 active:ring-opacity-50 text-white`;
+      break;
+
     default:
-      buttonStyle = `${'border border-gray-500 hover:border-gray-600  bg-gray-100 text-black focus:ring-gray-600 active:ring-gray-600 hover:ring-gray-500'}`;
+      buttonStyle = `border border-gray-500 dark:border-gray-400 hover:border-gray-600 bg-gray-100 text-black focus:ring-gray-600 active:ring-gray-600 hover:ring-gray-500 dark:bg-neutral-500 dark:text-white dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:ring-neutral-500 dark:active:ring-neutral-500 dark:hover:ring-neutral-400`;
       break;
   }
   return (

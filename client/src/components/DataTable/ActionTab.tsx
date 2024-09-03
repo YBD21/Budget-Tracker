@@ -1,8 +1,35 @@
+import { useState } from 'react';
 import { Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteDialog from '../DeleteDialog';
 
-const ActionTab = ({ record }: any) => {
+type RecordT = {
+  key: string;
+  title: string;
+  date: Date;
+  type: 'Income' | 'Expense';
+  reoccur: 'Once' | 'Monthly' | 'Yearly';
+  amount: number;
+};
+
+const ActionTab = ({ record }: { record: RecordT }) => {
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  // console.log(record);
+
+  const showDeleteDialog = () => {
+    setIsOpenDeleteDialog(true);
+  };
+
+  const handleDeleteAction = () => {
+    setIsOpenDeleteDialog(false);
+  };
+
+  const handleCancelDeleteAction = () => {
+    // when processing do nothing add this later
+    setIsOpenDeleteDialog(false);
+  };
+
   return (
     <div className="w-full flex justify-between gap-4">
       {/* Edit */}
@@ -30,12 +57,19 @@ const ActionTab = ({ record }: any) => {
       >
         <button
           className="py-1.5 px-2.5 bg-red-900 dark:bg-red-800 rounded-lg focus:ring-red-500 active:ring-red-500 hover:ring-red-400 dark:border dark:border-red-800 hover:ring-2 hover:ring-opacity-50  focus:outline-none focus:ring-2  focus:ring-opacity-50 active:ring-4 active:ring-opacity-50"
-          // onClick={() => handleDelete(entry)}
-          onClick={() => console.log(record.key)}
+          onClick={showDeleteDialog}
         >
           <DeleteIcon className="scale-110 text-white pointer-events-none" />
         </button>
       </Tooltip>
+      {/* Delete Dialog */}
+      <DeleteDialog
+        title={record.title}
+        openStatus={isOpenDeleteDialog}
+        handleCancel={handleCancelDeleteAction}
+        handleDelete={handleDeleteAction}
+      />
+      {/* )} */}
     </div>
   );
 };
