@@ -62,7 +62,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: any) =>
           Are you sure you want to delete {'?'}
         </p>
         <span className="py-3 font-bold text-center text-xl">"{title}"</span>
-        <div className="mx-8 py-3 px-5 text-sm text-gray-700 dark:text-neutral-300 bg-red-50 dark:bg-neutral-700 border border-red-300 dark:border-red-600 rounded-md">
+        <div className="mx-8 py-3 px-6 text-sm text-gray-700 dark:text-neutral-300 bg-red-50 dark:bg-neutral-700 border border-red-300 dark:border-red-600 rounded-md">
           <div className="flex items-baseline">
             <strong className="font-bold text-red-600 dark:text-white mr-2">Note:</strong>
             <span className="text-sm text-center text-gray-800 dark:text-gray-200">
