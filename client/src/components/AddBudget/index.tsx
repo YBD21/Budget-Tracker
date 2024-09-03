@@ -218,8 +218,8 @@ const AddBudget = () => {
                     <Controller
                       {...register('date')}
                       control={control}
-                      render={({ field: { onChange } }) => (
-                        <DatePicker format="YYYY/MM/DD" onChange={onChange} />
+                      render={({ field: { onChange, value } }) => (
+                        <DatePicker format="YYYY/MM/DD" onChange={onChange} value={value} />
                       )}
                     />
                   </StyledDatePickerWrapper>
