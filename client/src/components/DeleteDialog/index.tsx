@@ -10,10 +10,16 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: any) =>
     <Modal
       centered
       open={openStatus}
-      onCancel={handleCancel}
-      closeIcon={<CloseIcon className="scale-110 text-red-600 dark:text-red-700" />}
+      // onCancel={handleCancel}
+      closeIcon={
+        <CloseIcon
+          role="button"
+          className="scale-110 text-red-600 dark:text-red-700"
+          onClick={handleCancel}
+        />
+      }
       footer={(_) => (
-        <div className="flex justify-between gap-32 mt-6">
+        <div className="flex justify-between gap-32 mt-5">
           {/* Cancel */}
 
           <Tooltip
@@ -28,7 +34,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: any) =>
               },
             }}
           >
-            <Button handleClick={handleDelete} title="Cancel" />
+            <Button handleClick={handleCancel} title="Cancel" />
           </Tooltip>
 
           {/* Delete */}
@@ -61,7 +67,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: any) =>
         <p className="py-2 px-4 text-center text-xl font-medium text-gray-700 dark:text-neutral-300">
           Are you sure you want to delete {'?'}
         </p>
-        <span className="py-3 font-bold text-center text-xl">"{title}"</span>
+        <span className="py-4 font-bold text-center text-xl">"{title}"</span>
         <div className="mx-8 py-3 px-6 text-sm text-gray-700 dark:text-neutral-300 bg-red-50 dark:bg-neutral-700 border border-red-300 dark:border-red-600 rounded-md">
           <div className="px-2 flex items-baseline">
             <strong className="font-bold text-red-600 dark:text-white mr-2">Note:</strong>
