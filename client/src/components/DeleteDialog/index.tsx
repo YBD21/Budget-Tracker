@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '../Button';
 
-const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: any) => {
+const DeleteDialog = ({ id, title, openStatus, handleCancel, handleDelete }: any) => {
   // Are you sure you want to delete this : title
   return (
     <Modal

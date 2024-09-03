@@ -64,6 +64,7 @@ const ActionTab = ({ record }: { record: RecordT }) => {
       </Tooltip>
       {/* Delete Dialog */}
       <DeleteDialog
+        id={record.key}
         title={record.title}
         openStatus={isOpenDeleteDialog}
         handleCancel={handleCancelDeleteAction}
