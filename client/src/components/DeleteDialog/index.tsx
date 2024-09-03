@@ -63,7 +63,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: any) =>
         </p>
         <span className="py-3 font-bold text-center text-xl">"{title}"</span>
         <div className="mx-8 py-3 px-6 text-sm text-gray-700 dark:text-neutral-300 bg-red-50 dark:bg-neutral-700 border border-red-300 dark:border-red-600 rounded-md">
-          <div className="flex items-baseline">
+          <div className="px-2 flex items-baseline">
             <strong className="font-bold text-red-600 dark:text-white mr-2">Note:</strong>
             <span className="text-sm text-center text-gray-800 dark:text-gray-200">
               This action will permanently delete the item. This cannot be undone.
