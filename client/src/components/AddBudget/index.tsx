@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '../Button';
 import Add from '@mui/icons-material/Add';
-import { DatePicker, Modal } from 'antd';
+import { DatePicker, message, Modal } from 'antd';
 import { useThemeStore } from '@/context/Store';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -89,19 +89,16 @@ const AddBudget = () => {
       amount: data?.amount,
     };
 
-    showToast({ type: 'error', content: 'Operation completed successfully!' });
+    try {
+      const respond = await addBudgetMutation.mutateAsync(budgetData);
 
-    // try {
-    //   // const respond = await addBudgetMutation.mutateAsync(budgetData);
-    //   showToast({ type: 'success', content: 'Operation completed successfully!' });
-    //   // if (respond === true) {
-    //   //   message.success('Budget added successfully !', 8);
-    //   // }
-    //   handleOk();
-    // } catch (error: any) {
-    //   // console.log(error.message);
-    //   message.error(`${error.message}`, 8);
-    // }
+      if (respond === true) {
+        showToast({ type: 'success', content: 'Budget added successfully !' });
+      }
+      handleOk();
+    } catch (error: any) {
+      showToast({ type: 'error', content: `${error.message} !` });
+    }
   };
 
   return (
