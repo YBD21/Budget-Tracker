@@ -110,4 +110,57 @@ export class UpdateBudgetService {
       );
     }
   }
+
+  async subtractBudgetSummary({
+    userId,
+    amount,
+    type,
+  }: updateBudget): Promise<boolean> {
+    const fireStoreDB = this.firebaseService.getFirestore();
+
+    const budgetSummaryRef = fireStoreDB
+      .collection(this.usersCollectionPath)
+      .doc(userId);
+
+    try {
+      const transactionStatus = await fireStoreDB.runTransaction(
+        async (transaction) => {
+          const doc = await transaction.get(budgetSummaryRef);
+          if (!doc.exists) {
+            this.logger.error(`Budget summary document does not exist.`);
+            return false;
+          }
+
+          const { totalIncome, totalExpense, totalBalance } = doc.data();
+          let updatedSummary = {};
+
+          if (type === 'Income') {
+            // Income
+            updatedSummary = {
+              totalIncome: totalIncome - amount,
+              totalBalance: totalBalance - amount,
+            };
+          } else {
+            // Expense
+            updatedSummary = {
+              totalExpense: totalExpense - amount,
+              totalBalance: totalBalance + amount,
+            };
+          }
+
+          transaction.update(budgetSummaryRef, updatedSummary);
+          return true;
+        },
+      );
+
+      return transactionStatus;
+    } catch (error) {
+      this.logger.error(
+        `UpdateBudgetService:subtractBudgetSummary process failed: ${error.message}`,
+      );
+      throw new Error(
+        'An error occurred while subtracting budget summary. Please try again later.',
+      );
+    }
+  }
 }
