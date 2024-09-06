@@ -13,8 +13,8 @@ import {
 import { Request, Response } from 'express';
 import { BudgetDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
-import { CreateBudgetService } from './create/create.service';
-import { UpdateBudgetService } from './update/update.service';
+import { CreateBudgetService } from './budget/create/create.service';
+import { UpdateBudgetService } from './budget/update/update.service';
 import { UserGuard } from './user.guard';
 
 @Controller('user')

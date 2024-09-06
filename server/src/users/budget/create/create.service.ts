@@ -1,8 +1,8 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 
 import { FirebaseService } from 'src/firebase/firebase.service';
-import { BudgetDTO } from '../dto/users.dto';
-import { UsersService } from '../users.service';
+import { BudgetDTO } from 'src/users/dto/users.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class CreateBudgetService {

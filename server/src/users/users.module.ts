@@ -9,10 +9,10 @@ import { UsersService } from './users.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
 import { UserDataMiddleware } from './users.middleware';
 import { AuthModule } from 'src/auth/auth.module';
-import { CreateBudgetService } from './create/create.service';
-import { UpdateBudgetService } from './update/update.service';
+import { CreateBudgetService } from './budget/create/create.service';
+import { UpdateBudgetService } from './budget/update/update.service';
 import { JwtModule } from '@nestjs/jwt';
-import { DeleteService } from './delete/delete.service';
+import { DeleteService } from './budget/delete/delete.service';
 
 @Module({
   imports: [
