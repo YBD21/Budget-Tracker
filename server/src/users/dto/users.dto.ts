@@ -19,6 +19,7 @@ export type updateBudget = {
   userId: any;
   amount: number;
   type: string;
+  operation: 'add' | 'subtract';
 };
 
 export class BudgetDTO {
@@ -41,4 +42,9 @@ export class BudgetDTO {
   @IsNumber()
   @IsNotEmpty()
   amount: number;
+}
+
+export class BudgetWithID extends BudgetDTO {
+  @IsString()
+  id: string;
 }

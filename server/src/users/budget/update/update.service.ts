@@ -15,6 +15,7 @@ export class UpdateBudgetService {
     userId,
     amount,
     type,
+    operation,
   }: updateBudget): Promise<boolean> {
     const fireStoreDB = this.firebaseService.getFirestore();
 
@@ -34,17 +35,19 @@ export class UpdateBudgetService {
           const { totalIncome, totalExpense } = doc.data();
           let updatedSummary = {};
 
+          const sign = operation === 'add' ? 1 : -1; // Use 1 for addition and -1 for subtraction
+
           if (type === 'Income') {
             // Income
             updatedSummary = {
-              totalIncome: totalIncome + amount,
-              totalBalance: totalIncome + amount - totalExpense,
+              totalIncome: totalIncome + sign * amount,
+              totalBalance: totalIncome + sign * amount - totalExpense,
             };
           } else {
             // Expense
             updatedSummary = {
-              totalExpense: totalExpense + amount,
-              totalBalance: totalIncome - (totalExpense + amount),
+              totalExpense: totalExpense + sign * amount,
+              totalBalance: totalIncome - (totalExpense + sign * amount),
             };
           }
 
@@ -64,7 +67,13 @@ export class UpdateBudgetService {
     }
   }
 
-  async updateEntryAndPageCount(userId: any): Promise<boolean> {
+  async updateEntryAndPageCount({
+    userId,
+    operation, // 'add' or 'subtract'
+  }: {
+    userId: any;
+    operation: 'add' | 'subtract';
+  }): Promise<boolean> {
     const fireStoreDB = this.firebaseService.getFirestore();
 
     const budgetSummaryRef = fireStoreDB
@@ -79,19 +88,32 @@ export class UpdateBudgetService {
             this.logger.error(`Budget summary document does not exist.`);
             return false;
           }
+
           const { totalEntry, totalPage } = doc.data();
+          const sign = operation === 'add' ? 1 : -1; // Use 1 for add and -1 for subtract
+
           const updatedSummary = {
-            totalEntry: totalEntry + 1,
+            totalEntry: totalEntry + sign,
             totalPage,
           };
 
           const remainder = updatedSummary?.totalEntry % 5;
-
           const multiple = 5 * totalPage;
 
-          if (remainder !== 0 && updatedSummary?.totalEntry > multiple) {
+          if (
+            operation === 'add' &&
+            remainder !== 0 &&
+            updatedSummary?.totalEntry > multiple
+          ) {
             // increase totalPage count by one
             updatedSummary.totalPage = totalPage + 1;
+          } else if (
+            operation === 'subtract' &&
+            remainder === 0 &&
+            updatedSummary?.totalEntry < multiple
+          ) {
+            // decrease totalPage count by one when an entry is removed
+            updatedSummary.totalPage = totalPage - 1;
           }
 
           transaction.update(budgetSummaryRef, updatedSummary);
@@ -107,59 +129,6 @@ export class UpdateBudgetService {
       );
       throw new Error(
         'An error occurred while updating budget summary. Please try again later.',
-      );
-    }
-  }
-
-  async subtractBudgetSummary({
-    userId,
-    amount,
-    type,
-  }: updateBudget): Promise<boolean> {
-    const fireStoreDB = this.firebaseService.getFirestore();
-
-    const budgetSummaryRef = fireStoreDB
-      .collection(this.usersCollectionPath)
-      .doc(userId);
-
-    try {
-      const transactionStatus = await fireStoreDB.runTransaction(
-        async (transaction) => {
-          const doc = await transaction.get(budgetSummaryRef);
-          if (!doc.exists) {
-            this.logger.error(`Budget summary document does not exist.`);
-            return false;
-          }
-
-          const { totalIncome, totalExpense, totalBalance } = doc.data();
-          let updatedSummary = {};
-
-          if (type === 'Income') {
-            // Income
-            updatedSummary = {
-              totalIncome: totalIncome - amount,
-              totalBalance: totalBalance - amount,
-            };
-          } else {
-            // Expense
-            updatedSummary = {
-              totalExpense: totalExpense - amount,
-              totalBalance: totalBalance + amount,
-            };
-          }
-
-          transaction.update(budgetSummaryRef, updatedSummary);
-          return true;
-        },
-      );
-
-      return transactionStatus;
-    } catch (error) {
-      this.logger.error(
-        `UpdateBudgetService:subtractBudgetSummary process failed: ${error.message}`,
-      );
-      throw new Error(
-        'An error occurred while subtracting budget summary. Please try again later.',
       );
     }
   }

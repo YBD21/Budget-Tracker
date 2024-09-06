@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   InternalServerErrorException,
   Logger,
@@ -11,11 +12,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BudgetDTO } from './dto/users.dto';
+import { BudgetDTO, BudgetWithID } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './budget/create/create.service';
 import { UpdateBudgetService } from './budget/update/update.service';
 import { UserGuard } from './user.guard';
+import { DeleteBudgetService } from './budget/delete/delete.service';
 
 @Controller('user')
 export class UsersController {
@@ -24,6 +26,7 @@ export class UsersController {
     private readonly userService: UsersService,
     private readonly createBudget: CreateBudgetService,
     private readonly updateBudget: UpdateBudgetService,
+    private readonly deleteBudget: DeleteBudgetService,
   ) {}
 
   @Get('budget-list')
@@ -57,8 +60,9 @@ export class UsersController {
           userId,
           amount: budgetData.amount,
           type: budgetData.type,
+          operation: 'add',
         }),
-        this.updateBudget.updateEntryAndPageCount(userId),
+        this.updateBudget.updateEntryAndPageCount({ userId, operation: 'add' }),
       ]);
 
       return res.send(status && updateStatus && updateEntry);
@@ -111,6 +115,37 @@ export class UsersController {
         'Error occurred while fetching budget overview !',
         error.message,
       );
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete('delete-budget')
+  async handleDeleteBudget(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() budgetData: BudgetWithID,
+  ) {
+    const userData = req?.userData;
+    const userId = userData?.id;
+
+    try {
+      const [status, updateStatus, updateEntry] = await Promise.all([
+        this.deleteBudget.deleteBudgetRecord(userId, budgetData.id),
+        this.updateBudget.updateBudgetSummary({
+          userId,
+          amount: budgetData.amount,
+          type: budgetData.type,
+          operation: 'subtract',
+        }),
+        this.updateBudget.updateEntryAndPageCount({
+          userId,
+          operation: 'subtract',
+        }),
+      ]);
+
+      return res.send(status && updateStatus && updateEntry);
+    } catch (error) {
+      this.logger.error('Error occurred while creating budget', error.stack);
       throw new InternalServerErrorException();
     }
   }
