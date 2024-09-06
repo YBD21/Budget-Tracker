@@ -20,7 +20,7 @@ import {
   VerifyCodeDTO,
 } from './dto/auth.dto';
 import { Request, Response } from 'express';
-import { CreateBudgetService } from 'src/users/create.service';
+import { CreateBudgetService } from 'src/users/budget/create/create.service';
 
 // Extend the Request interface to include accessData
 declare module 'express-serve-static-core' {

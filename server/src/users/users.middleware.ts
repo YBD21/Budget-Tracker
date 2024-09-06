@@ -25,7 +25,7 @@ export class UserDataMiddleware implements NestMiddleware {
       const accessToken = req.cookies.userData;
 
       const userData = await this.authService.verifyToken(accessToken);
-
+      // console.log(userData?.status);
       if (userData?.status === false) {
         throw new UnauthorizedException();
       }

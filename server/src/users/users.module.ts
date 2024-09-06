@@ -12,7 +12,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { CreateBudgetService } from './budget/create/create.service';
 import { UpdateBudgetService } from './budget/update/update.service';
 import { JwtModule } from '@nestjs/jwt';
-import { DeleteService } from './budget/delete/delete.service';
+import { DeleteBudgetService } from './budget/delete/delete.service';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { DeleteService } from './budget/delete/delete.service';
     UsersService,
     CreateBudgetService,
     UpdateBudgetService,
-    DeleteService,
+    DeleteBudgetService,
   ],
   exports: [UsersService, CreateBudgetService],
 })
