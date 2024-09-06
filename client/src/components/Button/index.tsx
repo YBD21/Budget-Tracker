@@ -23,7 +23,7 @@ function Button({ title, handleClick, isDisable, type, small, isPending }: Butto
       break;
 
     default:
-      buttonStyle = `border border-gray-500 dark:border-gray-400 hover:border-gray-600 bg-gray-100 text-black focus:ring-gray-600 active:ring-gray-600 hover:ring-gray-500 dark:bg-neutral-500 dark:text-white dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:ring-neutral-500 dark:active:ring-neutral-500 dark:hover:ring-neutral-400`;
+      buttonStyle = `border border-gray-300 dark:border-gray-400 bg-gray-100 dark:bg-neutral-600 text-black focus:ring-gray-300 active:ring-gray-300 hover:ring-gray-400 dark:bg-neutral-500 dark:text-white dark:border-neutral-700 dark:hover:border-neutral-600 dark:focus:ring-neutral-500 dark:active:ring-neutral-500 dark:hover:ring-neutral-400`;
       break;
   }
   return (
