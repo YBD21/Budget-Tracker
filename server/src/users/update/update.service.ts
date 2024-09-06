@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, Logger } from '@nestjs/common';
 import { FirebaseService } from 'src/firebase/firebase.service';
-import { updateBudget } from './dto/users.dto';
+import { updateBudget } from '../dto/users.dto';
 
 @Injectable()
 export class UpdateBudgetService {

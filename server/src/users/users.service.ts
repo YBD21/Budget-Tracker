@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { BudgetSummary, UserName } from './dto/users.dto';
-import { CreateBudgetService } from './create.service';
+import { CreateBudgetService } from './create/create.service';
 
 @Injectable()
 export class UsersService {

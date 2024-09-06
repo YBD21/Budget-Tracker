@@ -9,9 +9,10 @@ import { UsersService } from './users.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
 import { UserDataMiddleware } from './users.middleware';
 import { AuthModule } from 'src/auth/auth.module';
-import { CreateBudgetService } from './create.service';
-import { UpdateBudgetService } from './update.service';
+import { CreateBudgetService } from './create/create.service';
+import { UpdateBudgetService } from './update/update.service';
 import { JwtModule } from '@nestjs/jwt';
+import { DeleteService } from './delete/delete.service';
 
 @Module({
   imports: [
@@ -20,7 +21,12 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, CreateBudgetService, UpdateBudgetService],
+  providers: [
+    UsersService,
+    CreateBudgetService,
+    UpdateBudgetService,
+    DeleteService,
+  ],
   exports: [UsersService, CreateBudgetService],
 })
 export class UsersModule implements NestModule {
