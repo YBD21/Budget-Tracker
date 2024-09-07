@@ -22,7 +22,7 @@ export const getBudgetDataByParams = async ({ params, searchData }: budgetDataMu
   const type = filters?.type?.length ? filters?.type[0] : null;
   const reoccur = filters?.reoccur?.length ? filters?.reoccur[0] : null;
 
-  const response = await client().get(`${baseUrl}//budget-list`, {
+  const response = await client().get(`${baseUrl}/budget-list`, {
     params: {
       current: pagination?.current,
       pageSize: pagination?.pageSize,
@@ -42,6 +42,6 @@ export const createBudget = async (data: AddBudgetInputs) => {
 };
 
 export const deleteBudget = async (data: any) => {
-  const respond = await client().delete(`${baseUrl}//delete-budget`, data);
+  const respond = await client().delete(`${baseUrl}/delete-budget`, data);
   return respond.data;
 };

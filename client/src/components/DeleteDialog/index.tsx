@@ -6,12 +6,19 @@ import Button from '../Button';
 
 type TDeleteDialog = {
   title: string;
+  pending: boolean;
   openStatus: boolean;
   handleCancel: () => void;
   handleDelete: () => void;
 };
 
-const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: TDeleteDialog) => {
+const DeleteDialog = ({
+  title,
+  pending,
+  openStatus,
+  handleCancel,
+  handleDelete,
+}: TDeleteDialog) => {
   return (
     <Modal
       centered
@@ -21,7 +28,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: TDelete
         <CloseIcon
           role="button"
           className="scale-110 text-red-600 dark:text-red-700"
-          onClick={handleCancel}
+          onClick={!pending ? handleCancel : undefined}
         />
       }
       footer={(_) => (
@@ -40,7 +47,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: TDelete
               },
             }}
           >
-            <Button handleClick={handleCancel} title="Cancel" />
+            <Button isPending={pending} handleClick={handleCancel} title="Cancel" />
           </Tooltip>
 
           {/* Delete */}
@@ -57,6 +64,7 @@ const DeleteDialog = ({ title, openStatus, handleCancel, handleDelete }: TDelete
             }}
           >
             <Button
+              isPending={pending}
               type="error"
               handleClick={handleDelete}
               title={

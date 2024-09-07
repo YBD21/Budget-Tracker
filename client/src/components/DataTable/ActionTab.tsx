@@ -3,6 +3,8 @@ import { Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteDialog from '../DeleteDialog';
+import { useUserAction } from '@/hooks/user/useUserAction';
+import { showToast } from '../Toast';
 
 type RecordT = {
   key: string;
@@ -16,18 +18,36 @@ type RecordT = {
 const ActionTab = ({ record }: { record: RecordT }) => {
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   // console.log(record);
+  const { deleteBudgetMutation } = useUserAction();
 
   const showDeleteDialog = () => {
     setIsOpenDeleteDialog(true);
   };
 
   const handleDeleteAction = () => {
+    deleteBudget();
     setIsOpenDeleteDialog(false);
   };
 
   const handleCancelDeleteAction = () => {
     // when processing do nothing add this later
     setIsOpenDeleteDialog(false);
+  };
+
+  const deleteBudget = async () => {
+    const { key, ...budgetData } = {
+      ...record,
+      id: record.key,
+    };
+
+    try {
+      const respond = await deleteBudgetMutation.mutateAsync(budgetData);
+      if (respond === true) {
+        showToast({ type: 'success', content: 'Budget deleted successfully !' });
+      }
+    } catch (error: any) {
+      showToast({ type: 'error', content: 'Budget deletion failed !' });
+    }
   };
 
   return (
@@ -65,6 +85,7 @@ const ActionTab = ({ record }: { record: RecordT }) => {
       {/* Delete Dialog */}
       <DeleteDialog
         title={record.title}
+        pending={deleteBudgetMutation.isPending}
         openStatus={isOpenDeleteDialog}
         handleCancel={handleCancelDeleteAction}
         handleDelete={handleDeleteAction}
