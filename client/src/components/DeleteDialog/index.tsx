@@ -3,6 +3,7 @@ import { Modal } from 'antd';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '../Button';
+import { title } from 'process';
 
 type TDeleteDialog = {
   title: string;
@@ -28,52 +29,27 @@ const DeleteDialog = ({
         <CloseIcon
           role="button"
           className="scale-110 text-red-600 dark:text-red-700"
-          onClick={!pending ? handleCancel : undefined}
+          onClick={handleCancel}
         />
       }
       footer={(_) => (
         <div className="flex justify-between gap-32 mt-5">
           {/* Cancel */}
 
-          <Tooltip
-            title="Cancel"
-            followCursor
-            PopperProps={{
-              sx: {
-                '& .MuiTooltip-tooltip': {
-                  backgroundColor: '#8B0000',
-                  color: 'white',
-                },
-              },
-            }}
-          >
-            <Button isPending={pending} handleClick={handleCancel} title="Cancel" />
-          </Tooltip>
+          <Button handleClick={handleCancel} title="Cancel" />
 
           {/* Delete */}
-          <Tooltip
-            title="Delete"
-            followCursor
-            PopperProps={{
-              sx: {
-                '& .MuiTooltip-tooltip': {
-                  backgroundColor: '#8B0000',
-                  color: 'white',
-                },
-              },
-            }}
-          >
-            <Button
-              isPending={pending}
-              type="error"
-              handleClick={handleDelete}
-              title={
-                <div className="flex gap-2">
-                  <DeleteIcon className="scale-110 text-white pointer-events-none" /> Delete
-                </div>
-              }
-            />
-          </Tooltip>
+
+          <Button
+            isPending={pending}
+            type="error"
+            handleClick={handleDelete}
+            title={
+              <div className="flex gap-2">
+                <DeleteIcon className="scale-110 text-white pointer-events-none" /> Delete
+              </div>
+            }
+          />
         </div>
       )}
     >

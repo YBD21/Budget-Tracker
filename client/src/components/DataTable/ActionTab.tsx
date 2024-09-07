@@ -26,12 +26,12 @@ const ActionTab = ({ record }: { record: RecordT }) => {
 
   const handleDeleteAction = () => {
     deleteBudget();
-    setIsOpenDeleteDialog(false);
   };
 
   const handleCancelDeleteAction = () => {
-    // when processing do nothing add this later
-    setIsOpenDeleteDialog(false);
+    if (!deleteBudgetMutation.isPending) {
+      setIsOpenDeleteDialog(false);
+    }
   };
 
   const deleteBudget = async () => {
@@ -44,9 +44,12 @@ const ActionTab = ({ record }: { record: RecordT }) => {
       const respond = await deleteBudgetMutation.mutateAsync(budgetData);
       if (respond === true) {
         showToast({ type: 'success', content: 'Budget deleted successfully !' });
+
+        setIsOpenDeleteDialog(false);
       }
     } catch (error: any) {
       showToast({ type: 'error', content: 'Budget deletion failed !' });
+      setIsOpenDeleteDialog(false);
     }
   };
 
