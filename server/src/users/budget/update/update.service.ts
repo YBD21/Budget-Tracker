@@ -10,6 +10,7 @@ export class UpdateBudgetService {
 
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
+  private readonly typeOptions: string[] = ['Income', 'Expense'];
 
   async updateBudgetSummary({
     userId,
@@ -18,42 +19,49 @@ export class UpdateBudgetService {
     operation,
   }: updateBudget): Promise<boolean> {
     const fireStoreDB = this.firebaseService.getFirestore();
-
     const budgetSummaryRef = fireStoreDB
       .collection(this.usersCollectionPath)
       .doc(userId);
+
+    if (!this.typeOptions.includes(type)) {
+      this.logger.error(`Invalid type provided: ${type}`);
+      return false;
+    }
 
     try {
       const transactionStatus = await fireStoreDB.runTransaction(
         async (transaction) => {
           const doc = await transaction.get(budgetSummaryRef);
+
           if (!doc.exists) {
             this.logger.error(`Budget summary document does not exist.`);
             return false;
           }
 
-          const { totalIncome, totalExpense } = doc.data();
-          let updatedSummary = {};
+          const { totalIncome = 0, totalExpense = 0 } = doc.data() || {};
+          const updatedSummary = this.calculateUpdatedSummary(type, {
+            totalIncome,
+            totalExpense,
+            amount,
+            operation,
+          });
 
-          const sign = operation === 'add' ? 1 : -1; // Use 1 for addition and -1 for subtraction
-
-          if (type === 'Income') {
-            // Income
-            updatedSummary = {
-              totalIncome: totalIncome + sign * amount,
-              totalBalance: totalIncome + sign * amount - totalExpense,
-            };
-          } else {
-            // Expense
-            updatedSummary = {
-              totalExpense: totalExpense + sign * amount,
-              totalBalance: totalIncome - (totalExpense + sign * amount),
-            };
+          if (!updatedSummary) {
+            this.logger.error(
+              `Invalid type or operation provided: ${type}, ${operation}`,
+            );
+            return false;
           }
 
           transaction.update(budgetSummaryRef, updatedSummary);
           return true;
         },
+      );
+
+      this.logger.log(
+        transactionStatus
+          ? 'Budget summary updated successfully'
+          : 'Error updating budget summary',
       );
 
       return transactionStatus;
@@ -62,9 +70,45 @@ export class UpdateBudgetService {
         `UpdateBudgetService:updateBudgetSummary process failed: ${error.message}`,
       );
       throw new Error(
-        'An error occurred while updating budget summary. Please try again later.',
+        'An error occurred while updating the budget summary. Please try again later.',
       );
     }
+  }
+
+  private calculateUpdatedSummary(
+    type: string,
+    data: {
+      totalIncome: number;
+      totalExpense: number;
+      amount: number;
+      operation: 'add' | 'subtract';
+    },
+  ) {
+    const { totalIncome, totalExpense, amount, operation } = data;
+
+    const updateValues = (newIncome: number, newExpense: number) => ({
+      totalIncome: newIncome,
+      totalExpense: newExpense,
+      totalBalance: newIncome - newExpense,
+    });
+
+    if (operation === 'add') {
+      return type === 'Income'
+        ? updateValues(totalIncome + amount, totalExpense)
+        : type === 'Expense'
+          ? updateValues(totalIncome, totalExpense + amount)
+          : null;
+    }
+
+    if (operation === 'subtract') {
+      return type === 'Income'
+        ? updateValues(totalIncome - amount, totalExpense)
+        : type === 'Expense'
+          ? updateValues(totalIncome, totalExpense - amount)
+          : null;
+    }
+
+    return null;
   }
 
   async updateEntryAndPageCount({
