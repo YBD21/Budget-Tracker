@@ -42,6 +42,6 @@ export const createBudget = async (data: AddBudgetInputs) => {
 };
 
 export const deleteBudget = async (data: any) => {
-  const respond = await client().delete(`${baseUrl}/delete-budget`, data);
-  return respond.data;
+  const response = await client().delete(`${baseUrl}/delete-budget`, { data });
+  return response.data;
 };

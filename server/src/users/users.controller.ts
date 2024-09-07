@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BudgetDTO, BudgetWithID } from './dto/users.dto';
+import { BudgetDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './budget/create/create.service';
 import { UpdateBudgetService } from './budget/update/update.service';
@@ -123,7 +123,7 @@ export class UsersController {
   async handleDeleteBudget(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() budgetData: BudgetWithID,
+    @Body() budgetData: any, //BudgetWithID
   ) {
     const userData = req?.userData;
     const userId = userData?.id;
