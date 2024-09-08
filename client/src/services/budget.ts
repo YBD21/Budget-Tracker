@@ -1,4 +1,4 @@
-import { AddBudgetInputs } from '@/components/AddBudget';
+import { AddBudgetInputs } from '@/components/AddBudgetDialog';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
 import { budgetDataMutationType } from '@/hooks/user/useUserAction';

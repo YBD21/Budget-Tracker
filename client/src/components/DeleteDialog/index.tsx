@@ -1,9 +1,7 @@
-import { Tooltip } from '@mui/material';
 import { Modal } from 'antd';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '../Button';
-import { title } from 'process';
 
 type TDeleteDialog = {
   title: string;

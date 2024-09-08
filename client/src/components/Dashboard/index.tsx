@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useBudgetOverview, useUserName } from '@/hooks/user/useUser';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
@@ -7,11 +8,23 @@ import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalance
 import OverviewCard from './OverviewCard';
 import SearchBar from '../SearchBar';
 import DataTable from '../DataTable';
-import AddBudget from '../AddBudget';
+import Button from '../Button';
+import Add from '@mui/icons-material/Add';
+import AddBudgetDialog from '../AddBudgetDialog';
 
 const Dashboard = () => {
   const { data: userData } = useUserName();
   const { data: budgetData } = useBudgetOverview();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const firstName = userData?.firstName;
   const income = budgetData?.totalIncome;
@@ -68,7 +81,19 @@ const Dashboard = () => {
         <div className="mt-4" suppressHydrationWarning>
           <div className="flex justify-between gap-6">
             <SearchBar />
-            <AddBudget />
+            <div className="flex-row mx-2.5">
+              <Button
+                handleClick={showModal}
+                title={
+                  <div className="flex justify-between text-base dark:text-white">
+                    <Add className="mr-2" fontSize="medium" /> Add
+                  </div>
+                }
+                type="primary"
+              />
+            </div>
+
+            <AddBudgetDialog openStatus={isModalOpen} closeModal={closeModal} />
           </div>
 
           <DataTable />

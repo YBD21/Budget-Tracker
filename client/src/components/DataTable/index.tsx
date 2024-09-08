@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import type { GetProp, TablePaginationConfig, TableProps } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
