@@ -5,9 +5,8 @@ import { SorterResult } from 'antd/es/table/interface';
 import { useSearchStore, useThemeStore } from '@/context/Store';
 import StyleWrapper from './StyleWrapper';
 
-import { useUserAction } from '@/hooks/user/useUserAction';
+import { useBudgetData, useBudgetOverview } from '@/hooks/user/useUser';
 import { DataType, useColumns } from './Columns';
-import { useBudgetOverview } from '@/hooks/user/useUser';
 
 export interface TableParams {
   pagination?: TablePaginationConfig;
@@ -19,9 +18,7 @@ export interface TableParams {
 const DataTable: React.FC = () => {
   const { data: currentUser } = useBudgetOverview();
   const { theme: themeValue } = useThemeStore();
-
   const { searchData } = useSearchStore();
-  const { budgetDataMutation } = useUserAction();
 
   const [dataSource, setDataSource] = useState<DataType[]>([]);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -34,31 +31,26 @@ const DataTable: React.FC = () => {
 
   const [totalRecords, setTotalRecords] = useState<number>(currentUser?.totalEntry || 1);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const { pagination, sortField, sortOrder, filters } = tableParams;
-      const budgetData = await budgetDataMutation.mutateAsync({
-        params: { pagination, sortField, sortOrder, filters },
-        searchData,
-      });
+  const { pagination, sortField, sortOrder, filters } = tableParams;
 
-      setDataSource(budgetData?.data);
+  // Use the useBudgetData hook to fetch the data, passing updated params and searchData
+  const { data: budgetData, isLoading } = useBudgetData({
+    params: { pagination, sortField, sortOrder, filters },
+    searchData,
+  });
 
-      setTotalRecords(budgetData?.total || 0);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+  useEffect(() => {
+    if (budgetData) {
+      setDataSource(budgetData.data); // Set the data source from the query result
+      setTotalRecords(budgetData.total || 0); // Update total records
     }
-  }, [budgetDataMutation, totalRecords, tableParams, searchData]);
+  }, [budgetData, tableParams, searchData]); // Re-run this effect if tableParams or searchData change
 
   useEffect(() => {
     if (currentUser) {
       setTotalRecords(currentUser.totalEntry || 1);
     }
   }, [currentUser]);
-
-  useEffect(() => {
-    fetchData();
-  }, [tableParams, searchData]);
 
   const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
     setTableParams({
@@ -81,7 +73,7 @@ const DataTable: React.FC = () => {
           total: totalRecords,
           showSizeChanger: false,
         }}
-        loading={budgetDataMutation?.isPending}
+        loading={isLoading} // Use isLoading to show the loading state
       />
     </StyleWrapper>
   );

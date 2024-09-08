@@ -11,14 +11,6 @@ export type budgetDataMutationType = {
 export const useUserAction = () => {
   const queryClient = useQueryClient();
 
-  const budgetDataMutation = useMutation({
-    mutationFn: ({ params, searchData }: budgetDataMutationType) =>
-      getBudgetDataByParams({ params, searchData }),
-    onSuccess: (newData) => {
-      queryClient.setQueryData([Budget_Data], () => newData);
-    },
-  });
-
   const addBudgetMutation = useMutation({
     mutationFn: createBudget,
     onSuccess: () => {
@@ -26,9 +18,9 @@ export const useUserAction = () => {
       queryClient.invalidateQueries({
         queryKey: [BUDGET_OVERVIEW],
       });
-      // queryClient.invalidateQueries({
-      //   queryKey: [Budget_Data],
-      // });
+      queryClient.invalidateQueries({
+        queryKey: [Budget_Data],
+      });
     },
   });
 
@@ -39,14 +31,13 @@ export const useUserAction = () => {
       queryClient.invalidateQueries({
         queryKey: [BUDGET_OVERVIEW],
       });
-      // queryClient.invalidateQueries({
-      //   queryKey: [Budget_Data],
-      // });
+      queryClient.invalidateQueries({
+        queryKey: [Budget_Data],
+      });
     },
   });
 
   return {
-    budgetDataMutation,
     addBudgetMutation,
     deleteBudgetMutation,
   };
