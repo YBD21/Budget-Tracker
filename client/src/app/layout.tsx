@@ -31,8 +31,9 @@ export default function RootLayout({
       </head> */}
 
       <body className={redditMono.className}>
+        
+      <ReactQueryProvider>
         <ProgressBarProvider />
-        <ReactQueryProvider>
           {/* <StateProvider initialState={initialState} reducer={reducer}> */}
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <AntdRegistry>
