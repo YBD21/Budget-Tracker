@@ -1,7 +1,7 @@
 'use server';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
-import { FIND_ACCESS, USER_DATA } from '@/constants/queryKey';
+import { FIND_ACCESS, USER_DATA } from '@/constants/cookiesName';
 
 export const decodeUser = async (accessToken: string) => {
   return jwtDecode(accessToken);

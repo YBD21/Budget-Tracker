@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 import { DASHBOARD, LOGIN, ACCESS_ONCE_ROUTES, PROTECTED_CLIENT_ROUTES } from './constants/Routes';
 import { CLIENT } from './constants/actionName';
-import { USER_DATA } from './constants/queryKey';
+import { USER_DATA } from './constants/cookiesName';
 import { decodeUser } from './services/userServer';
 import { JwtPayload } from 'jwt-decode';
 

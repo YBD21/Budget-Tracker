@@ -21,6 +21,15 @@ export const useUserAction = () => {
 
   const addBudgetMutation = useMutation({
     mutationFn: createBudget,
+    onSuccess: () => {
+      // refetch data
+      queryClient.invalidateQueries({
+        queryKey: [BUDGET_OVERVIEW],
+      });
+      // queryClient.invalidateQueries({
+      //   queryKey: [Budget_Data],
+      // });
+    },
   });
 
   const deleteBudgetMutation = useMutation({
@@ -28,8 +37,11 @@ export const useUserAction = () => {
     onSuccess: () => {
       // refetch data
       queryClient.invalidateQueries({
-        queryKey: [[Budget_Data], [BUDGET_OVERVIEW]],
+        queryKey: [BUDGET_OVERVIEW],
       });
+      // queryClient.invalidateQueries({
+      //   queryKey: [Budget_Data],
+      // });
     },
   });
 
