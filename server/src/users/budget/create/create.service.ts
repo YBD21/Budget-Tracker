@@ -60,8 +60,10 @@ export class CreateBudgetService {
 
     try {
       const summaryDoc = await fireStoreRef.get();
+      const isEmptyDoc =
+        Object.keys(summaryDoc.data()).length === 0 ? true : false;
 
-      if (!summaryDoc.exists) {
+      if (isEmptyDoc) {
         await fireStoreRef.set(newSummary);
         this.logger.log(
           `Initial BudgetSummary has been created for email: ${email}`,

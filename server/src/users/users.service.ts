@@ -61,7 +61,10 @@ export class UsersService {
     try {
       const summaryDoc = await budgetSummaryRef.get();
 
-      if (summaryDoc.exists) {
+      const isEmptyDoc =
+        Object.keys(summaryDoc.data()).length === 0 ? true : false;
+
+      if (!isEmptyDoc) {
         const {
           totalIncome,
           totalExpense,
@@ -81,7 +84,7 @@ export class UsersService {
 
         const status =
           await this.createBudgetService.createBudgetSummary(email);
-
+        console.log(status);
         if (status) {
           const updateDoc = await budgetSummaryRef.get();
 

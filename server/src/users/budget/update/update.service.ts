@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { updateBudget } from '../../dto/users.dto';
 
@@ -32,9 +32,11 @@ export class UpdateBudgetService {
       const transactionStatus = await fireStoreDB.runTransaction(
         async (transaction) => {
           const doc = await transaction.get(budgetSummaryRef);
+          const isEmptyDoc =
+            Object.keys(doc.data()).length === 0 ? true : false;
 
-          if (!doc.exists) {
-            this.logger.error(`Budget summary document does not exist.`);
+          if (isEmptyDoc) {
+            this.logger.warn(`Budget summary document does not exist.`);
             return false;
           }
 
