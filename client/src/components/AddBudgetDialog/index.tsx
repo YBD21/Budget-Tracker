@@ -1,4 +1,5 @@
 'use client';
+import moment from 'moment';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DatePicker, Modal } from 'antd';
@@ -11,6 +12,7 @@ import ErrorMessage from '../ErrorMessage';
 import { useUserAction } from '@/hooks/user/useUserAction';
 import { showToast } from '../Toast';
 import Button from '../Button';
+import { RecordT } from '../DataTable/ActionTab';
 
 export type AddBudgetInputs = {
   title: string;
@@ -23,9 +25,10 @@ export type AddBudgetInputs = {
 type TAddBudgetDialog = {
   openStatus: boolean;
   closeModal: () => void;
+  budgetInfo?: RecordT;
 };
 
-const AddBudgetDialog = ({ openStatus, closeModal }: TAddBudgetDialog) => {
+const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialog) => {
   const { theme: themeValue } = useThemeStore();
 
   const { addBudgetMutation } = useUserAction();
@@ -121,8 +124,7 @@ const AddBudgetDialog = ({ openStatus, closeModal }: TAddBudgetDialog) => {
               {...register('title')}
               type="text"
               autoComplete="off"
-              // onChange={handleClearErrors}
-              // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
+              defaultValue={budgetInfo && budgetInfo.title}
               className={`
               ${errors?.title ? 'border-red-400 focus:border-red-400 focus:ring-red-400' : 'border-black focus:border-black focus:ring-black dark:border-neutral-400 dark:focus:border-neutral-500 dark:focus:ring-neutral-400'}
               mt-2.5 block w-full rounded-md border-2  px-4 py-1.5  focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-neutral-700`}
@@ -139,6 +141,7 @@ const AddBudgetDialog = ({ openStatus, closeModal }: TAddBudgetDialog) => {
               <div className="relative mt-2">
                 <select
                   {...register('type')}
+                  defaultValue={budgetInfo && budgetInfo.type}
                   className={`${
                     errors?.type
                       ? 'border-red-400 focus:border-red-400 focus:ring-red-400'
@@ -162,6 +165,7 @@ const AddBudgetDialog = ({ openStatus, closeModal }: TAddBudgetDialog) => {
               <div className="relative mt-2">
                 <select
                   {...register('reoccur')}
+                  defaultValue={budgetInfo && budgetInfo.reoccur}
                   className={`${
                     errors?.reoccur
                       ? 'border-red-400 focus:border-red-400 focus:ring-red-400'
@@ -193,9 +197,12 @@ const AddBudgetDialog = ({ openStatus, closeModal }: TAddBudgetDialog) => {
                 >
                   <Controller
                     {...register('date')}
+                    defaultValue={budgetInfo && moment(budgetInfo.date)}
                     control={control}
                     render={({ field: { onChange, value } }) => (
-                      <DatePicker format="YYYY/MM/DD" onChange={onChange} value={value} />
+                      console.log(value),
+                      console.log(typeof value),
+                      (<DatePicker format="YYYY/MM/DD" onChange={onChange} value={value} />)
                     )}
                   />
                 </StyledDatePickerWrapper>
@@ -210,6 +217,7 @@ const AddBudgetDialog = ({ openStatus, closeModal }: TAddBudgetDialog) => {
 
               <input
                 {...register('amount')}
+                defaultValue={budgetInfo && budgetInfo.amount}
                 type="number"
                 autoComplete="off"
                 onChange={handleClearErrors}

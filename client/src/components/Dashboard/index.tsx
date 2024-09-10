@@ -93,7 +93,7 @@ const Dashboard = () => {
               />
             </div>
 
-            <AddBudgetDialog openStatus={isModalOpen} closeModal={closeModal} />
+            {isModalOpen && <AddBudgetDialog openStatus={isModalOpen} closeModal={closeModal} />}
           </div>
 
           <DataTable />
