@@ -5,6 +5,7 @@ import {
   Get,
   InternalServerErrorException,
   Logger,
+  Patch,
   Post,
   Query,
   Req,
@@ -12,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BudgetDTO } from './dto/users.dto';
+import { BudgetDTO, UpdateBudgetDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './budget/create/create.service';
 import { UpdateBudgetService } from './budget/update/update.service';
@@ -66,6 +67,33 @@ export class UsersController {
       ]);
 
       return res.send(status && updateStatus && updateEntry);
+    } catch (error) {
+      this.logger.error('Error occurred while creating budget', error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Patch('edit-budget')
+  async handleUpdateBudget(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() budgetData: UpdateBudgetDTO,
+  ) {
+    const userData = req?.userData;
+    const userId = userData?.id;
+
+    try {
+      const [status, updateStatus] = await Promise.all([
+        this.updateBudget.updateBudget(userId, budgetData),
+        this.updateBudget.updateBudgetSummary({
+          userId,
+          amount: budgetData.amount,
+          type: budgetData.type,
+          operation: budgetData.operation,
+        }),
+      ]);
+
+      return res.send(status && updateStatus);
     } catch (error) {
       this.logger.error('Error occurred while creating budget', error.stack);
       throw new InternalServerErrorException();
