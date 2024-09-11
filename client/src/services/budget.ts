@@ -1,4 +1,3 @@
-import { AddBudgetInputs } from '@/components/AddBudgetDialog';
 import client from './axiosClient';
 import { getHttpOnlyUserData } from './userServer';
 import { budgetDataMutationType } from '@/hooks/user/useUserAction';
@@ -36,8 +35,13 @@ export const getBudgetDataByParams = async ({ params, searchData }: budgetDataMu
   return response.data;
 };
 
-export const createBudget = async (data: AddBudgetInputs) => {
+export const createBudget = async (data: any) => {
   const respond = await client().post(`${baseUrl}/create-budget`, data);
+  return respond.data;
+};
+
+export const editBudget = async (data: any) => {
+  const respond = await client().patch(`${baseUrl}/edit-budget`, data);
   return respond.data;
 };
 

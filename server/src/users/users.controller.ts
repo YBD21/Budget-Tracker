@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BudgetDTO, UpdateBudgetDTO } from './dto/users.dto';
+import { BudgetDTO, BudgetWithID } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { CreateBudgetService } from './budget/create/create.service';
 import { UpdateBudgetService } from './budget/update/update.service';
@@ -77,25 +77,35 @@ export class UsersController {
   async handleUpdateBudget(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() budgetData: UpdateBudgetDTO,
+    @Body() budgetData: BudgetWithID,
   ) {
     const userData = req?.userData;
     const userId = userData?.id;
 
     try {
-      const [status, updateStatus] = await Promise.all([
-        this.updateBudget.updateBudget(userId, budgetData),
-        this.updateBudget.updateBudgetSummary({
-          userId,
-          amount: budgetData.amount,
-          type: budgetData.type,
-          operation: budgetData.operation,
-        }),
-      ]);
+      const [deleteStatus, updateDeleteStatus, status, updateStatus] =
+        await Promise.all([
+          this.deleteBudget.deleteBudgetRecord(userId, budgetData.id),
+          this.updateBudget.updateBudgetSummary({
+            userId,
+            amount: budgetData.amount,
+            type: budgetData.type,
+            operation: 'subtract',
+          }),
+          this.updateBudget.updateBudget(userId, budgetData),
+          this.updateBudget.updateBudgetSummary({
+            userId,
+            amount: budgetData.amount,
+            type: budgetData.type,
+            operation: 'add',
+          }),
+        ]);
 
-      return res.send(status && updateStatus);
+      return res.send(
+        deleteStatus && updateDeleteStatus && status && updateStatus,
+      );
     } catch (error) {
-      this.logger.error('Error occurred while creating budget', error.stack);
+      this.logger.error('Error occurred while updating budget', error.stack);
       throw new InternalServerErrorException();
     }
   }
@@ -151,7 +161,7 @@ export class UsersController {
   async handleDeleteBudget(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() budgetData: any, //BudgetWithID
+    @Body() budgetData: BudgetWithID,
   ) {
     const userData = req?.userData;
     const userId = userData?.id;

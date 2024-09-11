@@ -1,5 +1,5 @@
 'use client';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DatePicker, Modal } from 'antd';
@@ -14,7 +14,7 @@ import { showToast } from '../Toast';
 import Button from '../Button';
 import { RecordT } from '../DataTable/ActionTab';
 
-export type AddBudgetInputs = {
+type AddBudgetInputs = {
   title: string;
   date: Date;
   type: 'Income' | 'Expense';
@@ -28,10 +28,12 @@ type TAddBudgetDialog = {
   budgetInfo?: RecordT;
 };
 
+const DateFormat = 'YYYY/MM/DD';
+
 const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialog) => {
   const { theme: themeValue } = useThemeStore();
 
-  const { addBudgetMutation } = useUserAction();
+  const { addBudgetMutation, editBudgetMutation } = useUserAction();
 
   const typeOptions = ['Income', 'Expense'];
   const reoccurOptions = ['Once', 'Monthly', 'Yearly'];
@@ -94,6 +96,28 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
     }
   };
 
+  const handleEditSubmit: SubmitHandler<AddBudgetInputs> = async (data) => {
+    const budgetData = {
+      id: budgetInfo?.key,
+      title: data?.title,
+      date: data?.date,
+      reoccur: data?.reoccur,
+      type: data.type,
+      amount: data?.amount,
+    };
+
+    try {
+      const respond = await editBudgetMutation.mutateAsync(budgetData);
+
+      if (respond === true) {
+        showToast({ type: 'success', content: 'Budget updated successfully !' });
+      }
+      closeModal();
+    } catch (error: any) {
+      showToast({ type: 'error', content: `${error.message} !` });
+    }
+  };
+
   return (
     <Modal
       centered
@@ -106,7 +130,12 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
       closeIcon={<CloseIcon className="scale-110 text-red-600 dark:text-red-700" />}
       footer={(_) => (
         <div className="w-1/4 flex justify-center mx-auto mt-10">
-          <Button handleClick={handleSubmit(handleAddSubmit)} small type="primary" title="Submit" />
+          <Button
+            handleClick={handleSubmit(budgetInfo ? handleEditSubmit : handleAddSubmit)}
+            small
+            type="primary"
+            title="Submit"
+          />
         </div>
       )}
     >
@@ -193,14 +222,15 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
                   className={`${themeValue === 'light' ? 'light' : 'dark'}`}
                 >
                   <Controller
-                    {...register('date')}
-                    // @ts-expect-error
-                    defaultValue={budgetInfo && moment(budgetInfo.date)}
+                    name="date"
                     control={control}
                     render={({ field: { onChange, value } }) => (
-                      console.log(value),
-                      console.log(typeof value),
-                      (<DatePicker format="YYYY/MM/DD" onChange={onChange} value={value} />)
+                      <DatePicker
+                        defaultValue={budgetInfo && dayjs(budgetInfo.date, DateFormat)}
+                        format={DateFormat}
+                        onChange={onChange}
+                        value={value}
+                      />
                     )}
                   />
                 </StyledDatePickerWrapper>

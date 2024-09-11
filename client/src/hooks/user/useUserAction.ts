@@ -1,6 +1,6 @@
 import { TableParams } from '@/components/DataTable';
 import { Budget_Data, BUDGET_OVERVIEW } from '@/constants/queryKey';
-import { createBudget, deleteBudget, getBudgetDataByParams } from '@/services/budget';
+import { createBudget, deleteBudget, editBudget } from '@/services/budget';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export type budgetDataMutationType = {
@@ -13,6 +13,19 @@ export const useUserAction = () => {
 
   const addBudgetMutation = useMutation({
     mutationFn: createBudget,
+    onSuccess: () => {
+      // refetch data
+      queryClient.invalidateQueries({
+        queryKey: [BUDGET_OVERVIEW],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [Budget_Data],
+      });
+    },
+  });
+
+  const editBudgetMutation = useMutation({
+    mutationFn: editBudget,
     onSuccess: () => {
       // refetch data
       queryClient.invalidateQueries({
@@ -39,6 +52,7 @@ export const useUserAction = () => {
 
   return {
     addBudgetMutation,
+    editBudgetMutation,
     deleteBudgetMutation,
   };
 };

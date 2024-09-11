@@ -28,7 +28,7 @@ export class UpdateBudgetService {
       .doc(unixTimestamp.toString());
 
     try {
-      await budgetCollectionRef.update(newEntry);
+      await budgetCollectionRef.set(newEntry);
       return true; // Return true if the operation is successful
     } catch (error) {
       this.logger.error(

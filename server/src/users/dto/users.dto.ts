@@ -48,9 +48,3 @@ export class BudgetWithID extends BudgetDTO {
   @IsString()
   id: string;
 }
-
-export class UpdateBudgetDTO extends BudgetDTO {
-  @IsString()
-  @IsNotEmpty()
-  operation: 'add' | 'subtract';
-}
