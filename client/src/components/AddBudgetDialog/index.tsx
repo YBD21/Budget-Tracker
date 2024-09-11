@@ -73,7 +73,7 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
     clearErrors();
   };
 
-  const handleLoginSubmit: SubmitHandler<AddBudgetInputs> = async (data) => {
+  const handleAddSubmit: SubmitHandler<AddBudgetInputs> = async (data) => {
     const budgetData = {
       title: data?.title,
       date: data?.date,
@@ -97,19 +97,16 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
   return (
     <Modal
       centered
-      title={<p className="text-center text-lg font-bold">Add Item</p>}
+      title={
+        <p className="text-center text-lg font-bold">{budgetInfo ? 'Edit Item' : 'Add Item'}</p>
+      }
       open={openStatus}
       onCancel={closeModal} // Close the modal
       afterClose={handleAfterClose} // Reset data after close
       closeIcon={<CloseIcon className="scale-110 text-red-600 dark:text-red-700" />}
       footer={(_) => (
         <div className="w-1/4 flex justify-center mx-auto mt-10">
-          <Button
-            handleClick={handleSubmit(handleLoginSubmit)}
-            small
-            type="primary"
-            title="Submit"
-          />
+          <Button handleClick={handleSubmit(handleAddSubmit)} small type="primary" title="Submit" />
         </div>
       )}
     >
@@ -197,6 +194,7 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
                 >
                   <Controller
                     {...register('date')}
+                    // @ts-expect-error
                     defaultValue={budgetInfo && moment(budgetInfo.date)}
                     control={control}
                     render={({ field: { onChange, value } }) => (
