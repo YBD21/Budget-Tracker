@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, Logger } from '@nestjs/common';
 import { FirebaseService } from 'src/firebase/firebase.service';
-import { BudgetDTO, updateBudget } from '../../dto/users.dto';
+import { BudgetWithID, updateBudget } from '../../dto/users.dto';
 
 @Injectable()
 export class UpdateBudgetService {
@@ -11,27 +11,91 @@ export class UpdateBudgetService {
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
 
-  async updateBudget(userId: any, budgetData: BudgetDTO): Promise<boolean> {
+  async updateBudgetRecordAndUpdateSummary(
+    userId: string,
+    budgetData: BudgetWithID,
+  ): Promise<boolean> {
+    const fireStoreDB = this.firebaseService.getFirestore();
     const unixTimestamp = new Date().getTime();
     const newEntry = {
       ...budgetData,
-      created_at: unixTimestamp,
+      updated_at: unixTimestamp,
     };
 
-    // Path of Firestore -- User/userid/BudgetEntry/createdDate
-    const budgetCollectionRef = this.firebaseService
-      .getFirestore()
+    // Path of Firestore -- User/userid/BudgetEntry/budgetData.id
+    const budgetCollectionRef = fireStoreDB
       .collection(this.usersCollectionPath)
       .doc(userId)
       .collection(this.budgetEntryCollectionPath)
-      .doc(unixTimestamp.toString());
+      .doc(budgetData.id);
+
+    const budgetSummaryRef = fireStoreDB
+      .collection(this.usersCollectionPath)
+      .doc(userId);
 
     try {
-      await budgetCollectionRef.set(newEntry);
-      return true; // Return true if the operation is successful
+      const transactionStatus = await fireStoreDB.runTransaction(
+        async (transaction) => {
+          // Fetch previous data
+          const prevBudgetSnapshot = await transaction.get(budgetCollectionRef);
+
+          if (!prevBudgetSnapshot.exists) {
+            this.logger.error(`Budget record does not exist: ${budgetData.id}`);
+            return false;
+          }
+
+          // Fetch budget summary
+          const budgetSummarySnapshot = await transaction.get(budgetSummaryRef);
+
+          if (!budgetSummarySnapshot.exists) {
+            this.logger.error('Budget summary document does not exist.');
+            return false;
+          }
+
+          // All reads are completed here, now proceed with writes
+
+          // Update the budget entry in the transaction
+          transaction.update(budgetCollectionRef, newEntry);
+          this.logger.log(`Budget entry updated for user: ${userId}`);
+
+          const { totalIncome = 0, totalExpense = 0 } =
+            budgetSummarySnapshot.data() || {};
+
+          const { prev_amount: prevAmount } = prevBudgetSnapshot.data() || {};
+
+          // Determine operation based on previous and new amount
+          const amountDifference = budgetData.amount - (prevAmount || 0);
+          const operation = amountDifference >= 0 ? 'add' : 'subtract';
+          const absoluteAmount = Math.abs(amountDifference);
+
+          // Calculate updated summary based on the type of budget and subtract or add operation
+          const updatedSummary = await this.calculateUpdatedSummary(
+            budgetData.type,
+            {
+              totalIncome,
+              totalExpense,
+              amount: absoluteAmount,
+              operation,
+            },
+          );
+
+          if (!updatedSummary) {
+            this.logger.error(`Invalid data for type: ${budgetData.type}`);
+            return false;
+          }
+
+          // Update the budget summary
+          transaction.update(budgetSummaryRef, updatedSummary);
+
+          this.logger.log(`Budget summary updated for user: ${userId}`);
+          return true;
+        },
+      );
+
+      return transactionStatus;
     } catch (error) {
       this.logger.error(
-        `Error while adding new Budget to Firestore: ${error.message}`,
+        `Error while updating existing Budget to Firestore: ${error.message}`,
       );
       return false; // Return false if an error occurs
     }

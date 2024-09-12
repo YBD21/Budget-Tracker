@@ -36,7 +36,9 @@ export class CreateBudgetService {
       .collection(this.budgetEntryCollectionPath)
       .doc(unixTimestamp.toString());
 
-    const budgetSummaryRef = this.getBudgetSummaryRef(fireStoreDB, userId);
+    const budgetSummaryRef = fireStoreDB
+      .collection(this.usersCollectionPath)
+      .doc(userId);
 
     try {
       const transactionStatus = await fireStoreDB.runTransaction(
@@ -143,12 +145,5 @@ export class CreateBudgetService {
         'An error occurred while creating new budget summary. Please try again later.',
       );
     }
-  }
-
-  private getBudgetSummaryRef(
-    fireStoreDB: FirebaseFirestore.Firestore,
-    userId: string,
-  ): FirebaseFirestore.DocumentReference {
-    return fireStoreDB.collection(this.usersCollectionPath).doc(userId);
   }
 }

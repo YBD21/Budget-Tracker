@@ -5,6 +5,7 @@ import {
   Get,
   InternalServerErrorException,
   Logger,
+  Patch,
   // Patch,
   Post,
   Query,
@@ -67,42 +68,27 @@ export class UsersController {
     }
   }
 
-  // @Patch('edit-budget')
-  // async handleUpdateBudget(
-  //   @Req() req: Request,
-  //   @Res() res: Response,
-  //   @Body() budgetData: BudgetWithID,
-  // ) {
-  //   const userData = req?.userData;
-  //   const userId = userData?.id;
+  @Patch('edit-budget')
+  async handleUpdateBudget(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() budgetData: BudgetWithID,
+  ) {
+    const userData = req?.userData;
+    const userId = userData?.id;
 
-  //   try {
-  //     const [deleteStatus, updateDeleteStatus, status, updateStatus] =
-  //       await Promise.all([
-  //         this.deleteBudget.deleteBudgetRecord(userId, budgetData.id),
-  //         this.updateBudget.updateBudgetSummary({
-  //           userId,
-  //           amount: budgetData.amount,
-  //           type: budgetData.type,
-  //           operation: 'subtract',
-  //         }),
-  //         this.updateBudget.updateBudget(userId, budgetData),
-  //         this.updateBudget.updateBudgetSummary({
-  //           userId,
-  //           amount: budgetData.amount,
-  //           type: budgetData.type,
-  //           operation: 'add',
-  //         }),
-  //       ]);
+    try {
+      const status = await this.updateBudget.updateBudgetRecordAndUpdateSummary(
+        userId,
+        budgetData,
+      );
 
-  //     return res.send(
-  //       deleteStatus && updateDeleteStatus && status && updateStatus,
-  //     );
-  //   } catch (error) {
-  //     this.logger.error('Error occurred while updating budget', error.stack);
-  //     throw new InternalServerErrorException();
-  //   }
-  // }
+      return res.send(status);
+    } catch (error) {
+      this.logger.error('Error occurred while updating budget', error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
 
   @UseGuards(UserGuard)
   @Get('budget-overview')
