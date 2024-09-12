@@ -69,7 +69,7 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
   } = useForm(validationOpt);
 
   useEffect(() => {
-    const currentDate = dayjs(budgetInfo?.date, DateFormat);
+    const currentDate = dayjs(budgetInfo?.date);
     // @ts-expect-error
     setValue('date', currentDate); // Set the date value using setValue
   }, [setValue, budgetInfo]);
