@@ -10,7 +10,6 @@ export class UpdateBudgetService {
 
   private readonly usersCollectionPath = 'Users';
   private readonly budgetEntryCollectionPath = 'BudgetEntry';
-  private readonly typeOptions: string[] = ['Income', 'Expense'];
 
   async updateBudget(userId: any, budgetData: BudgetDTO): Promise<boolean> {
     const unixTimestamp = new Date().getTime();
@@ -49,11 +48,6 @@ export class UpdateBudgetService {
       .collection(this.usersCollectionPath)
       .doc(userId);
 
-    if (!this.typeOptions.includes(type)) {
-      this.logger.error(`Invalid type provided: ${type}`);
-      return false;
-    }
-
     try {
       const transactionStatus = await fireStoreDB.runTransaction(
         async (transaction) => {
@@ -67,7 +61,7 @@ export class UpdateBudgetService {
           }
 
           const { totalIncome = 0, totalExpense = 0 } = doc.data() || {};
-          const updatedSummary = this.calculateUpdatedSummary(type, {
+          const updatedSummary = await this.calculateUpdatedSummary(type, {
             totalIncome,
             totalExpense,
             amount,
@@ -103,7 +97,7 @@ export class UpdateBudgetService {
     }
   }
 
-  private calculateUpdatedSummary(
+  async calculateUpdatedSummary(
     type: string,
     data: {
       totalIncome: number;
