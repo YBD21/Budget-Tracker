@@ -13,6 +13,7 @@ import { useUserAction } from '@/hooks/user/useUserAction';
 import { showToast } from '../Toast';
 import Button from '../Button';
 import { RecordT } from '../DataTable/ActionTab';
+import { useEffect } from 'react';
 
 type AddBudgetInputs = {
   title: string;
@@ -59,12 +60,19 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
 
   const {
     control,
+    setValue,
     register,
     handleSubmit,
     clearErrors,
     reset,
     formState: { errors },
   } = useForm(validationOpt);
+
+  useEffect(() => {
+    const currentDate = dayjs(budgetInfo?.date, DateFormat);
+    // @ts-expect-error
+    setValue('date', currentDate); // Set the date value using setValue
+  }, [setValue, budgetInfo]);
 
   const handleAfterClose = () => {
     reset();
@@ -225,12 +233,7 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
                     name="date"
                     control={control}
                     render={({ field: { onChange, value } }) => (
-                      <DatePicker
-                        defaultValue={budgetInfo && dayjs(budgetInfo.date, DateFormat)}
-                        format={DateFormat}
-                        onChange={onChange}
-                        value={value}
-                      />
+                      <DatePicker format={DateFormat} onChange={onChange} value={value} />
                     )}
                   />
                 </StyledDatePickerWrapper>
