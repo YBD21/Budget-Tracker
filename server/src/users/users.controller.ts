@@ -55,18 +55,12 @@ export class UsersController {
     const userId = userData?.id;
 
     try {
-      const [status, updateStatus, updateEntry] = await Promise.all([
-        this.createBudget.createBudget(userId, budgetData),
-        this.updateBudget.updateBudgetSummary({
-          userId,
-          amount: budgetData.amount,
-          type: budgetData.type,
-          operation: 'add',
-        }),
-        this.updateBudget.updateEntryAndPageCount({ userId, operation: 'add' }),
-      ]);
+      const status = await this.createBudget.createBudgetRecordAndUpdateSummary(
+        userId,
+        budgetData,
+      );
 
-      return res.send(status && updateStatus && updateEntry);
+      return res.send(status);
     } catch (error) {
       this.logger.error('Error occurred while creating budget', error.stack);
       throw new InternalServerErrorException();

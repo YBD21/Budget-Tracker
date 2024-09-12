@@ -17,7 +17,7 @@ export class DeleteBudgetService {
 
   async deleteBudgetRecordAndUpdateSummary(
     userId: string,
-    BudgetData: BudgetWithID,
+    budgetData: BudgetWithID,
   ): Promise<boolean> {
     const fireStoreDB = this.firebaseService.getFirestore();
     const budgetEntryDataRef = this.getBudgetEntryDataRef(fireStoreDB, userId);
@@ -27,11 +27,11 @@ export class DeleteBudgetService {
       const transactionStatus = await fireStoreDB.runTransaction(
         async (transaction) => {
           // Fetch budget entry first
-          const budgetEntryRef = budgetEntryDataRef.doc(BudgetData.id);
+          const budgetEntryRef = budgetEntryDataRef.doc(budgetData.id);
           const budgetEntrySnapshot = await transaction.get(budgetEntryRef);
 
           if (!budgetEntrySnapshot.exists) {
-            this.logger.warn(`Budget record does not exist: ${BudgetData.id}`);
+            this.logger.warn(`Budget record does not exist: ${budgetData.id}`);
             return false;
           }
 
@@ -47,7 +47,7 @@ export class DeleteBudgetService {
 
           // Delete the budget entry
           transaction.delete(budgetEntryRef);
-          this.logger.log(`Budget record deleted: ${BudgetData.id}`);
+          this.logger.log(`Budget record deleted: ${budgetData.id}`);
 
           const {
             totalIncome = 0,
@@ -58,15 +58,15 @@ export class DeleteBudgetService {
 
           // Calculate updated summary based on the type of budget and subtract operation
           const updatedSummary =
-            await this.updateService.calculateUpdatedSummary(BudgetData.type, {
+            await this.updateService.calculateUpdatedSummary(budgetData.type, {
               totalIncome,
               totalExpense,
-              amount: BudgetData.amount,
+              amount: budgetData.amount,
               operation: 'subtract',
             });
 
           if (!updatedSummary) {
-            this.logger.error(`Invalid data for type: ${BudgetData.type}`);
+            this.logger.error(`Invalid data for type: ${budgetData.type}`);
             return false;
           }
 
