@@ -2,6 +2,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { BudgetWithID, updateBudget } from '../../dto/users.dto';
+import { type } from 'os';
+import { async } from 'rxjs';
 
 @Injectable()
 export class UpdateBudgetService {
@@ -16,13 +18,13 @@ export class UpdateBudgetService {
     budgetData: BudgetWithID,
   ): Promise<boolean> {
     const fireStoreDB = this.firebaseService.getFirestore();
-    const unixTimestamp = new Date().getTime();
+    const unixTimestamp = new Date().getTime(); // Cleaner way to get current time
     const newEntry = {
       ...budgetData,
       updated_at: unixTimestamp,
     };
 
-    // Path of Firestore -- User/userid/BudgetEntry/budgetData.id
+    // Firestore paths
     const budgetCollectionRef = fireStoreDB
       .collection(this.usersCollectionPath)
       .doc(userId)
@@ -36,9 +38,8 @@ export class UpdateBudgetService {
     try {
       const transactionStatus = await fireStoreDB.runTransaction(
         async (transaction) => {
-          // Fetch previous data
+          // Fetch previous budget data
           const prevBudgetSnapshot = await transaction.get(budgetCollectionRef);
-
           if (!prevBudgetSnapshot.exists) {
             this.logger.error(`Budget record does not exist: ${budgetData.id}`);
             return false;
@@ -46,45 +47,106 @@ export class UpdateBudgetService {
 
           // Fetch budget summary
           const budgetSummarySnapshot = await transaction.get(budgetSummaryRef);
-
           if (!budgetSummarySnapshot.exists) {
             this.logger.error('Budget summary document does not exist.');
             return false;
           }
 
-          // All reads are completed here, now proceed with writes
-
-          // Update the budget entry in the transaction
+          // All reads are completed, proceed with writes
           transaction.update(budgetCollectionRef, newEntry);
           this.logger.log(`Budget entry updated for user: ${userId}`);
 
-          const { totalIncome = 0, totalExpense = 0 } =
-            budgetSummarySnapshot.data() || {};
+          const {
+            totalIncome = 0,
+            totalExpense = 0,
+            totalBalance = 0,
+          } = budgetSummarySnapshot.data() || {};
 
-          const { prev_amount: prevAmount } = prevBudgetSnapshot.data() || {};
+          const { amount: prevAmount = 0, type: prevType } =
+            prevBudgetSnapshot.data() || {};
 
-          // Determine operation based on previous and new amount
-          const amountDifference = budgetData.amount - (prevAmount || 0);
-          const operation = amountDifference >= 0 ? 'add' : 'subtract';
-          const absoluteAmount = Math.abs(amountDifference);
+          let amountDifference = 0;
+          let operation = 'add'; // Default operation
 
-          // Calculate updated summary based on the type of budget and subtract or add operation
-          const updatedSummary = await this.calculateUpdatedSummary(
-            budgetData.type,
-            {
-              totalIncome,
-              totalExpense,
-              amount: absoluteAmount,
-              operation,
-            },
-          );
-
-          if (!updatedSummary) {
-            this.logger.error(`Invalid data for type: ${budgetData.type}`);
-            return false;
+          // If the types are the same (either 'Income' or 'Expense')
+          if (budgetData.type === prevType) {
+            // Determine the amount difference between the new and previous amount
+            amountDifference = budgetData.amount - prevAmount;
+            operation = amountDifference >= 0 ? 'add' : 'subtract';
+          } else {
+            // If the types are different (e.g., 'Income' changed to 'Expense' or vice versa)
+            // When type changes, the full previous amount must be subtracted, and the new amount added
+            if (prevType === 'Income') {
+              // If previous type was 'Income', subtract the old income
+              amountDifference = prevAmount + budgetData.amount;
+              operation = 'subtract'; // Because we are removing income and adding expense
+            } else {
+              // If previous type was 'Expense', add the old expense back and then subtract the new income
+              amountDifference = prevAmount + budgetData.amount;
+              operation = 'add'; // Because we are removing expense and adding income
+            }
           }
 
-          // Update the budget summary
+          const absoluteAmount = Math.abs(amountDifference);
+
+          // Update the budget summary based on the type of budgetData
+          const updatedSummary = {
+            totalIncome,
+            totalExpense,
+            totalBalance,
+          };
+
+          if (prevType === 'Expense' && budgetData.type === 'Income') {
+            updatedSummary.totalIncome += budgetData.amount;
+            updatedSummary.totalExpense -= prevAmount;
+            updatedSummary.totalBalance =
+              updatedSummary.totalIncome - updatedSummary.totalExpense;
+          } else if (prevType === 'Income' && budgetData.type === 'Expense') {
+            updatedSummary.totalIncome -= prevAmount;
+            updatedSummary.totalExpense += budgetData.amount;
+            updatedSummary.totalBalance =
+              updatedSummary.totalIncome - updatedSummary.totalExpense;
+          } else if (
+            prevType === 'Income' &&
+            budgetData.type === 'Income' &&
+            operation === 'add'
+          ) {
+            updatedSummary.totalIncome += absoluteAmount;
+            updatedSummary.totalExpense =
+              updatedSummary.totalBalance - absoluteAmount;
+            updatedSummary.totalBalance =
+              updatedSummary.totalIncome - updatedSummary.totalExpense;
+          } else if (
+            prevType === 'Income' &&
+            budgetData.type === 'Income' &&
+            operation === 'subtract'
+          ) {
+            updatedSummary.totalIncome -= absoluteAmount;
+            updatedSummary.totalExpense =
+              updatedSummary.totalBalance - absoluteAmount;
+            updatedSummary.totalBalance =
+              updatedSummary.totalIncome - updatedSummary.totalExpense;
+          } else if (
+            prevType === 'Expense' &&
+            budgetData.type === 'Expense' &&
+            operation === 'subtract'
+          ) {
+            updatedSummary.totalExpense -= absoluteAmount;
+
+            updatedSummary.totalBalance =
+              updatedSummary.totalIncome - updatedSummary.totalExpense;
+          } else if (
+            prevType === 'Expense' &&
+            budgetData.type === 'Expense' &&
+            operation === 'add'
+          ) {
+            updatedSummary.totalExpense += absoluteAmount;
+
+            updatedSummary.totalBalance =
+              updatedSummary.totalIncome - updatedSummary.totalExpense;
+          }
+
+          // Update the summary
           transaction.update(budgetSummaryRef, updatedSummary);
 
           this.logger.log(`Budget summary updated for user: ${userId}`);
@@ -95,7 +157,7 @@ export class UpdateBudgetService {
       return transactionStatus;
     } catch (error) {
       this.logger.error(
-        `Error while updating existing Budget to Firestore: ${error.message}`,
+        `Error while updating existing Budget in Firestore: ${error.message}`,
       );
       return false; // Return false if an error occurs
     }
