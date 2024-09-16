@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { deleteAllCookies } from '@/services/userServer';
 
 type userProps = {
   openStatus: boolean;
@@ -10,6 +12,7 @@ type userProps = {
 };
 
 const UserDropDown = ({ openStatus, onChange }: userProps) => {
+  const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -24,6 +27,11 @@ const UserDropDown = ({ openStatus, onChange }: userProps) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownRef]);
+
+  const logOut = async () => {
+    await deleteAllCookies();
+    router.refresh(); // refresh page
+  };
 
   return (
     <div
@@ -47,7 +55,7 @@ const UserDropDown = ({ openStatus, onChange }: userProps) => {
           {/* LogOut */}
           <li
             className="flex items-center px-1.5 py-2.5 text-gray-700 hover:bg-gray-100 hover:text-red-800 rounded-md"
-            // onClick={logOut}
+            onClick={logOut}
           >
             <ExitToAppIcon fontSize="large" className="ml-3 mr-10" />
             <span className="w-full font-medium text-base  hover:text-red-800">Logout</span>

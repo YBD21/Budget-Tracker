@@ -53,3 +53,14 @@ export const getHttpOnlyUserData = (): Promise<string | null> => {
     resolve(token?.value || null);
   });
 };
+
+export const deleteAllCookies = (): Promise<void> => {
+  const cookieStore = cookies();
+  return new Promise((resolve) => {
+    const allCookies = cookieStore.getAll(); // Get all cookies
+    allCookies.forEach((cookie) => {
+      cookieStore.delete(cookie.name);
+    });
+    resolve();
+  });
+};
