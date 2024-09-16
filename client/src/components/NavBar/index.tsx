@@ -9,6 +9,7 @@ import ToggleTheme from '../ToggleTheme';
 import Logo from '@/assets/logo.svg';
 // import Sidebar from '../SideBar';
 import { DASHBOARD } from '@/constants/Routes';
+import Profile from '../Profile';
 
 type NavProps = { children: React.ReactNode };
 
@@ -65,9 +66,7 @@ const NavBar = ({ children }: NavProps) => {
           </li> */}
 
           {/* Profile  */}
-          <li className="my-auto mx-4">
-            <AccountCircleIcon fontSize="large" className="cursor-pointer" />
-          </li>
+          <Profile />
         </ul>
       </header>
       <main className="flex-1 flex">
