@@ -49,6 +49,7 @@ const AddBudgetDialog = ({ openStatus, closeModal, budgetInfo }: TAddBudgetDialo
       .oneOf(['Once', 'Monthly', 'Yearly'], 'Reoccur must be Once, Monthly, or Yearly')
       .required('Reoccur is required!'),
     amount: Yup.number()
+      .max(999999999)
       .typeError('Amount is required!')
       .positive('Amount must be a positive number')
       .required('Amount is required!'),
