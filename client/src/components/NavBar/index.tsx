@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -9,16 +10,24 @@ import ToggleTheme from '../ToggleTheme';
 import Logo from '@/assets/logo.svg';
 // import Sidebar from '../SideBar';
 import { DASHBOARD } from '@/constants/Routes';
-import Profile from '../Profile';
+import UserDropDown from '../UserDropDown';
 
 type NavProps = { children: React.ReactNode };
 
 const NavBar = ({ children }: NavProps) => {
-  // const [isExpand, setIsExpand] = useState(false);
+  const [isUserclicked, setIsUserClicked] = useState(false);
 
   // const toggleExpand = (status: boolean) => {
   //   setIsExpand(!status);
   // };
+
+  const showMenu = () => {
+    setIsUserClicked(!isUserclicked);
+  };
+
+  const handelOnChangeFromChild = (status: boolean) => {
+    setIsUserClicked(status);
+  };
 
   return (
     <div className="overflow-visible h-svh">
@@ -66,7 +75,13 @@ const NavBar = ({ children }: NavProps) => {
           </li> */}
 
           {/* Profile  */}
-          <Profile />
+          <li className="my-auto mx-4" role="button" onClick={showMenu}>
+            <AccountCircleIcon fontSize="large" className="cursor-pointer" />
+          </li>
+          {/* UserDropDown  */}
+          {isUserclicked && (
+            <UserDropDown openStatus={isUserclicked} onChange={handelOnChangeFromChild} />
+          )}
         </ul>
       </header>
       <main className="flex-1 flex">
