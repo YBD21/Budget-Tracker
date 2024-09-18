@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import type { TableColumnsType } from 'antd';
 import ActionTab from './ActionTab';
-import { render } from 'react-dom';
 
 export interface DataType {
   key: React.Key;
@@ -12,7 +11,7 @@ export interface DataType {
   amount: number;
 }
 
-export const useColumns = (): TableColumnsType<DataType> => {
+export const useColumns = (): TableColumnsType<any> => {
   return useMemo(
     () => [
       {

@@ -1,6 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-const MessageBox = ({ text, checkClick, isError = true }) => {
+type MessageT = {
+  text: any;
+  checkClick: any;
+  isError?: boolean;
+};
+
+const MessageBox = ({ text, checkClick, isError = true }: MessageT) => {
   return (
     <div
       className={`flex flex-col justify-center border ${isError ? 'bg-red-100 border-red-900 text-red-800' : 'bg-green-100 border-green-900 text-green-800'}  px-2.5 py-3 rounded-md relative mt-4`}
@@ -25,7 +31,7 @@ const MessageBox = ({ text, checkClick, isError = true }) => {
         </svg>
       </span>
     </div>
-  )
-}
+  );
+};
 
-export default MessageBox
+export default MessageBox;
