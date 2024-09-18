@@ -29,6 +29,7 @@ const UserDropDown = ({ openStatus, onChange }: userProps) => {
   }, [dropdownRef]);
 
   const logOut = async () => {
+    // add api for logout
     await deleteAllCookies();
     router.refresh(); // refresh page
   };
@@ -46,18 +47,18 @@ const UserDropDown = ({ openStatus, onChange }: userProps) => {
         {/* <div className="px-4 py-3 border-b border-gray-600"><Profile /></div>  */}
         <ul className="divide-y divide-gray-600 p-2">
           {/* Setting */}
-          <li className="flex items-center px-1.5 py-2.5  text-gray-700  hover:bg-gray-100 rounded-md ">
+          {/* <li className="flex items-center px-1.5 py-2.5  text-gray-700  hover:bg-gray-100 rounded-md ">
             <Link href="/Setting" className="w-full font-medium text-base hover:text-black">
-              <SettingsIcon fontSize="large" className="ml-3 mr-10" />
+              <SettingsIcon fontSize="medium" className="ml-3 mr-10" />
               Setting
             </Link>
-          </li>
+          </li> */}
           {/* LogOut */}
           <li
             className="flex items-center px-1.5 py-2.5 text-gray-700 hover:bg-gray-100 hover:text-red-800 rounded-md"
             onClick={logOut}
           >
-            <ExitToAppIcon fontSize="large" className="ml-3 mr-10" />
+            <ExitToAppIcon fontSize="medium" className="ml-3 mr-10" />
             <span className="w-full font-medium text-base  hover:text-red-800">Logout</span>
           </li>
         </ul>
