@@ -16,7 +16,7 @@ export const useAuthUser = () => {
   const loginUserMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: async (data) => {
-      const setCookiesStatus = setHttpOnlyUserData(data.accessToken);
+      const setCookiesStatus = await setHttpOnlyUserData(data.accessToken);
     },
   });
 
