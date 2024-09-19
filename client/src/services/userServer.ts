@@ -7,6 +7,8 @@ export const decodeUser = async (accessToken: string) => {
   return jwtDecode(accessToken);
 };
 
+const ROOT_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
+
 export const setHttpOnlyUserData = (token: any): boolean => {
   try {
     const time = 1 * 60 * 60 * 1000; // 60 min
@@ -18,6 +20,7 @@ export const setHttpOnlyUserData = (token: any): boolean => {
       path: '/',
       maxAge: time,
       secure: true,
+      domain: ROOT_URL,
       // expires: new Date(Date.now() + time),
       sameSite: 'strict',
     });
