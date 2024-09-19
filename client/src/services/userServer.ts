@@ -40,6 +40,7 @@ export const setHttpOnlyFindAccess = (token: any): boolean => {
       value: token,
       httpOnly: true,
       path: '/',
+      domain: ROOT_URL,
       expires: new Date(Date.now() + time),
     });
 
