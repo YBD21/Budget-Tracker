@@ -2,7 +2,6 @@
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { FIND_ACCESS, USER_DATA } from '@/constants/cookiesName';
-import { useUserStore } from '@/context/Store';
 
 export const decodeUser = async (accessToken: string) => {
   return jwtDecode(accessToken);
@@ -12,9 +11,6 @@ const ROOT_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
 
 export const setHttpOnlyUserData = async (token: any): Promise<boolean> => {
   try {
-    const decodeData = await decodeUser(token);
-    useUserStore.setState({ userData: decodeData });
-
     const time = 1 * 60 * 60 * 1000; // 60 min
 
     cookies().set({
@@ -38,16 +34,16 @@ export const setHttpOnlyUserData = async (token: any): Promise<boolean> => {
 
 export const setHttpOnlyFindAccess = (token: any): boolean => {
   try {
-    // const time = 10 * 60 * 1000; // 10 min
-    // cookies().set({
-    //   name: FIND_ACCESS,
-    //   value: token,
-    //   httpOnly: true,
-    //   path: '/',
-    //   // domain: ROOT_URL,
-    //   expires: new Date(Date.now() + time),
-    //   sameSite: 'none',
-    // });
+    const time = 10 * 60 * 1000; // 10 min
+    cookies().set({
+      name: FIND_ACCESS,
+      value: token,
+      httpOnly: true,
+      path: '/',
+      // domain: ROOT_URL,
+      expires: new Date(Date.now() + time),
+      sameSite: 'none',
+    });
 
     return true;
   } catch (error: any) {

@@ -8,7 +8,9 @@ export const useThemeStore = create<ThemeState>((set) => ({
 
 export const useUserStore = create<UserState>((set) => ({
   userData: null, // initial
-  setUserData: (newData: any) => set({ userData: newData }),
+  setUserData: (newData: any) => {
+    set({ userData: newData });
+  },
 }));
 
 export const useSearchStore = create<SearchState>((set) => ({

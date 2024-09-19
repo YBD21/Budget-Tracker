@@ -1,33 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import { cookies } from 'next/headers';
+import { cookies } from 'next/headers';
 
 import { DASHBOARD, LOGIN, ACCESS_ONCE_ROUTES, PROTECTED_CLIENT_ROUTES } from './constants/Routes';
 import { CLIENT } from './constants/actionName';
-// import { USER_DATA } from './constants/cookiesName';
-// import { decodeUser } from './services/userServer';
-// import { JwtPayload } from 'jwt-decode';
-import { useUserStore } from './context/Store';
+import { USER_DATA } from './constants/cookiesName';
+import { decodeUser } from './services/userServer';
+import { JwtPayload } from 'jwt-decode';
 
-// interface DecodedToken extends JwtPayload {
-//   role: string;
-// }
+interface DecodedToken extends JwtPayload {
+  role: string;
+}
 
 export default async function middleware(req: NextRequest) {
-  const getRole = useUserStore.getState().userData?.role;
+  let role = '';
+  const token = cookies().get(USER_DATA);
 
-  const role = getRole ?? '';
-
-  console.log(role);
-  // const token = cookies().get(USER_DATA);
-
-  // if (token) {
-  //   try {
-  //     const decodedToken = await decodeUser(token.value);
-  //     role = (decodedToken as DecodedToken)?.role?.toLowerCase() || '';
-  //   } catch (error: any) {
-  //     console.log('Token decoding error:', error);
-  //   }
-  // }
+  if (token) {
+    try {
+      const decodedToken = await decodeUser(token.value);
+      role = (decodedToken as DecodedToken)?.role?.toLowerCase() || '';
+    } catch (error: any) {
+      console.log('Token decoding error:', error);
+    }
+  }
 
   const { pathname, origin } = req.nextUrl;
 
