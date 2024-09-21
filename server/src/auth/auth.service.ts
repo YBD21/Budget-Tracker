@@ -372,6 +372,7 @@ export class AuthService {
       this.logger.log(`Verification email sent to ${email}`);
       return true;
     } catch (error) {
+      console.log(error.message);
       this.logger.error(`Failed to send verification email to ${email}`);
       return false;
     }

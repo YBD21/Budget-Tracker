@@ -151,6 +151,7 @@ export class AuthController {
         const hashOfOTP = this.authService.generateHashFromOTP(otp);
         return res.status(HttpStatus.OK).send(hashOfOTP);
       }
+      return res.status(HttpStatus.NOT_FOUND).send(respond);
     } catch (error) {
       throw new InternalServerErrorException();
     }
