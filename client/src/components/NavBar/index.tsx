@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -28,6 +28,15 @@ const NavBar = ({ children }: NavProps) => {
   const handelOnChangeFromChild = (status: boolean) => {
     setIsUserClicked(status);
   };
+
+  // Optionally, you can add a useEffect to handle component mounts/unmounts
+  useEffect(() => {
+    // This effect could help reset state if necessary when the component mounts or unmounts.
+    return () => {
+      // If you want to reset `isUserClicked` on unmount, you can do it here.
+      setIsUserClicked(false);
+    };
+  }, []);
 
   return (
     <div className="overflow-visible h-svh">

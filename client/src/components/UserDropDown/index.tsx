@@ -16,11 +16,11 @@ const UserDropDown = ({ openStatus, onChange }: userProps) => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    function handleClickOutside(event: { target: any }) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        onChange(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        onChange(false); // Close dropdown if clicked outside
       }
-    }
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
