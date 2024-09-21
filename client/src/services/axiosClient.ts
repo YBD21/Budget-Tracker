@@ -6,6 +6,9 @@ const axiosClient = () => {
   return axios.create({
     baseURL: ROOT_URL,
     withCredentials: true,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded', // Use a simple Content-Type to avoid preflight
+    },
   });
 };
 

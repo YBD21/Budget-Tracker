@@ -27,15 +27,14 @@ async function bootstrap() {
   // Enable CORS for all origins and allow credentials
   app.enableCors({
     origin: clientPort,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-    preflightContinue: true,
-    maxAge: 600,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    // maxAge: 600,
     credentials: true,
   });
 
   // Set 'trust proxy' on the underlying Express instance
-  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+  // app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
   await app.listen(port);
   logger.log(`Server running on port ${port}`);

@@ -129,7 +129,7 @@ const VerifyEmail: FC<VerifyEmailProps> = ({ togglePage, userInfo }) => {
 
   useEffect(() => {
     sendEmail();
-  }, [sendEmail]);
+  }, []);
 
   return (
     <div className="flex h-screen items-center justify-center">
