@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -15,28 +15,18 @@ import UserDropDown from '../UserDropDown';
 type NavProps = { children: React.ReactNode };
 
 const NavBar = ({ children }: NavProps) => {
+  const profileRef = useRef<HTMLLIElement | null>(null); // Use HTMLLIElement
   const [isUserclicked, setIsUserClicked] = useState(false);
 
-  // const toggleExpand = (status: boolean) => {
-  //   setIsExpand(!status);
-  // };
-
   const showMenu = () => {
-    setIsUserClicked(!isUserclicked);
+    if (isUserclicked === false) {
+      setIsUserClicked(!isUserclicked);
+    }
   };
 
   const handelOnChangeFromChild = (status: boolean) => {
     setIsUserClicked(status);
   };
-
-  // Optionally, you can add a useEffect to handle component mounts/unmounts
-  useEffect(() => {
-    // This effect could help reset state if necessary when the component mounts or unmounts.
-    return () => {
-      // If you want to reset `isUserClicked` on unmount, you can do it here.
-      setIsUserClicked(false);
-    };
-  }, []);
 
   return (
     <div className="overflow-visible h-svh">
@@ -84,12 +74,16 @@ const NavBar = ({ children }: NavProps) => {
           </li> */}
 
           {/* Profile  */}
-          <li className="my-auto mx-4" role="button" onClick={showMenu}>
+          <li className="my-auto mx-4" role="button" onClick={showMenu} ref={profileRef}>
             <AccountCircleIcon fontSize="large" className="cursor-pointer" />
           </li>
           {/* UserDropDown  */}
           {isUserclicked && (
-            <UserDropDown openStatus={isUserclicked} onChange={handelOnChangeFromChild} />
+            <UserDropDown
+              openStatus={isUserclicked}
+              onChange={handelOnChangeFromChild}
+              parentRef={profileRef}
+            />
           )}
         </ul>
       </header>

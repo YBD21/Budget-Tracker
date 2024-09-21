@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -9,24 +9,31 @@ import { deleteAllCookies } from '@/services/userServer';
 type userProps = {
   openStatus: boolean;
   onChange: (arg0: boolean) => void;
+  parentRef: MutableRefObject<HTMLLIElement | null>;
 };
 
-const UserDropDown = ({ openStatus, onChange }: userProps) => {
+const UserDropDown = ({ openStatus, onChange, parentRef }: userProps) => {
   const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        onChange(false); // Close dropdown if clicked outside
+      const isClickOutsideDropdown =
+        dropdownRef.current && !dropdownRef.current.contains(event.target as Node);
+      const isClickOutsideParent =
+        parentRef.current && !parentRef.current.contains(event.target as Node);
+
+      if (isClickOutsideDropdown && isClickOutsideParent) {
+        onChange(false); // Close dropdown if clicked outside both
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, [dropdownRef, parentRef]);
 
   const logOut = async () => {
     // add api for logout
