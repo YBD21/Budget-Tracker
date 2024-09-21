@@ -5,6 +5,7 @@ import { MutableRefObject, useEffect, useRef } from 'react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { deleteAllCookies } from '@/services/userServer';
+import { SETTING } from '@/constants/Routes';
 
 type userProps = {
   openStatus: boolean;
@@ -47,26 +48,28 @@ const UserDropDown = ({ openStatus, onChange, parentRef }: userProps) => {
       ref={dropdownRef}
     >
       <div
-        className={`absolute transform origin-top-left -translate-x-1/2 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 ${
+        className={`absolute transform origin-top-left -translate-x-1/2 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-neutral-800 ring-1 ring-black ring-opacity-5  dark:text-gray-300 text-gray-700 ${
           openStatus ? 'block' : 'hidden'
         }`}
       >
         {/* <div className="px-4 py-3 border-b border-gray-600"><Profile /></div>  */}
         <ul className="divide-y divide-gray-600 p-2">
           {/* Setting */}
-          {/* <li className="flex items-center px-1.5 py-2.5  text-gray-700  hover:bg-gray-100 rounded-md ">
-            <Link href="/Setting" className="w-full font-medium text-base hover:text-black">
+          <li className="flex items-center px-1.5 py-2.5 dark:hover:bg-neutral-700 hover:bg-gray-100 rounded-md hover:text-black dark:hover:text-white">
+            <Link href={SETTING} className="w-full font-medium text-base">
               <SettingsIcon fontSize="medium" className="ml-3 mr-10" />
               Setting
             </Link>
-          </li> */}
+          </li>
           {/* LogOut */}
           <li
-            className="flex items-center px-1.5 py-2.5 text-gray-700 hover:bg-gray-100 hover:text-red-800 rounded-md"
+            className="flex items-center px-1.5 py-2.5 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:hover:text-red-600 hover:text-red-800 rounded-md"
             onClick={logOut}
           >
             <ExitToAppIcon fontSize="medium" className="ml-3 mr-10" />
-            <span className="w-full font-medium text-base  hover:text-red-800">Logout</span>
+            <span className="w-full font-medium text-base  hover:text-red-800 dark:hover:text-red-600">
+              Logout
+            </span>
           </li>
         </ul>
       </div>
