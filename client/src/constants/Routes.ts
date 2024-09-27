@@ -9,4 +9,4 @@ export const CUSTOMIZATION = '/customization';
 
 // Routes Collection
 export const ACCESS_ONCE_ROUTES = [LOGIN, SIGNUP, FORGOTPASSWORD];
-export const PROTECTED_CLIENT_ROUTES = [DASHBOARD, SETTING];
+export const PROTECTED_CLIENT_ROUTES = [DASHBOARD];

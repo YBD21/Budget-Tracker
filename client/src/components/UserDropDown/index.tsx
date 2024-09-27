@@ -55,12 +55,12 @@ const UserDropDown = ({ openStatus, onChange, parentRef }: userProps) => {
         {/* <div className="px-4 py-3 border-b border-gray-600"><Profile /></div>  */}
         <ul className="divide-y divide-gray-600 p-2">
           {/* Setting */}
-          <li className="flex items-center px-1.5 py-2.5 dark:hover:bg-neutral-700 hover:bg-gray-100 rounded-md hover:text-black dark:hover:text-white">
+          {/* <li className="flex items-center px-1.5 py-2.5 dark:hover:bg-neutral-700 hover:bg-gray-100 rounded-md hover:text-black dark:hover:text-white">
             <Link href={SETTING} className="w-full font-medium text-base">
               <SettingsIcon fontSize="medium" className="ml-3 mr-10" />
               Setting
             </Link>
-          </li>
+          </li> */}
           {/* LogOut */}
           <li
             className="flex items-center px-1.5 py-2.5 hover:bg-gray-100 dark:hover:bg-neutral-700 dark:hover:text-red-600 hover:text-red-800 rounded-md"
