@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import slowDown from 'express-slow-down';
 import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express'; // Import Express adapter
+import { json } from 'express';
 
 async function bootstrap() {
   const logger = new Logger('Main (main.ts)');
@@ -40,6 +41,9 @@ async function bootstrap() {
     // maxAge: 600,
     credentials: true,
   });
+
+  // limit incomming json data to 5 Kb
+  app.use(json({ limit: '5kb' }));
 
   // Set 'trust proxy' on the underlying Express instance
   // app.getHttpAdapter().getInstance().set('trust proxy', 1);
