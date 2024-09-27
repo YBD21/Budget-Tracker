@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
+import slowDown from 'express-slow-down';
 import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express'; // Import Express adapter
 
@@ -24,6 +25,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
+  const speedLimiter = slowDown({
+    windowMs: 30 * 60 * 1000, // 30 minutes
+    delayAfter: 25, // allow 10 requests per 30 minutes, then...
+    delayMs: 500, // begin adding 5ms of delay per request above 10:
+  });
+
+  app.use(speedLimiter);
   // Enable CORS for all origins and allow credentials
   app.enableCors({
     origin: clientPort,
